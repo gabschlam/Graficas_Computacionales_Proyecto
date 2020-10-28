@@ -29,6 +29,6 @@ Nuestro plan de trabajo se dividirá en diferentes sprints, con diferentes entre
 ### Segundo Sprint: 10/11 - 16/11
 1. Animaciones de entrada y salida de personajes. **¿Quién? -> Todo el equipo, dividido por escenas, liderado por Alejandra**
 2. Animaciones de objetos con interacción de usuario: movimiento y/o sonido (raycasting). **¿Quién? -> Todo el equipo, dividido por escenas, liderado por Samantha**
-### Tercero Sprint: 17/11 - 26/11
+### Tercer Sprint: 17/11 - 26/11
 1. Animaciones de texto de cuento. **¿Quién? -> Todo el equipo, dividido por escenas, liderado por Gabriel**
 2. Animaciones de camara (alejamiento, acercamiento, etc). **¿Quién? -> Todo el equipo**
