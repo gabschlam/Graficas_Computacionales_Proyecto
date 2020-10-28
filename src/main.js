@@ -1,10 +1,13 @@
 let renderer = null, 
 scene = null, 
-scene1 = null,
-scene2 = null,
+sceneTemp = null,
 camera = null,
 cube = null,
 sphere = null;
+
+let index = 0;
+
+let scenes = [];
 
 let duration = 5000; // ms
 let currentTime = Date.now();
@@ -30,6 +33,19 @@ function run() {
     // Render the scene
     renderer.render( scene, camera );
 
+    if (index < 1) {
+        document.getElementById('previousButton').disabled = true;
+    }
+
+    else if (index > (scenes.length-2)) {
+        document.getElementById('nextButton').disabled = true;
+    }
+    
+    else {
+        document.getElementById('previousButton').disabled = false;
+        document.getElementById('nextButton').disabled = false;
+    }
+
     // Spin all pivots for next frame
     animate();
 }
@@ -51,32 +67,90 @@ function createScene(canvas)
     // Add a camera so we can view the scene
     camera = new THREE.PerspectiveCamera( 45, canvas.width / canvas.height, 1, 4000 );
     camera.position.z = 30;
-    scene.add(camera);
+    //scene.add(camera);
 
     // This light globally illuminates all objects in the scene equally.
     // Cannot cast shadows
     let ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
     scene.add(ambientLight);
 
-    scene1 = new THREE.Scene();
+    sceneTemp = new THREE.Scene();
     let geometry = new THREE.CubeGeometry(5, 5, 5);
     let material = new THREE.MeshNormalMaterial();
     cube = new THREE.Mesh(geometry, material);
-    scene1.add(cube);
+    sceneTemp.add(cube);
+
+    scenes.push(sceneTemp);
+
+    // Choosing default scene as scene1
+    scene = sceneTemp;
+    scene.add(camera);
+
+    index = 0;
 
     /////////////////////////////////////////////////
     //       Scene 2                               //
     /////////////////////////////////////////////////
 
-    scene2 = new THREE.Scene();
+    sceneTemp = new THREE.Scene();
 
     geometry = new THREE.SphereGeometry(5, 20, 20);
     material = new THREE.MeshNormalMaterial();
 
     sphere = new THREE.Mesh(geometry, material);
-    scene2.add(sphere); // so note need to be able to switch this on 
+    sceneTemp.add(sphere); // so note need to be able to switch this on 
 
-    // Choosing default scene as scene1
-    scene = scene1;
-    scene.add(camera);
+    scenes.push(sceneTemp);
+
+    /////////////////////////////////////////////////
+    //       Scene 3                               //
+    /////////////////////////////////////////////////  
+
+    sceneTemp = new THREE.Scene();
+    geometry = new THREE.CubeGeometry(5, 5, 5);
+    material = new THREE.MeshNormalMaterial();
+    cube = new THREE.Mesh(geometry, material);
+    sceneTemp.add(cube);
+
+    scenes.push(sceneTemp);
+
+    /////////////////////////////////////////////////
+    //       Scene 4                               //
+    /////////////////////////////////////////////////
+
+    sceneTemp = new THREE.Scene();
+
+    geometry = new THREE.SphereGeometry(5, 20, 20);
+    material = new THREE.MeshNormalMaterial();
+
+    sphere = new THREE.Mesh(geometry, material);
+    sceneTemp.add(sphere); // so note need to be able to switch this on 
+
+    scenes.push(sceneTemp);
+
+    /////////////////////////////////////////////////
+    //       Scene 5                               //
+    /////////////////////////////////////////////////  
+
+    sceneTemp = new THREE.Scene();
+    geometry = new THREE.CubeGeometry(5, 5, 5);
+    material = new THREE.MeshNormalMaterial();
+    cube = new THREE.Mesh(geometry, material);
+    sceneTemp.add(cube);
+
+    scenes.push(sceneTemp);
+
+    /////////////////////////////////////////////////
+    //       Scene 6                               //
+    /////////////////////////////////////////////////
+
+    sceneTemp = new THREE.Scene();
+
+    geometry = new THREE.SphereGeometry(5, 20, 20);
+    material = new THREE.MeshNormalMaterial();
+
+    sphere = new THREE.Mesh(geometry, material);
+    sceneTemp.add(sphere); // so note need to be able to switch this on 
+
+    scenes.push(sceneTemp);
 }

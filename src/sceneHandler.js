@@ -1,9 +1,13 @@
 function initControls()
 {
     $("#nextButton").click(function() {
-        scene = scene2
+        index = index + 1
+        console.log("index:" + index)
+        scene = scenes[index]
       })
     $("#previousButton").click(function() {
-        scene = scene1
+        index = index - 1
+        console.log("index:" + index)
+        scene = scenes[index]
     })	
 }
