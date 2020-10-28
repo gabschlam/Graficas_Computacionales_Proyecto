@@ -1,0 +1,52 @@
+@charset "UTF-8";
+
+#webglcanvas {
+	border:none;
+	background-color:#ffffff;
+}
+
+#title {
+	position:absolute;
+	left:20px;
+	top:20px;
+	color:#e28383;
+}
+
+#prompt {
+	position:absolute;
+	bottom:20px;
+	left:20px;
+	color:#b8c3f5;
+}
+
+#buttons {
+	position:absolute;
+	bottom:130px;
+}
+
+#webglcanvas {
+	background: #ffffff;
+}
+
+button {
+	text-decoration: none;
+	padding: 8px 16px;
+}
+  
+button:hover {
+	background-color: #ddd;
+	color: black;
+}
+  
+.previous {
+	background-color: #f1f1f1;
+	margin-left: 10px;
+	color: black;
+}
+  
+.next {
+	background-color: #4CAF50;
+	margin-left:690px;
+	color: white;
+
+}
