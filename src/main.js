@@ -34,19 +34,20 @@ function run() {
     renderer.render( scene, camera );
 
     if (index < 1) {
-        document.getElementById('previousButton').disabled = true;
+        document.getElementById('previousButton').style.display = 'none';
+        document.getElementById('nextButton').style.marginLeft = "750px";
     }
 
     else if (index > (scenes.length-2)) {
-        document.getElementById('nextButton').disabled = true;
+        document.getElementById('nextButton').style.display = 'none';
     }
     
     else {
-        document.getElementById('previousButton').disabled = false;
-        document.getElementById('nextButton').disabled = false;
+        document.getElementById('nextButton').style.marginLeft = "690px";
+        document.getElementById('previousButton').style.display = 'inline';
+        document.getElementById('nextButton').style.display = 'inline';
     }
 
-    // Spin all pivots for next frame
     animate();
 }
 
@@ -67,12 +68,15 @@ function createScene(canvas)
     // Add a camera so we can view the scene
     camera = new THREE.PerspectiveCamera( 45, canvas.width / canvas.height, 1, 4000 );
     camera.position.z = 30;
-    //scene.add(camera);
 
     // This light globally illuminates all objects in the scene equally.
     // Cannot cast shadows
     let ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
     scene.add(ambientLight);
+
+    /////////////////////////////////////////////////
+    //       Scene 1                               //
+    /////////////////////////////////////////////////
 
     sceneTemp = new THREE.Scene();
     let geometry = new THREE.CubeGeometry(5, 5, 5);
@@ -85,8 +89,6 @@ function createScene(canvas)
     // Choosing default scene as scene1
     scene = sceneTemp;
     scene.add(camera);
-
-    index = 0;
 
     /////////////////////////////////////////////////
     //       Scene 2                               //
