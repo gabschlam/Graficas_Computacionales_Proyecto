@@ -14,36 +14,42 @@
 A continuación se explicará cada una de ellas:
 
     * Escena 1:
+    ![Escena 1](https://github.com/gabschlam/Graficas_Computacionales_Proyecto/blob/main/Readme%20Files/Scene1.png)
     Esta escena será la portada, en ella lucirá la icónica zapatilla de cenicienta con y además una mariposa que estará postrada en la escena (quizá en el título). Para esta primera escena no queremos que la zapatilla y la mariposa entren, sino que siempre estará dentro para hacerlucir la protada. Además, estará el título y nuestros nombres.
         Objetos interactuables:
         - Zapatilla: al precionarla esta rotará en y para lucir su increible diseño. 
         - Mariposa: cuando se presione hará un recorrido de vuelo. 
 
     * Escena 2:
+    ![Escena 2](https://github.com/gabschlam/Graficas_Computacionales_Proyecto/blob/main/Readme%20Files/Scene2.png)
     Esta escena ilustra lo infeliz que era Cenicienta, la escena comenzará vacía, posteriormente entrará Cenicienta con su cubeta de agua y luego las hermanastras y sumadrastra. 
         Objetos interactuables:
         - Cubeta con agua: cuando se presione esta sacará burbujas.
         - Sillón: saldrá un ratón caminando. 
 
     * Escena 3:
+    ![Escena 3](https://github.com/gabschlam/Graficas_Computacionales_Proyecto/blob/main/Readme%20Files/Scene3.png)
     Cuando le prohiben a Cenicienta a acudir al baile que tanto deseaba ir. Entrará Cenicienta, luego su familia y finalmente saldrá su familia y se quedará sola en la escena. 
         Objetos interactuables:
-        - Fuente: la fuente sacrá gotas de agua, o quizá se eleverá y bajará (indicando que pronto llegará el ada madrina). 
+        - Fuente: la fuente sacrá gotas de agua, o quizá se eleverá y bajará (indicando que pronto llegará el hada madrina). 
         - Ratones: al presionar a Cenicienta apareceran sus ratones a acompañarla. 
 
     * Escena 4:
+    ![Escena 4](https://github.com/gabschlam/Graficas_Computacionales_Proyecto/blob/main/Readme%20Files/Scene4.png)
     El hada madrina aparece para ayudar a Cenicienta a acudir al baile. Cenicienta ya estará en la escena, dado que ya estaba en ese lugar en la escena anterior. Luego, aparecerá el hada madrina y el carruaje. 
         Objetos interactuables:
         - Carruaje: al precionarlo se elevará del piso (flotará) y volverá a bajar. 
         - Hada madrina: Dará vueltas
 
     * Escena 5:
+    ![Escena 5](https://github.com/gabschlam/Graficas_Computacionales_Proyecto/blob/main/Readme%20Files/Scene5.png)
     Cenicienta conoce al príncipe y bailan juntos. Entra primero el prícipe y luego Cenicienta a la escena. 
         Objetos interactuables:
         - Cenicienta y el príncipe: comienzan a bailar en forma de infinito. 
         - Luz: cuando se preciona cierto lugar por definit, aparece una luz que alumbra directamente al Principe y a Cenicienta. 
 
     * Escena 6: 
+    ![Escena 6](https://github.com/gabschlam/Graficas_Computacionales_Proyecto/blob/main/Readme%20Files/Scene6.png)
     Encuentran que a Cenicienta le queda perfectamente la zapatilla y se casa con el príncipe. Primero entra el príncipe y luego Cenicienta. 
         Objetos interactuables:
         - Ratones: al presionar algún mueble saldrán caminando. 
