@@ -72,7 +72,7 @@ function createScene(canvas)
 
     sceneTemp = new THREE.Scene();
     // Set the background image 
-    sceneTemp.background = new THREE.TextureLoader().load("../images/scene1_background_2.jpg");
+    sceneTemp.background = new THREE.TextureLoader().load("../images/Backgrounds/scene1_background_3.jpg");
 
     scenes.push(sceneTemp);
 
@@ -86,7 +86,7 @@ function createScene(canvas)
 
     sceneTemp = new THREE.Scene();
     // Set the background image 
-    sceneTemp.background = new THREE.TextureLoader().load("../images/scene2_background.jpg");
+    sceneTemp.background = new THREE.TextureLoader().load("../images/Backgrounds/scene2_background.jpg");
     
     let geometry = new THREE.CubeGeometry(5, 5, 5);
     let material = new THREE.MeshNormalMaterial();
@@ -101,7 +101,7 @@ function createScene(canvas)
 
     sceneTemp = new THREE.Scene();
     // Set the background image 
-    sceneTemp.background = new THREE.TextureLoader().load("../images/scene3-4_background.jpg");
+    sceneTemp.background = new THREE.TextureLoader().load("../images/Backgrounds/scene3-4_background.jpg");
 
     geometry = new THREE.CubeGeometry(5, 5, 5);
     material = new THREE.MeshNormalMaterial();
@@ -116,7 +116,7 @@ function createScene(canvas)
 
     sceneTemp = new THREE.Scene();
     // Set the background image 
-    sceneTemp.background = new THREE.TextureLoader().load("../images/scene3-4_background.jpg");
+    sceneTemp.background = new THREE.TextureLoader().load("../images/Backgrounds/scene3-4_background.jpg");
 
     geometry = new THREE.SphereGeometry(5, 20, 20);
     material = new THREE.MeshNormalMaterial();
@@ -132,7 +132,7 @@ function createScene(canvas)
 
     sceneTemp = new THREE.Scene();  
     // Set the background image 
-    sceneTemp.background = new THREE.TextureLoader().load("../images/scene5-6_background.jpg");
+    sceneTemp.background = new THREE.TextureLoader().load("../images/Backgrounds/scene5-6_background.jpg");
 
     geometry = new THREE.CubeGeometry(5, 5, 5);
     material = new THREE.MeshNormalMaterial();
@@ -147,7 +147,7 @@ function createScene(canvas)
 
     sceneTemp = new THREE.Scene();
     // Set the background image 
-    sceneTemp.background = new THREE.TextureLoader().load("../images/scene5-6_background.jpg");
+    sceneTemp.background = new THREE.TextureLoader().load("../images/Backgrounds/scene5-6_background.jpg");
     geometry = new THREE.SphereGeometry(5, 20, 20);
     material = new THREE.MeshNormalMaterial();
 

@@ -10,50 +10,54 @@
 3. Habrá como mínimo dos objetos por cada escena con los que el usuario podrán interactuar.
 4. La cámara tendrá movimiento en cada escena.
 5. La historia del cuento aparecerá como texto, conforme al flujo de los personajes, para poder dar un seguimiento a la historia.
-6. Habrán un total de seis escenas de la historia.
-A continuación se explicará cada una de ellas:
-
-    * Escena 1:
-    ![Escena 1](https://github.com/gabschlam/Graficas_Computacionales_Proyecto/blob/main/Readme%20Files/Scene1.png)
-    Esta escena será la portada, en ella lucirá la icónica zapatilla de cenicienta con y además una mariposa que estará postrada en la escena (quizá en el título). Para esta primera escena no queremos que la zapatilla y la mariposa entren, sino que siempre estará dentro para hacerlucir la protada. Además, estará el título y nuestros nombres.
-        Objetos interactuables:
-        - Zapatilla: al precionarla esta rotará en y para lucir su increible diseño. 
+6. Habrá un total de seis escenas de la historia. A continuación se explicará cada una de ellas:
+    * **Escena 1:**
+    ![Escena 1](images/ScenesReadme/Scene1.png)
+    Esta escena será la portada, en ella lucirá la icónica zapatilla de cenicienta con y además una mariposa que estará postrada en la escena (quizá en el título). Para esta primera escena no queremos que la zapatilla y la mariposa entren, sino que siempre estará dentro para hacer lucir la portada. Además, estará el título y nuestros nombres.
+        
+        **Objetos interactuables:**
+        - Zapatilla: al presionarla esta rotará en y para lucir su increíble diseño. 
         - Mariposa: cuando se presione hará un recorrido de vuelo. 
 
-    * Escena 2:
-    ![Escena 2](https://github.com/gabschlam/Graficas_Computacionales_Proyecto/blob/main/Readme%20Files/Scene2.png)
-    Esta escena ilustra lo infeliz que era Cenicienta, la escena comenzará vacía, posteriormente entrará Cenicienta con su cubeta de agua y luego las hermanastras y sumadrastra. 
-        Objetos interactuables:
+    * **Escena 2:**
+    ![Escena 2](images/ScenesReadme/Scene2.png)
+    Esta escena ilustra lo infeliz que era Cenicienta, la escena comenzará vacía, posteriormente entrará Cenicienta con su cubeta de agua y luego las hermanastras y su madrastra. 
+        
+        **Objetos interactuables:**
         - Cubeta con agua: cuando se presione esta sacará burbujas.
         - Sillón: saldrá un ratón caminando. 
 
-    * Escena 3:
-    ![Escena 3](https://github.com/gabschlam/Graficas_Computacionales_Proyecto/blob/main/Readme%20Files/Scene3.png)
-    Cuando le prohiben a Cenicienta a acudir al baile que tanto deseaba ir. Entrará Cenicienta, luego su familia y finalmente saldrá su familia y se quedará sola en la escena. 
-        Objetos interactuables:
-        - Fuente: la fuente sacrá gotas de agua, o quizá se eleverá y bajará (indicando que pronto llegará el hada madrina). 
-        - Ratones: al presionar a Cenicienta apareceran sus ratones a acompañarla. 
+    * **Escena 3:**
+    ![Escena 3](images/ScenesReadme/Scene3.png)
+    Cuando le prohíben a Cenicienta a acudir al baile que tanto deseaba ir. Entrará Cenicienta, luego su familia y finalmente saldrá su familia y se quedará sola en la escena.
 
-    * Escena 4:
-    ![Escena 4](https://github.com/gabschlam/Graficas_Computacionales_Proyecto/blob/main/Readme%20Files/Scene4.png)
+        **Objetos interactuables:**
+        - Fuente: la fuente sacará gotas de agua, o quizá se elevará y bajará (indicando que pronto llegará el hada madrina). 
+        - Ratones: al presionar a Cenicienta aparecerán sus ratones a acompañarla. 
+
+    * **Escena 4:**
+    ![Escena 4](images/ScenesReadme/Scene4.png)
     El hada madrina aparece para ayudar a Cenicienta a acudir al baile. Cenicienta ya estará en la escena, dado que ya estaba en ese lugar en la escena anterior. Luego, aparecerá el hada madrina y el carruaje. 
-        Objetos interactuables:
-        - Carruaje: al precionarlo se elevará del piso (flotará) y volverá a bajar. 
+        
+        **Objetos interactuables:**
+        - Carruaje: al presionarlo se elevará del piso (flotará) y volverá a bajar. 
         - Hada madrina: Dará vueltas
 
-    * Escena 5:
-    ![Escena 5](https://github.com/gabschlam/Graficas_Computacionales_Proyecto/blob/main/Readme%20Files/Scene5.png)
-    Cenicienta conoce al príncipe y bailan juntos. Entra primero el prícipe y luego Cenicienta a la escena. 
-        Objetos interactuables:
-        - Cenicienta y el príncipe: comienzan a bailar en forma de infinito. 
-        - Luz: cuando se preciona cierto lugar por definit, aparece una luz que alumbra directamente al Principe y a Cenicienta. 
+    * **Escena 5:**
+    ![Escena 5](images/ScenesReadme/Scene5.png)
+    Cenicienta conoce al Príncipe y bailan juntos. Entra primero el Príncipe y luego Cenicienta a la escena. 
+        
+        **Objetos interactuables:**
+        - Cenicienta y el Príncipe: comienzan a bailar en forma de infinito. 
+        - Luz: cuando se presiona cierto lugar por definir, aparece una luz que alumbra directamente al Príncipe y a Cenicienta. 
 
-    * Escena 6: 
-    ![Escena 6](https://github.com/gabschlam/Graficas_Computacionales_Proyecto/blob/main/Readme%20Files/Scene6.png)
-    Encuentran que a Cenicienta le queda perfectamente la zapatilla y se casa con el príncipe. Primero entra el príncipe y luego Cenicienta. 
-        Objetos interactuables:
+    * **Escena 6:**
+    ![Escena 6](images/ScenesReadme/Scene6.png)
+    Encuentran que a Cenicienta le queda perfectamente la zapatilla y se casa con el Príncipe. Primero entra el Príncipe y luego Cenicienta. 
+        
+        **Objetos interactuables:**
         - Ratones: al presionar algún mueble saldrán caminando. 
-        - Pájaros: al precionarlos darán un recorrido de vuelo y volverán a postrarse en el mismo sitio. 
+        - Pájaros: al presionarlos darán un recorrido de vuelo y volverán a postrarse en el mismo sitio. 
 
 7. Implementar conocimiento de gráficos 3D y animaciones adquiridos en clase.
 
@@ -75,4 +79,4 @@ Nuestro plan de trabajo se dividirá en diferentes sprints, con diferentes entre
 2. Animaciones de objetos con interacción de usuario: movimiento y/o sonido (raycasting). **¿Quién? -> Todo el equipo, dividido por escenas, liderado por Samantha**
 ### Tercer Sprint: 17/11 - 26/11
 1. Animaciones de texto de cuento. **¿Quién? -> Todo el equipo, dividido por escenas, liderado por Gabriel**
-2. Animaciones de camara (alejamiento, acercamiento, etc). **¿Quién? -> Todo el equipo**
+2. Animaciones de cámara (alejamiento, acercamiento, etc.). **¿Quién? -> Todo el equipo**
