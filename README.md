@@ -41,7 +41,7 @@
         
         **Objetos interactuables:**
         - Carruaje: al presionarlo se elevará del piso (flotará) y volverá a bajar. 
-        - Hada madrina: Dará vueltas
+        - Hada madrina: Moverse de arriba hacia abajo.
 
     * **Escena 5:**
     ![Escena 5](images/ScenesReadme/Scene5.png)
@@ -62,7 +62,7 @@
 7. Implementar conocimiento de gráficos 3D y animaciones adquiridos en clase.
 
 ## ¿Cómo se van a cumplir los requerimientos?
-* Se utilizarán modelos 3D, con animaciones ya sea integradas o creadas por el equipo.
+* Se utilizarán personajes 2D, modelos 3D, con animaciones ya sea integradas o creadas por el equipo.
 * Se utilizará un mecanismo para pasar de una escena a otra, por medio de botones de siguiente y anterior.
 * Utilizaremos el método de raycasting para controlar la interacción entre el usuario y los objetos con animación.
 * Utilizaremos el método de transformación de CSS a objetos 3D para animar el texto de la historia.
