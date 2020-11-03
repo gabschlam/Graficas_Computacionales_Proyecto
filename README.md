@@ -71,7 +71,7 @@
 ## Plan de trabajo
 Nuestro plan de trabajo se dividirá en diferentes sprints, con diferentes entregables a medir.
 ### Primer Sprint: 02/11 - 09/11
-1. Modelos 3D recopilados, enlistando las animaciones que ya tiene el objeto. **¿Quién? -> Todo el equipo**
+1. Personajes 2D, modelos 3D recopilados, enlistando las animaciones que ya tiene el objeto. **¿Quién? -> Todo el equipo**
 2. Cargar cada modelo y/o objeto a su respectiva escena y posición. **¿Quién? -> Todo el equipo, dividido por escenas**
 3. Realizar flujo de botones de siguiente y anterior. **¿Quién? -> Gabriel**
 ### Segundo Sprint: 10/11 - 16/11
