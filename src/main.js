@@ -88,10 +88,15 @@ function createScene(canvas)
     // Set the background image 
     sceneTemp.background = new THREE.TextureLoader().load("../images/Backgrounds/scene2_background.jpg");
     
-    let geometry = new THREE.CubeGeometry(5, 5, 5);
-    let material = new THREE.MeshNormalMaterial();
-    cube = new THREE.Mesh(geometry, material);
-    //sceneTemp.add(cube);
+    // Put in a ground plane to show off the lighting
+    let map = new THREE.TextureLoader().load("../models/cinderella.png");
+    let color = 0xffffff;
+
+    let geometry = new THREE.PlaneGeometry(20, 20, 5, 5);
+    let mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({map:map, side:THREE.DoubleSide, transparent:true}));
+    sceneTemp.add(mesh);
+    sceneTemp.add(ambientLight);
+
 
     scenes.push(sceneTemp);
 
