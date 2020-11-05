@@ -4,6 +4,7 @@ sceneTemp = null,
 camera = null,
 cube = null,
 objLoader = null,
+ambientLight = null,
 sphere = null;
 
 let index = 0;
@@ -13,7 +14,7 @@ let scenes = [];
 let duration = 5000; // ms
 let currentTime = Date.now();
 
-function load3dModel(objModelUrl, mtlModelUrl, sceneObj, scale, x, y, z, rotation)
+function load3dModel(objModelUrl, mtlModelUrl, sceneObj, scale, x, y, z, rotationX)
 {
     mtlLoader = new THREE.MTLLoader();
 
@@ -29,13 +30,14 @@ function load3dModel(objModelUrl, mtlModelUrl, sceneObj, scale, x, y, z, rotatio
         objLoader.load(objModelUrl, object=>{
             object.scale.set(scale,scale,scale);
             object.position.set(x, y, z);
-            object.rotation.x = -Math.PI / 18 ;
+            if (rotationX) {
+                object.rotation.x = rotationX ;
+            }
             sceneObj.add(object);
         });
     });
 
 }
-
 
 function animate() 
 {
@@ -90,7 +92,7 @@ function createScene(canvas)
 
     // This light globally illuminates all objects in the scene equally.
     // Cannot cast shadows
-    let ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+    ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
     //scene.add(ambientLight);
 
     /////////////////////////////////////////////////
@@ -120,7 +122,6 @@ function createScene(canvas)
 
     let geometry = new THREE.PlaneGeometry(20, 20, 5, 5);
     let mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({map:map, side:THREE.DoubleSide, transparent:true}));
-    sceneTemp.add(ambientLight);
     sceneTemp.add(mesh);
     scenes.push(sceneTemp);
 
@@ -132,12 +133,10 @@ function createScene(canvas)
     // Set the background image 
     sceneTemp.background = new THREE.TextureLoader().load("../images/Backgrounds/scene3-4_background.jpg");
 
-    sceneTemp.add(ambientLight);
-
     scenes.push(sceneTemp);
 
     // Create the fountain
-    load3dModel('../models/fountain/fountain.obj', '../models/fountain/fountain.mtl', scenes[2], 3.5, 15, -30, -75);
+    load3dModel('../models/fountain/fountain.obj', '../models/fountain/fountain.mtl', scenes[2], 3.5, 15, -30, -75, -Math.PI / 18);
 
     /////////////////////////////////////////////////
     //       Scene 4                               //
@@ -147,13 +146,10 @@ function createScene(canvas)
     // Set the background image 
     sceneTemp.background = new THREE.TextureLoader().load("../images/Backgrounds/scene3-4_background.jpg");
 
-    geometry = new THREE.SphereGeometry(5, 20, 20);
-    material = new THREE.MeshNormalMaterial();
-
-    sphere = new THREE.Mesh(geometry, material);
-    //sceneTemp.add(sphere);
-
     scenes.push(sceneTemp);
+
+    // Create the fountain
+    load3dModel('../models/fountain/fountain.obj', '../models/fountain/fountain.mtl', scenes[3], 3.5, 15, -30, -75, -Math.PI / 18);
 
     /////////////////////////////////////////////////
     //       Scene 5                               //
@@ -184,4 +180,5 @@ function createScene(canvas)
     //sceneTemp.add(sphere);
 
     scenes.push(sceneTemp);
+
 }
