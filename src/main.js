@@ -3,6 +3,7 @@ scene = null,
 sceneTemp = null,
 camera = null,
 cube = null,
+objLoader = null,
 sphere = null;
 
 let index = 0;
@@ -12,6 +13,30 @@ let scenes = [];
 let duration = 5000; // ms
 let currentTime = Date.now();
 
+function load3dModel(objModelUrl, mtlModelUrl, sceneObj, scale, x, y, z, rotation)
+{
+    mtlLoader = new THREE.MTLLoader();
+
+    mtlLoader.load(mtlModelUrl, materials =>{
+        
+        materials.preload();
+        console.log(materials);
+
+        objLoader = new THREE.OBJLoader();
+        
+        objLoader.setMaterials(materials);
+
+        objLoader.load(objModelUrl, object=>{
+            object.scale.set(scale,scale,scale);
+            object.position.set(x, y, z);
+            object.rotation.x = -Math.PI / 18 ;
+            sceneObj.add(object);
+        });
+    });
+
+}
+
+
 function animate() 
 {
     let now = Date.now();
@@ -19,6 +44,8 @@ function animate()
     currentTime = now;
     let fract = deltat / duration;
     let angle = Math.PI * 2 * fract;
+
+   // console.log(carruaje);
 
 }
 
@@ -42,7 +69,7 @@ function run() {
         document.getElementById('previousButton').style.display = 'inline';
         document.getElementById('nextButton').style.display = 'inline';
     }
-
+    
     animate();
 }
 
@@ -64,7 +91,7 @@ function createScene(canvas)
     // This light globally illuminates all objects in the scene equally.
     // Cannot cast shadows
     let ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
-    scene.add(ambientLight);
+    //scene.add(ambientLight);
 
     /////////////////////////////////////////////////
     //       Scene 1                               //
@@ -90,14 +117,11 @@ function createScene(canvas)
     
     // Put in a ground plane to show off the lighting
     let map = new THREE.TextureLoader().load("../models/cinderella.png");
-    let color = 0xffffff;
 
     let geometry = new THREE.PlaneGeometry(20, 20, 5, 5);
     let mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({map:map, side:THREE.DoubleSide, transparent:true}));
-    sceneTemp.add(mesh);
     sceneTemp.add(ambientLight);
-
-
+    sceneTemp.add(mesh);
     scenes.push(sceneTemp);
 
     /////////////////////////////////////////////////
@@ -108,12 +132,12 @@ function createScene(canvas)
     // Set the background image 
     sceneTemp.background = new THREE.TextureLoader().load("../images/Backgrounds/scene3-4_background.jpg");
 
-    geometry = new THREE.CubeGeometry(5, 5, 5);
-    material = new THREE.MeshNormalMaterial();
-    cube = new THREE.Mesh(geometry, material);
-    //sceneTemp.add(cube);
+    sceneTemp.add(ambientLight);
 
     scenes.push(sceneTemp);
+
+    // Create the fountain
+    load3dModel('../models/fountain/fountain.obj', '../models/fountain/fountain.mtl', scenes[2], 3.5, 15, -30, -75);
 
     /////////////////////////////////////////////////
     //       Scene 4                               //
