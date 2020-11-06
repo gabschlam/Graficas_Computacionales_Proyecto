@@ -182,16 +182,22 @@ function createScene(canvas)
     sceneTemp.add(mesh_scene5_prince);
 
     //Loading Cinderella
-    let map_scene5_cinderella = new THREE.TextureLoader().load("../models/cinderella.png");
+    sceneTemp.add(createCharacterMesh("../models/cinderella.png",9,12,4,-9,-5));
 
-    let geometry_scene5_cinderella = new THREE.PlaneGeometry(9, 9, 2, 2);
-    let mesh_scene5_cinderella = new THREE.Mesh(geometry_scene5_cinderella, new THREE.MeshPhongMaterial({map:map_scene5_cinderella, side:THREE.DoubleSide, transparent:true}));
-    sceneTemp.add(mesh_scene5_cinderella);
-
-    mesh_scene5_cinderella.position.y = -8;
-    mesh_scene5_cinderella.position.x = 4;
     scenes.push(sceneTemp);
 
+    // Create the columns
+    //1
+    load3dModel('../models/Column/Column_Made_By_Tyro_Smith.obj', '../models/Column/Column_Made_By_Tyro_Smith.mtl', scenes[4], 3.5, 15, -30, -75, -Math.PI / 18);
+
+    //Referencias:
+    /*
+    Princesa 
+    Príncipe https://www.pngwing.com/es/free-png-zdlha
+     Columna https://free3d.com/3d-model/white-column-44873.html
+     Textura columna https://www.pinterest.es/pin/825495806689115334/
+    */
+   
     /////////////////////////////////////////////////
     //       Scene 6                               //
     /////////////////////////////////////////////////
