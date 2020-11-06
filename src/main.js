@@ -159,11 +159,23 @@ function createScene(canvas)
     // Set the background image 
     sceneTemp.background = new THREE.TextureLoader().load("../images/Backgrounds/scene5-6_background.jpg");
 
-    geometry = new THREE.CubeGeometry(5, 5, 5);
-    material = new THREE.MeshNormalMaterial();
-    cube = new THREE.Mesh(geometry, material);
-    //sceneTemp.add(cube);
+    //Loading the prince
+    let map_scene5_prince = new THREE.TextureLoader().load("../models/prince_charming_scene_5.png");
 
+    let geometry_scene5_prince = new THREE.PlaneGeometry(10, 10, 5, 5);
+    let mesh_scene5_prince = new THREE.Mesh(geometry_scene5_prince, new THREE.MeshPhongMaterial({map:map_scene5_prince, side:THREE.DoubleSide, transparent:true}));
+    mesh_scene5_prince.position.y = -7;
+    sceneTemp.add(mesh_scene5_prince);
+
+    //Loading Cinderella
+    let map_scene5_cinderella = new THREE.TextureLoader().load("../models/cinderella.png");
+
+    let geometry_scene5_cinderella = new THREE.PlaneGeometry(9, 9, 2, 2);
+    let mesh_scene5_cinderella = new THREE.Mesh(geometry_scene5_cinderella, new THREE.MeshPhongMaterial({map:map_scene5_cinderella, side:THREE.DoubleSide, transparent:true}));
+    sceneTemp.add(mesh_scene5_cinderella);
+
+    mesh_scene5_cinderella.position.y = -8;
+    mesh_scene5_cinderella.position.x = 4;
     scenes.push(sceneTemp);
 
     /////////////////////////////////////////////////
