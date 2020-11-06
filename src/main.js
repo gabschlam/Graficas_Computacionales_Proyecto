@@ -14,7 +14,7 @@ let scenes = [];
 let duration = 5000; // ms
 let currentTime = Date.now();
 
-function load3dModel(objModelUrl, mtlModelUrl, sceneObj, scale, x, y, z, rotationX)
+function load3dModel(objModelUrl, mtlModelUrl, sceneObj, scale, x, y, z, rotationX, rotationY)
 {
     mtlLoader = new THREE.MTLLoader();
 
@@ -32,6 +32,9 @@ function load3dModel(objModelUrl, mtlModelUrl, sceneObj, scale, x, y, z, rotatio
             object.position.set(x, y, z);
             if (rotationX) {
                 object.rotation.x = rotationX ;
+            }
+            if (rotationY) {
+                object.rotation.y = rotationY ;
             }
             sceneObj.add(object);
         });
@@ -136,7 +139,6 @@ function createScene(canvas)
     //277x655 px
     sceneTemp.add(createCharacterMesh("../models/stepmother.png",7,15,5,-5,0));
 
-
     scenes.push(sceneTemp);
 
     /////////////////////////////////////////////////
@@ -146,6 +148,12 @@ function createScene(canvas)
     sceneTemp = new THREE.Scene();
     // Set the background image 
     sceneTemp.background = new THREE.TextureLoader().load("../images/Backgrounds/scene3-4_background.jpg");
+    sceneTemp.add(createCharacterMesh("../models/cinderella_crying.png",8,10,-15,-8,-2));
+    stepSisters = createCharacterMesh("../models/stepsisters_party.png",13,14,16,-8,-5);
+    stepMother = createCharacterMesh("../models/stepmother_party.png",8,15,9,-8,-5);
+    stepSisters.rotation.y = Math.PI;
+    sceneTemp.add(stepSisters);
+    sceneTemp.add(stepMother);
 
     scenes.push(sceneTemp);
 
@@ -160,10 +168,17 @@ function createScene(canvas)
     // Set the background image 
     sceneTemp.background = new THREE.TextureLoader().load("../images/Backgrounds/scene3-4_background.jpg");
 
+    sceneTemp.add(createCharacterMesh("../models/cinderella_crying.png",8,10,-15,-8,-2));
+    godmother = createCharacterMesh("../models/fairy_godmother.png",16,18,-2,-5,-7);
+    godmother.rotation.y = Math.PI;
+    sceneTemp.add(godmother);
+
     scenes.push(sceneTemp);
 
     // Create the fountain
     load3dModel('../models/fountain/fountain.obj', '../models/fountain/fountain.mtl', scenes[3], 3.5, 15, -30, -75, -Math.PI / 18);
+    
+    load3dModel('../models/cinderella_carrosse/Cinderella_Carosse.obj', '../models/cinderella_carrosse/Cinderella_Carosse.mtl', scenes[3], 9, 35, -30, -50, null, Math.PI / 3);
 
     /////////////////////////////////////////////////
     //       Scene 5                               //
