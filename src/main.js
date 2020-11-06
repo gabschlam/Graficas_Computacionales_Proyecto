@@ -86,33 +86,6 @@ function createCharacterMesh( address, width, height, X, Y, Z ) {
     return mesh;
 }
 
-function load3dModel(objModelUrl, mtlModelUrl)
-{
-    mtlLoader = new THREE.MTLLoader();
-
-    mtlLoader.load(mtlModelUrl, materials =>{
-        
-        materials.preload();
-        console.log(materials);
-
-        objLoader = new THREE.OBJLoader();
-        
-        objLoader.setMaterials(materials);
-
-        objLoader.load(objModelUrl, object=>{
-           // objectList.push(object);
- 
-            object.position.set(2, -5, 10);
-            object.rotation.x = -Math.PI / 4 ;
-            
-            //object.scale.set(0.5, 0.5, 0.5);
-            carruaje = object;
-            scenes[2].add(object);
-        });
-    });
-
-}
-
 function createScene(canvas)
 {    
     // Create the Three.js renderer and attach it to our canvas
@@ -156,23 +129,14 @@ function createScene(canvas)
     sceneTemp.background = new THREE.TextureLoader().load("../images/Backgrounds/scene2_background.jpg");
     
     // Put in a ground plane to show off the lighting
-<<<<<<< Updated upstream
-    let map = new THREE.TextureLoader().load("../models/cinderella.png");
-
-    let geometry = new THREE.PlaneGeometry(20, 20, 5, 5);
-    let mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({map:map, side:THREE.DoubleSide, transparent:true}));
-    sceneTemp.add(mesh);
-=======
     //727 x 902 px
     sceneTemp.add(createCharacterMesh("../models/cinderella_cleaning.png",12,15,-13,-5,-2));
     //470x496px
     sceneTemp.add(createCharacterMesh("../models/stepsisters_normal.png",14,14,11,-5,0));
     //277x655 px
     sceneTemp.add(createCharacterMesh("../models/stepmother.png",7,15,5,-5,0));
-    sceneTemp.add(ambientLight);
 
 
->>>>>>> Stashed changes
     scenes.push(sceneTemp);
 
     /////////////////////////////////////////////////
