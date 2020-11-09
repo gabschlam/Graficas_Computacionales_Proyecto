@@ -11,7 +11,11 @@ let index = 0;
 
 let scenes = [];
 
-let duration = 5000; // ms
+let animator = null,
+animatorBalancing = null,
+duration = 10, // sec
+loopAnimation = false;
+
 let currentTime = Date.now();
 
 let controls;
@@ -163,20 +167,6 @@ function load3dObjModel(modelUrl, textureUrl, normalUrl, aoUrl, metalUrl, roughn
 	});
 }
 
-function animate() 
-{
-    let now = Date.now();
-    let deltat = now - currentTime;
-    currentTime = now;
-    let fract = deltat / duration;
-    let angle = Math.PI * 2 * fract;
-
-    console.log(scene);
-
-    //controls.update();
-
-}
-
 function run() {
     requestAnimationFrame(function() { run(); });
     
@@ -198,7 +188,8 @@ function run() {
         document.getElementById('nextButton').style.display = 'inline';
     }
     
-    animate();
+    // Update the animations
+    KF.update();
 }
 
 function createCharacterMesh( address, name, width, height, X, Y, Z ) {
@@ -241,6 +232,7 @@ function createScene(canvas)
     /////////////////////////////////////////////////
 
     sceneTemp = new THREE.Scene();
+    sceneTemp.name = "scene1";
     // Set the background image 
     sceneTemp.background = new THREE.Color( 0xffffff);
 
@@ -309,6 +301,7 @@ function createScene(canvas)
     /////////////////////////////////////////////////
 
     sceneTemp = new THREE.Scene();
+    sceneTemp.name = "scene2";
     // Set the background image 
     sceneTemp.background = new THREE.TextureLoader().load("../images/Backgrounds/scene2_background.jpg");
     
@@ -338,9 +331,10 @@ function createScene(canvas)
     /////////////////////////////////////////////////  
 
     sceneTemp = new THREE.Scene();
+    sceneTemp.name = "scene3";
     // Set the background image 
     sceneTemp.background = new THREE.TextureLoader().load("../images/Backgrounds/scene3-4_background.jpg");
-    sceneTemp.add(createCharacterMesh("../models/cinderella_crying.png", 'cinderella_crying', 8,10,-15,-8,-2));
+    sceneTemp.add(createCharacterMesh("../models/cinderella_crying.png", 'cinderella_crying', 8,10,-30,-8,-2));
     stepSisters = createCharacterMesh("../models/stepsisters_party.png", 'stepsisters_party', 13,14,16,-8,-5);
     stepMother = createCharacterMesh("../models/stepmother_party.png", 'stepmother_party', 8,15,9,-8,-5);
     stepSisters.rotation.y = Math.PI;
@@ -357,6 +351,7 @@ function createScene(canvas)
     /////////////////////////////////////////////////
 
     sceneTemp = new THREE.Scene();
+    sceneTemp.name = "scene4";
     // Set the background image 
     sceneTemp.background = new THREE.TextureLoader().load("../images/Backgrounds/scene3-4_background.jpg");
 
@@ -378,6 +373,7 @@ function createScene(canvas)
     /////////////////////////////////////////////////  
 
     sceneTemp = new THREE.Scene();  
+    sceneTemp.name = "scene5";
     // Set the background image 
     sceneTemp.background = new THREE.TextureLoader().load("../images/Backgrounds/scene5-6_background.jpg");
 
@@ -406,6 +402,7 @@ function createScene(canvas)
     /////////////////////////////////////////////////
 
     sceneTemp = new THREE.Scene();
+    sceneTemp.name = "scene6";
     // Set the background image 
     sceneTemp.background = new THREE.TextureLoader().load("../images/Backgrounds/scene5-6_background.jpg");
     geometry = new THREE.SphereGeometry(5, 20, 20);
@@ -418,14 +415,62 @@ function createScene(canvas)
 
 }
 
-/*function playAnimations() 
+function playAnimations() 
 {
-    switch (scene) {
-        case value:
-            
+    switch (scene.name) {
+        case "scene1":
+            console.log("Escena 1");
+            // Animaciones
             break;
+        case "scene2":
+            console.log("Escena 2");
+            // Animaciones
+            break;
+        case "scene3":
+            console.log("Escena 3");
+            // Animaciones
+            scene.children.forEach(element => {
+                switch (element.name) {
+                    case "cinderella_crying":
+                        animator = new KF.KeyFrameAnimator;
+                        animator.init({ 
+                            interps:
+                                [
+                                    // Keys for the rotation in y for the Penguin for facing forward
+                                    { 
+                                        keys:[0, 0.125], 
+                                        values:[
+                                                { x : -30  },
+                                                { x : -15 },
+                                                ],
+                                        target:element.position
+                                    }
+                                ],
+                            loop: loopAnimation,
+                            duration: duration * 1000,
+                        });
+                        animator.start();
+                        break;
+                
+                    default:
+                        break;
+                }
+            });
+            break;
+        case "scene4":
+            console.log("Escena 4");
+            // Animaciones
+            break;
+        case "scene5":
+            console.log("Escena 5");
+            // Animaciones
+            break;
+        case "scene6":
+            console.log("Escena 6");
+            // Animaciones
+            break;            
     
         default:
             break;
     }
-}*/
+}
