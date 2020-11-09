@@ -16,7 +16,7 @@ let currentTime = Date.now();
 
 let controls;
 
-function load3dModel(objModelUrl, mtlModelUrl, sceneObj, scale, x, y, z, rotationX, rotationY)
+function load3dModel(objModelUrl, mtlModelUrl, name, sceneObj, scale, x, y, z, rotationX, rotationY)
 {
     mtlLoader = new THREE.MTLLoader();
 
@@ -38,6 +38,7 @@ function load3dModel(objModelUrl, mtlModelUrl, sceneObj, scale, x, y, z, rotatio
             if (rotationY) {
                 object.rotation.y = rotationY ;
             }
+            object.name = name;
             sceneObj.add(object);
         });
     });
@@ -69,7 +70,7 @@ function load3dDaeModel(sceneObj)
 	});
 }
 
-function load3dFbxModel(modelUrl, textureUrl, normalUrl, aoUrl, metalUrl, roughnessUrl, sceneObj, scale, x, y, z, rotationX, rotationY)
+function load3dFbxModel(modelUrl, textureUrl, normalUrl, aoUrl, metalUrl, roughnessUrl, name, sceneObj, scale, x, y, z, rotationX, rotationY)
 {
     var loader = new THREE.FBXLoader();
     loader.load(modelUrl, function (object) {
@@ -108,6 +109,7 @@ function load3dFbxModel(modelUrl, textureUrl, normalUrl, aoUrl, metalUrl, roughn
         if (rotationY) {
             object.rotation.y = rotationY ;
         }
+        object.name = name;
         sceneObj.add(object);
         console.log("FBX");
         console.log(object);
@@ -169,7 +171,9 @@ function animate()
     let fract = deltat / duration;
     let angle = Math.PI * 2 * fract;
 
-   controls.update();
+    console.log(scene);
+
+    //controls.update();
 
 }
 
@@ -197,7 +201,7 @@ function run() {
     animate();
 }
 
-function createCharacterMesh( address, width, height, X, Y, Z ) {
+function createCharacterMesh( address, name, width, height, X, Y, Z ) {
     let map = new THREE.TextureLoader().load(address);
 
     let geometry = new THREE.PlaneGeometry(width, height, 5, 5);
@@ -205,6 +209,7 @@ function createCharacterMesh( address, width, height, X, Y, Z ) {
     mesh.position.setX(X);
     mesh.position.setY(Y);
     mesh.position.setZ(Z);
+    mesh.name = name;
     return mesh;
 }
 
@@ -224,7 +229,7 @@ function createScene(canvas)
     camera.position.z = 30;
 
     //Orbit controls for test
-    controls = new THREE.OrbitControls (camera, renderer.domElement);
+    //controls = new THREE.OrbitControls (camera, renderer.domElement);
 
     // This light globally illuminates all objects in the scene equally.
     // Cannot cast shadows
@@ -309,22 +314,22 @@ function createScene(canvas)
     
     // Put in a ground plane to show off the lighting
     //727 x 902 px
-    sceneTemp.add(createCharacterMesh("../models/cinderella_cleaning.png",12,15,-13,-5,-2));
+    sceneTemp.add(createCharacterMesh("../models/cinderella_cleaning.png", 'cinderella_cleaning' ,12,15,-13,-5,-2));
     //470x496px
-    sceneTemp.add(createCharacterMesh("../models/stepsisters_normal.png",14,14,13,-5,0));
+    sceneTemp.add(createCharacterMesh("../models/stepsisters_normal.png", 'stepsisters_normal' ,14,14,13,-5,0));
     //277x655 px
-    sceneTemp.add(createCharacterMesh("../models/stepmother.png",7,15,7,-5,0.5));
+    sceneTemp.add(createCharacterMesh("../models/stepmother.png", 'stepmother', 7,15,7,-5,0.5));
 
     scenes.push(sceneTemp);
 
     // Create the table https://sketchfab.com/3d-models/classic-coffee-table-0b151b371da847d3a2dd960f9339eef1
-    load3dFbxModel("../models/table/source/table.fbx", "../models/table/textures/texture.jpg", null, null, null, null, scenes[1], 0.1,-4, -11, 0.2, 0, 0);
+    load3dFbxModel("../models/table/source/table.fbx", "../models/table/textures/texture.jpg", null, null, null, null, 'table', scenes[1], 0.1,-4, -11, 0.2, 0, 0);
 
     // Create the bucket https://sketchfab.com/3d-models/old-wooden-bucket-7649d45e7d6f408b9b5929ab51895dfa
-    load3dFbxModel("../models/bucket/source/Bucket.fbx", "../models/bucket/textures/Bucket_Albedo.png", "../models/bucket/textures/Bucket_Normal.png", "../models/bucket/textures/Bucket_AO.png", "../models/bucket/textures/Bucket_Metallic.png", "../models/bucket/textures/Bucket_Roughness.png", scenes[1], 5,-10,-11,2, 80, 0);
+    load3dFbxModel("../models/bucket/source/Bucket.fbx", "../models/bucket/textures/Bucket_Albedo.png", "../models/bucket/textures/Bucket_Normal.png", "../models/bucket/textures/Bucket_AO.png", "../models/bucket/textures/Bucket_Metallic.png", "../models/bucket/textures/Bucket_Roughness.png", 'bucket', scenes[1], 5,-10,-11,2, 80, 0);
 
     //Sofa https://sketchfab.com/3d-models/sofa-a9695e97f8c74667a2c89f7d98ca3a9f
-    load3dFbxModel("../models/sofa/source/Sofa010_001.FBX", "../models/sofa/textures/Sofa010_D1024.png", "../models/sofa/textures/Sofa010_N1024.png", "../models/sofa/textures/Sofa010_AO1024.png", "../models/sofa/textures/Sofa010_S1024.png", null, scenes[1], 0.06,-16,-12,-14, 0, 0.7);
+    load3dFbxModel("../models/sofa/source/Sofa010_001.FBX", "../models/sofa/textures/Sofa010_D1024.png", "../models/sofa/textures/Sofa010_N1024.png", "../models/sofa/textures/Sofa010_AO1024.png", "../models/sofa/textures/Sofa010_S1024.png", null, 'sofa', scenes[1], 0.06,-16,-12,-14, 0, 0.7);
 
 
 
@@ -335,17 +340,17 @@ function createScene(canvas)
     sceneTemp = new THREE.Scene();
     // Set the background image 
     sceneTemp.background = new THREE.TextureLoader().load("../images/Backgrounds/scene3-4_background.jpg");
-    sceneTemp.add(createCharacterMesh("../models/cinderella_crying.png",8,10,-15,-8,-2));
-    stepSisters = createCharacterMesh("../models/stepsisters_party.png",13,14,16,-8,-5);
-    stepMother = createCharacterMesh("../models/stepmother_party.png",8,15,9,-8,-5);
+    sceneTemp.add(createCharacterMesh("../models/cinderella_crying.png", 'cinderella_crying', 8,10,-15,-8,-2));
+    stepSisters = createCharacterMesh("../models/stepsisters_party.png", 'stepsisters_party', 13,14,16,-8,-5);
+    stepMother = createCharacterMesh("../models/stepmother_party.png", 'stepmother_party', 8,15,9,-8,-5);
     stepSisters.rotation.y = Math.PI;
     sceneTemp.add(stepSisters);
     sceneTemp.add(stepMother);
 
     scenes.push(sceneTemp);
 
-    // Create the fountain
-    load3dModel('../models/fountain/fountain.obj', '../models/fountain/fountain.mtl', scenes[2], 3.5, 15, -30, -75, -Math.PI / 18);
+    // Create the fountain: https://sketchfab.com/3d-models/fountain-9812aa1535454df886fea502373edf08
+    load3dModel('../models/fountain/fountain.obj', '../models/fountain/fountain.mtl', 'fountain', scenes[2], 3.5, 15, -30, -75, -Math.PI / 18);
 
     /////////////////////////////////////////////////
     //       Scene 4                               //
@@ -355,17 +360,18 @@ function createScene(canvas)
     // Set the background image 
     sceneTemp.background = new THREE.TextureLoader().load("../images/Backgrounds/scene3-4_background.jpg");
 
-    sceneTemp.add(createCharacterMesh("../models/cinderella_crying.png",8,10,-15,-8,-2));
-    godmother = createCharacterMesh("../models/fairy_godmother.png",16,18,-2,-5,-7);
+    sceneTemp.add(createCharacterMesh("../models/cinderella_crying.png", 'cinderella_crying', 8,10,-15,-8,-2));
+    godmother = createCharacterMesh("../models/fairy_godmother.png", 'fairy_godmother', 16,18,-2,-5,-7);
     godmother.rotation.y = Math.PI;
     sceneTemp.add(godmother);
 
     scenes.push(sceneTemp);
 
-    // Create the fountain
-    load3dModel('../models/fountain/fountain.obj', '../models/fountain/fountain.mtl', scenes[3], 3.5, 15, -30, -75, -Math.PI / 18);
+    // Create the fountain: https://sketchfab.com/3d-models/fountain-9812aa1535454df886fea502373edf08
+    load3dModel('../models/fountain/fountain.obj', '../models/fountain/fountain.mtl', 'fountain', scenes[3], 3.5, 15, -30, -75, -Math.PI / 18);
     
-    load3dModel('../models/cinderella_carrosse/Cinderella_Carosse.obj', '../models/cinderella_carrosse/Cinderella_Carosse.mtl', scenes[3], 9, 35, -30, -50, null, Math.PI / 3);
+    // Create carruaje: https://www.blendswap.com/blend/9819 
+    load3dModel('../models/cinderella_carrosse/Cinderella_Carosse.obj', '../models/cinderella_carrosse/Cinderella_Carosse.mtl', 'Cinderella_Carosse', scenes[3], 9, 35, -30, -50, null, Math.PI / 3);
 
     /////////////////////////////////////////////////
     //       Scene 5                               //
@@ -376,21 +382,16 @@ function createScene(canvas)
     sceneTemp.background = new THREE.TextureLoader().load("../images/Backgrounds/scene5-6_background.jpg");
 
     //Loading the prince
-    let map_scene5_prince = new THREE.TextureLoader().load("../models/prince_charming_scene_5.png");
-
-    let geometry_scene5_prince = new THREE.PlaneGeometry(10, 10, 5, 5);
-    let mesh_scene5_prince = new THREE.Mesh(geometry_scene5_prince, new THREE.MeshPhongMaterial({map:map_scene5_prince, side:THREE.DoubleSide, transparent:true}));
-    mesh_scene5_prince.position.y = -7;
-    sceneTemp.add(mesh_scene5_prince);
+    sceneTemp.add(createCharacterMesh("../models/prince_charming_scene_5.png", 'prince', 10,10,0,-7,0));
 
     //Loading Cinderella
-    sceneTemp.add(createCharacterMesh("../models/cinderella.png",9,12,4,-9,-5));
+    sceneTemp.add(createCharacterMesh("../models/cinderella.png", 'cinderella', 9,12,4,-9,-5));
 
     scenes.push(sceneTemp);
 
     // Create the columns
     //1
-    load3dModel('../models/Column/Column_Made_By_Tyro_Smith.obj', '../models/Column/Column_Made_By_Tyro_Smith.mtl', scenes[4], 3.5, 15, -30, -75, -Math.PI / 18);
+    load3dModel('../models/Column/Column_Made_By_Tyro_Smith.obj', '../models/Column/Column_Made_By_Tyro_Smith.mtl', 'column', scenes[4], 3.5, 15, -30, -75, -Math.PI / 18);
 
     //Referencias:
     /*
@@ -416,3 +417,15 @@ function createScene(canvas)
     scenes.push(sceneTemp);
 
 }
+
+/*function playAnimations() 
+{
+    switch (scene) {
+        case value:
+            
+            break;
+    
+        default:
+            break;
+    }
+}*/
