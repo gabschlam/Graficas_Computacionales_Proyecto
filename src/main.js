@@ -11,9 +11,8 @@ let index = 0;
 
 let scenes = [];
 
-let animator = null,
-animatorBalancing = null,
-duration = 10, // sec
+//let animator = null;
+let duration = 10, // sec
 loopAnimation = false;
 
 let currentTime = Date.now();
@@ -335,11 +334,15 @@ function createScene(canvas)
     // Set the background image 
     sceneTemp.background = new THREE.TextureLoader().load("../images/Backgrounds/scene3-4_background.jpg");
     sceneTemp.add(createCharacterMesh("../models/cinderella_crying.png", 'cinderella_crying', 8,10,-30,-8,-2));
+    objectGroup = new THREE.Object3D;
+    objectGroup.name = "groupStepSistersMother"
     stepSisters = createCharacterMesh("../models/stepsisters_party.png", 'stepsisters_party', 13,14,16,-8,-5);
     stepMother = createCharacterMesh("../models/stepmother_party.png", 'stepmother_party', 8,15,9,-8,-5);
     stepSisters.rotation.y = Math.PI;
-    sceneTemp.add(stepSisters);
-    sceneTemp.add(stepMother);
+    objectGroup.add(stepSisters);
+    objectGroup.add(stepMother);
+    objectGroup.position.x = 20;
+    sceneTemp.add(objectGroup)
 
     scenes.push(sceneTemp);
 
@@ -436,7 +439,7 @@ function playAnimations()
                         animator.init({ 
                             interps:
                                 [
-                                    // Keys for the rotation in y for the Penguin for facing forward
+                                    // Keys for the entry animation
                                     { 
                                         keys:[0, 0.125], 
                                         values:[
@@ -444,6 +447,48 @@ function playAnimations()
                                                 { x : -15 },
                                                 ],
                                         target:element.position
+                                    }
+                                ],
+                            loop: loopAnimation,
+                            duration: duration * 1000,
+                        });
+                        animator.start();
+                        break;
+                    case "groupStepSistersMother":
+                        animator = new KF.KeyFrameAnimator;
+                        animator.init({ 
+                            interps:
+                                [
+                                    // Keys for the entry and exit animation
+                                    { 
+                                        keys:[0.125, 0.25, 0.9, 1], 
+                                        values:[
+                                                { x : 20  },
+                                                { x : 0 },
+                                                { x : 0 },
+                                                { x : 20 },
+                                                ],
+                                        target:element.position
+                                    },
+                                    { 
+                                        keys:[0, 0.8, 0.9, 1], 
+                                        values:[
+                                                { y : -Math.PI },
+                                                { y : -Math.PI },
+                                                { y : 0 },
+                                                { y : 0 },
+                                                ],
+                                        target:element.children[0].rotation
+                                    },
+                                    { 
+                                        keys:[0, 0.8, 0.9, 1], 
+                                        values:[
+                                                { y : 0  },
+                                                { y : 0  },
+                                                { y : Math.PI  },
+                                                { y : Math.PI  },
+                                                ],
+                                        target:element.children[1].rotation
                                     }
                                 ],
                             loop: loopAnimation,

@@ -4,6 +4,7 @@ function initControls()
         index = index + 1
         console.log("index:" + index)
         scene = scenes[index]
+        console.log(scene);
         scene.add(ambientLight)
         playAnimations();
       })
@@ -11,6 +12,7 @@ function initControls()
         index = index - 1
         console.log("index:" + index)
         scene = scenes[index]
+        console.log(scene);
         scene.add(ambientLight)
         playAnimations();
     })	
