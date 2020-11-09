@@ -14,6 +14,8 @@ let scenes = [];
 let duration = 5000; // ms
 let currentTime = Date.now();
 
+let controls;
+
 function load3dModel(objModelUrl, mtlModelUrl, sceneObj, scale, x, y, z, rotationX, rotationY)
 {
     mtlLoader = new THREE.MTLLoader();
@@ -42,6 +44,123 @@ function load3dModel(objModelUrl, mtlModelUrl, sceneObj, scale, x, y, z, rotatio
 
 }
 
+function load3dDaeModel(sceneObj)
+{
+    var loader = new THREE.ColladaLoader();
+    loader.load("../models/sofa/model.dae", function (collada) {
+        dae = collada.scene;
+        dae.position.set(0,0,0);
+        dae.children[1].children[0].material = new THREE.MeshPhongMaterial( { color: 0xFFFFFF, } );
+        dae.scale.set(1,1,1);
+        console.log(dae);
+        sceneObj.add(dae);
+    },
+	// called when loading is in progresses
+	function ( xhr ) {
+
+		console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded dae' );
+
+	},
+	// called when loading has errors
+	function ( error ) {
+
+		console.log( 'An error happened' );
+
+	});
+}
+
+function load3dFbxModel(modelUrl, textureUrl, normalUrl, aoUrl, metalUrl, roughnessUrl, sceneObj, scale, x, y, z, rotationX, rotationY)
+{
+    var loader = new THREE.FBXLoader();
+    loader.load(modelUrl, function (object) {
+        object.traverse( function (child){
+            if(child.isMesh){
+                let texture = new THREE.TextureLoader().load(textureUrl);
+                let normal = null;
+                let ao = null;
+                let metallic = null;
+                let roughness = null;
+                if(normalUrl != null){
+                    normal = new THREE.TextureLoader().load(normalUrl);
+                    console.log("loaded normal", normalUrl)
+                }
+                if(aoUrl != null){
+                    ao = new THREE.TextureLoader().load(aoUrl);
+                    console.log("loaded ao",aoUrl)
+                }
+                if(metalUrl != null){
+                    metallic = new THREE.TextureLoader().load(metalUrl);
+                    console.log("loaded metal",metalUrl)
+                }
+                if(roughnessUrl != null){
+                    roughness = new THREE.TextureLoader().load(roughnessUrl);
+                    console.log("loaded rough",roughnessUrl)
+                }
+                child.material = new THREE.MeshStandardMaterial( { map: texture, normalMap: normal, aoMap:ao, aoMapIntensity: 1, metalnessMap: metallic, metalness: 0,  roughnessMap: roughness, roughness: 0 } );
+            }
+        });
+
+        object.scale.x = object.scale.y = object.scale.z = scale;
+        object.position.set(x,y,z);
+        if (rotationX) {
+            object.rotation.x = rotationX ;
+        }
+        if (rotationY) {
+            object.rotation.y = rotationY ;
+        }
+        sceneObj.add(object);
+        console.log("FBX");
+        console.log(object);
+    });
+}
+
+function load3dObjModel(modelUrl, textureUrl, normalUrl, aoUrl, metalUrl, roughnessUrl, sceneObj, scale, x, y, z, rotationX, rotationY)
+{
+    let loader = new THREE.OBJLoader();
+    loader.load(modelUrl, function (object) {
+        object.traverse( function (child){
+            if(child.isMesh){
+                let texture = new THREE.TextureLoader().load(textureUrl);
+                let normal = null;
+                let ao = null;
+                let metallic = null;
+                let roughness = null;
+                if(normalUrl != null){
+                    normal = new THREE.TextureLoader().load(normalUrl);
+                }
+                if(aoUrl != null){
+                    ao = new THREE.TextureLoader().load(aoUrl);
+                }
+                if(metalUrl != null){
+                    metallic = new THREE.TextureLoader().load(metalUrl);
+                }
+                if(roughnessUrl != null){
+                    roughness = new THREE.TextureLoader().load(roughnessUrl);
+                }
+                child.material = new THREE.MeshStandardMaterial( { map: texture, normalMap: normal, aoMap:ao, metalnessMap: metallic,  roughnessMap: roughness } );
+            }
+        });
+        object.position.set(-70,-10,0);
+        object.scale.set(0.01,0.01,0.01);
+        object.rotation.y = Math.PI /4;
+        sceneObj.add(object);
+        console.log("OBJ");
+        console.log(object);
+    },
+	// called when loading is in progresses
+	function ( xhr ) {
+
+		console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+
+	},
+	// called when loading has errors
+	function ( error ) {
+
+		console.log( 'An error happened' );
+
+	});
+}
+
 function animate() 
 {
     let now = Date.now();
@@ -50,7 +169,7 @@ function animate()
     let fract = deltat / duration;
     let angle = Math.PI * 2 * fract;
 
-   // console.log(carruaje);
+   controls.update();
 
 }
 
@@ -104,6 +223,9 @@ function createScene(canvas)
     camera = new THREE.PerspectiveCamera( 45, canvas.width / canvas.height, 1, 4000 );
     camera.position.z = 30;
 
+    //Orbit controls for test
+    controls = new THREE.OrbitControls (camera, renderer.domElement);
+
     // This light globally illuminates all objects in the scene equally.
     // Cannot cast shadows
     ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
@@ -115,13 +237,67 @@ function createScene(canvas)
 
     sceneTemp = new THREE.Scene();
     // Set the background image 
-    sceneTemp.background = new THREE.TextureLoader().load("../images/Backgrounds/scene1_background_3.jpg");
+    sceneTemp.background = new THREE.Color( 0xffffff);
 
     scenes.push(sceneTemp);
+
+    //Title
+    const loaderText = new THREE.FontLoader();
+
+    loaderText.load( '../fonts/book.json', function ( font ) {
+
+        let textGeometry = new THREE.TextGeometry( 'Cinderella', {
+            font: font,
+            size: 5,
+            height: 1,
+            curveSegments: 12,
+            bevelEnabled: true,
+            bevelThickness: 0,
+            bevelSize: 0,
+            bevelOffset: 0,
+            bevelSegments: 5
+        } );
+
+        var textMaterial = new THREE.MeshPhongMaterial( 
+            { color: 0xd6ecef, specular: 0xffffff }
+        );
+        var mesh = new THREE.Mesh(textGeometry, textMaterial);
+        mesh.position.set(-17.5,5,-1);
+        scenes[0].add(mesh);
+    } );
+    // Slipper
+    var loader = new THREE.FBXLoader();
+    loader.load("../models/slipper/3d-model.fbx", function (object) {
+        object.traverse( function (child){
+            if(child.isMesh){
+                child.material = new THREE.MeshPhysicalMaterial({
+                    color: 0x80c4e2,
+                    opacity: 0.6,
+                    roughness: 0.3,
+                    metalness:1,
+                    reflectivity: 0.88,
+                    transparent: true,
+                    side: THREE.DoubleSide,
+                  });
+            }
+        });
+
+        object.scale.x = object.scale.y = object.scale.z = 0.3;
+        object.position.set(0,-8,0);
+        scenes[0].add(object);
+        console.log("FBX");
+        console.log(object);
+    });
+    
+    //Slipper
+     // Create the table https://sketchfab.com/3d-models/classic-coffee-table-0b151b371da847d3a2dd960f9339eef1
+     //load3dFbxModel("../models/slipper/source/Heel.fbx", null, null, null, null, null, scenes[0], 1,0, 0, 0, 0, 0);
+
 
     // Choosing default scene as scene1
     scene = sceneTemp;
     scene.add(camera);
+    scene.add(ambientLight)
 
     /////////////////////////////////////////////////
     //       Scene 2                               //
@@ -135,11 +311,22 @@ function createScene(canvas)
     //727 x 902 px
     sceneTemp.add(createCharacterMesh("../models/cinderella_cleaning.png",12,15,-13,-5,-2));
     //470x496px
-    sceneTemp.add(createCharacterMesh("../models/stepsisters_normal.png",14,14,11,-5,0));
+    sceneTemp.add(createCharacterMesh("../models/stepsisters_normal.png",14,14,13,-5,0));
     //277x655 px
-    sceneTemp.add(createCharacterMesh("../models/stepmother.png",7,15,5,-5,0));
+    sceneTemp.add(createCharacterMesh("../models/stepmother.png",7,15,7,-5,0.5));
 
     scenes.push(sceneTemp);
+
+    // Create the table https://sketchfab.com/3d-models/classic-coffee-table-0b151b371da847d3a2dd960f9339eef1
+    load3dFbxModel("../models/table/source/table.fbx", "../models/table/textures/texture.jpg", null, null, null, null, scenes[1], 0.1,-4, -11, 0.2, 0, 0);
+
+    // Create the bucket https://sketchfab.com/3d-models/old-wooden-bucket-7649d45e7d6f408b9b5929ab51895dfa
+    load3dFbxModel("../models/bucket/source/Bucket.fbx", "../models/bucket/textures/Bucket_Albedo.png", "../models/bucket/textures/Bucket_Normal.png", "../models/bucket/textures/Bucket_AO.png", "../models/bucket/textures/Bucket_Metallic.png", "../models/bucket/textures/Bucket_Roughness.png", scenes[1], 5,-10,-11,2, 80, 0);
+
+    //Sofa https://sketchfab.com/3d-models/sofa-a9695e97f8c74667a2c89f7d98ca3a9f
+    load3dFbxModel("../models/sofa/source/Sofa010_001.FBX", "../models/sofa/textures/Sofa010_D1024.png", "../models/sofa/textures/Sofa010_N1024.png", "../models/sofa/textures/Sofa010_AO1024.png", "../models/sofa/textures/Sofa010_S1024.png", null, scenes[1], 0.06,-16,-12,-14, 0, 0.7);
+
+
 
     /////////////////////////////////////////////////
     //       Scene 3                               //
