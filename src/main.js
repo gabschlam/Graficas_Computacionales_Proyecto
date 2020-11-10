@@ -165,30 +165,32 @@ function createScene(canvas)
 
     scenes.push(sceneTemp);
 
-    //Title
-    const loaderText = new THREE.FontLoader();
+    // //Title
+    textAnimation('Cinderella', 3,-12,8.5,-1, scenes[0]);
 
-    loaderText.load( '../fonts/book.json', function ( font ) {
+    // const loaderText = new THREE.FontLoader();
 
-        let textGeometry = new THREE.TextGeometry( 'Cinderella', {
-            font: font,
-            size: 3,
-            height: 1,
-            curveSegments: 12,
-            bevelEnabled: true,
-            bevelThickness: 0,
-            bevelSize: 0,
-            bevelOffset: 0,
-            bevelSegments: 5
-        } );
+    // loaderText.load( '../fonts/book.json', function ( font ) {
 
-        var textMaterial = new THREE.MeshPhongMaterial( 
-            { color: 0xd6ecef, specular: 0xffffff }
-        );
-        var mesh = new THREE.Mesh(textGeometry, textMaterial);
-        mesh.position.set(-12,8.5,-1);
-        scenes[0].add(mesh);
-    } );
+    //     let textGeometry = new THREE.TextGeometry( 'Cinderella', {
+    //         font: font,
+    //         size: 3,
+    //         height: 1,
+    //         curveSegments: 12,
+    //         bevelEnabled: true,
+    //         bevelThickness: 0,
+    //         bevelSize: 0,
+    //         bevelOffset: 0,
+    //         bevelSegments: 5
+    //     } );
+
+    //     var textMaterial = new THREE.MeshPhongMaterial( 
+    //         { color: 0xd6ecef, specular: 0xffffff }
+    //     );
+    //     var mesh = new THREE.Mesh(textGeometry, textMaterial);
+    //     mesh.position.set(-12,8.5,-1);
+    //     scenes[0].add(mesh);
+    // } );
     // Slipper
     var loader = new THREE.FBXLoader();
     loader.load("../models/slipper/3d-model.fbx", function (object) {
@@ -362,24 +364,7 @@ function playAnimations()
             scene.children.forEach(element => {
                 switch (element.name) {
                     case "cinderella_crying":
-                        animator = new KF.KeyFrameAnimator;
-                        animator.init({ 
-                            interps:
-                                [
-                                    // Keys for the entry animation
-                                    { 
-                                        keys:[0, 0.125], 
-                                        values:[
-                                                { x : -30 },
-                                                { x : -15 },
-                                                ],
-                                        target:element.position
-                                    }
-                                ],
-                            loop: loopAnimation,
-                            duration: duration * 1000,
-                        });
-                        animator.start();
+                        enterAnimation(0, 0.125, -30, -15, element);
                         break;
                     case "groupStepSistersMother":
                         animator = new KF.KeyFrameAnimator;
@@ -445,4 +430,52 @@ function playAnimations()
         default:
             break;
     }
+}
+
+function enterAnimation(ti, tf, pos1_x, pos2_x, element){
+    animator = new KF.KeyFrameAnimator;
+    animator.init({ 
+        interps:
+            [
+                // Keys for the entry animation
+                { 
+                    keys:[ti, tf], 
+                    values:[
+                            { x : pos1_x },
+                            { x : pos2_x },
+                            ],
+                    target: element.position
+                }
+            ],
+        loop: loopAnimation,
+        duration: duration * 1000,
+    });
+    animator.start();
+}
+
+function textAnimation(text, size, x, y, z, scene){
+    const loaderText = new THREE.FontLoader();
+
+    loaderText.load( '../fonts/book.json', function ( font ) {
+
+        let textGeometry = new THREE.TextGeometry( text, {
+            font: font,
+            size: size,
+            height: 1,
+            curveSegments: 12,
+            bevelEnabled: true,
+            bevelThickness: 0,
+            bevelSize: 0,
+            bevelOffset: 0,
+            bevelSegments: 5
+        } );
+
+        var textMaterial = new THREE.MeshPhongMaterial( 
+            { color: 0xd6ecef, specular: 0xffffff }
+        );
+        var mesh = new THREE.Mesh(textGeometry, textMaterial);
+
+        mesh.position.set(x, y, z);
+        scene.add(mesh);
+    } );
 }
