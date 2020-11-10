@@ -48,31 +48,6 @@ function load3dModel(objModelUrl, mtlModelUrl, name, sceneObj, scale, x, y, z, r
 
 }
 
-function load3dDaeModel(sceneObj)
-{
-    var loader = new THREE.ColladaLoader();
-    loader.load("../models/sofa/model.dae", function (collada) {
-        dae = collada.scene;
-        dae.position.set(0,0,0);
-        dae.children[1].children[0].material = new THREE.MeshPhongMaterial( { color: 0xFFFFFF, } );
-        dae.scale.set(1,1,1);
-        console.log(dae);
-        sceneObj.add(dae);
-    },
-	// called when loading is in progresses
-	function ( xhr ) {
-
-		console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded dae' );
-
-	},
-	// called when loading has errors
-	function ( error ) {
-
-		console.log( 'An error happened' );
-
-	});
-}
-
 function load3dFbxModel(modelUrl, textureUrl, normalUrl, aoUrl, metalUrl, roughnessUrl, name, sceneObj, scale, x, y, z, rotationX, rotationY)
 {
     var loader = new THREE.FBXLoader();
@@ -117,53 +92,6 @@ function load3dFbxModel(modelUrl, textureUrl, normalUrl, aoUrl, metalUrl, roughn
         console.log("FBX");
         console.log(object);
     });
-}
-
-function load3dObjModel(modelUrl, textureUrl, normalUrl, aoUrl, metalUrl, roughnessUrl, sceneObj, scale, x, y, z, rotationX, rotationY)
-{
-    let loader = new THREE.OBJLoader();
-    loader.load(modelUrl, function (object) {
-        object.traverse( function (child){
-            if(child.isMesh){
-                let texture = new THREE.TextureLoader().load(textureUrl);
-                let normal = null;
-                let ao = null;
-                let metallic = null;
-                let roughness = null;
-                if(normalUrl != null){
-                    normal = new THREE.TextureLoader().load(normalUrl);
-                }
-                if(aoUrl != null){
-                    ao = new THREE.TextureLoader().load(aoUrl);
-                }
-                if(metalUrl != null){
-                    metallic = new THREE.TextureLoader().load(metalUrl);
-                }
-                if(roughnessUrl != null){
-                    roughness = new THREE.TextureLoader().load(roughnessUrl);
-                }
-                child.material = new THREE.MeshStandardMaterial( { map: texture, normalMap: normal, aoMap:ao, metalnessMap: metallic,  roughnessMap: roughness } );
-            }
-        });
-        object.position.set(-70,-10,0);
-        object.scale.set(0.01,0.01,0.01);
-        object.rotation.y = Math.PI /4;
-        sceneObj.add(object);
-        console.log("OBJ");
-        console.log(object);
-    },
-	// called when loading is in progresses
-	function ( xhr ) {
-
-		console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-
-	},
-	// called when loading has errors
-	function ( error ) {
-
-		console.log( 'An error happened' );
-
-	});
 }
 
 function run() {
@@ -244,7 +172,7 @@ function createScene(canvas)
 
         let textGeometry = new THREE.TextGeometry( 'Cinderella', {
             font: font,
-            size: 5,
+            size: 3,
             height: 1,
             curveSegments: 12,
             bevelEnabled: true,
@@ -258,7 +186,7 @@ function createScene(canvas)
             { color: 0xd6ecef, specular: 0xffffff }
         );
         var mesh = new THREE.Mesh(textGeometry, textMaterial);
-        mesh.position.set(-17.5,5,-1);
+        mesh.position.set(-12,8.5,-1);
         scenes[0].add(mesh);
     } );
     // Slipper
@@ -322,7 +250,6 @@ function createScene(canvas)
 
     //Sofa https://sketchfab.com/3d-models/sofa-a9695e97f8c74667a2c89f7d98ca3a9f
     load3dFbxModel("../models/sofa/source/Sofa010_001.FBX", "../models/sofa/textures/Sofa010_D1024.png", "../models/sofa/textures/Sofa010_N1024.png", "../models/sofa/textures/Sofa010_AO1024.png", "../models/sofa/textures/Sofa010_S1024.png", null, 'sofa', scenes[1], 0.06,-16,-12,-14, 0, 0.7);
-
 
 
     /////////////////////////////////////////////////
@@ -443,7 +370,7 @@ function playAnimations()
                                     { 
                                         keys:[0, 0.125], 
                                         values:[
-                                                { x : -30  },
+                                                { x : -30 },
                                                 { x : -15 },
                                                 ],
                                         target:element.position
