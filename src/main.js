@@ -7,7 +7,7 @@ objLoader = null,
 ambientLight = null,
 sphere = null;
 
-let index = 0;
+let index = 5;
 
 let scenes = [];
 
@@ -26,7 +26,7 @@ function load3dModel(objModelUrl, mtlModelUrl, name, sceneObj, scale, x, y, z, r
     mtlLoader.load(mtlModelUrl, materials =>{
         
         materials.preload();
-        console.log(materials);
+        // // console.log(materials);
 
         objLoader = new THREE.OBJLoader();
         
@@ -42,6 +42,15 @@ function load3dModel(objModelUrl, mtlModelUrl, name, sceneObj, scale, x, y, z, r
                 object.rotation.y = rotationY ;
             }
             object.name = name;
+
+            object.traverse( function( child ) {
+                if ( child.isMesh ) 
+                {
+                    child.geometry.computeVertexNormals();
+                    // child.geometry.computeBoundingBox();
+                }
+            } );
+
             sceneObj.add(object);
         });
     });
@@ -61,19 +70,19 @@ function load3dFbxModel(modelUrl, textureUrl, normalUrl, aoUrl, metalUrl, roughn
                 let roughness = null;
                 if(normalUrl != null){
                     normal = new THREE.TextureLoader().load(normalUrl);
-                    console.log("loaded normal", normalUrl)
+                    // console.log("loaded normal", normalUrl)
                 }
                 if(aoUrl != null){
                     ao = new THREE.TextureLoader().load(aoUrl);
-                    console.log("loaded ao",aoUrl)
+                    // console.log("loaded ao",aoUrl)
                 }
                 if(metalUrl != null){
                     metallic = new THREE.TextureLoader().load(metalUrl);
-                    console.log("loaded metal",metalUrl)
+                    // console.log("loaded metal",metalUrl)
                 }
                 if(roughnessUrl != null){
                     roughness = new THREE.TextureLoader().load(roughnessUrl);
-                    console.log("loaded rough",roughnessUrl)
+                    // console.log("loaded rough",roughnessUrl)
                 }
                 child.material = new THREE.MeshStandardMaterial( { map: texture, normalMap: normal, aoMap:ao, aoMapIntensity: 1, metalnessMap: metallic, metalness: 0,  roughnessMap: roughness, roughness: 0 } );
             }
@@ -89,8 +98,8 @@ function load3dFbxModel(modelUrl, textureUrl, normalUrl, aoUrl, metalUrl, roughn
         }
         object.name = name;
         sceneObj.add(object);
-        console.log("FBX");
-        console.log(object);
+        // console.log("FBX");
+        // console.log(object);
     });
 }
 
@@ -211,8 +220,8 @@ function createScene(canvas)
         object.scale.x = object.scale.y = object.scale.z = 0.3;
         object.position.set(0,-8,0);
         scenes[0].add(object);
-        console.log("FBX");
-        console.log(object);
+        // console.log("FBX");
+        // console.log(object);
     });
     
     //Slipper
@@ -351,15 +360,15 @@ function playAnimations()
 {
     switch (scene.name) {
         case "scene1":
-            console.log("Escena 1");
+            // console.log("Escena 1");
             // Animaciones
             break;
         case "scene2":
-            console.log("Escena 2");
+            // console.log("Escena 2");
             // Animaciones
             break;
         case "scene3":
-            console.log("Escena 3");
+            // console.log("Escena 3");
             // Animaciones
             scene.children.forEach(element => {
                 switch (element.name) {
@@ -415,15 +424,15 @@ function playAnimations()
             });
             break;
         case "scene4":
-            console.log("Escena 4");
+            // console.log("Escena 4");
             // Animaciones
             break;
         case "scene5":
-            console.log("Escena 5");
+            // console.log("Escena 5");
             // Animaciones
             break;
         case "scene6":
-            console.log("Escena 6");
+            // console.log("Escena 6");
             // Animaciones
             break;            
     
