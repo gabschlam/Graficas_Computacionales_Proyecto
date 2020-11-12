@@ -7,7 +7,7 @@ objLoader = null,
 ambientLight = null,
 sphere = null;
 
-let index = 5;
+let index = 0;
 
 let scenes = [];
 
@@ -177,29 +177,6 @@ function createScene(canvas)
     // //Title
     textAnimation('Cinderella', 3,-12,8.5,-1, scenes[0]);
 
-    // const loaderText = new THREE.FontLoader();
-
-    // loaderText.load( '../fonts/book.json', function ( font ) {
-
-    //     let textGeometry = new THREE.TextGeometry( 'Cinderella', {
-    //         font: font,
-    //         size: 3,
-    //         height: 1,
-    //         curveSegments: 12,
-    //         bevelEnabled: true,
-    //         bevelThickness: 0,
-    //         bevelSize: 0,
-    //         bevelOffset: 0,
-    //         bevelSegments: 5
-    //     } );
-
-    //     var textMaterial = new THREE.MeshPhongMaterial( 
-    //         { color: 0xd6ecef, specular: 0xffffff }
-    //     );
-    //     var mesh = new THREE.Mesh(textGeometry, textMaterial);
-    //     mesh.position.set(-12,8.5,-1);
-    //     scenes[0].add(mesh);
-    // } );
     // Slipper
     var loader = new THREE.FBXLoader();
     loader.load("../models/slipper/3d-model.fbx", function (object) {
@@ -297,7 +274,7 @@ function createScene(canvas)
     sceneTemp.background = new THREE.TextureLoader().load("../images/Backgrounds/scene3-4_background.jpg");
 
     sceneTemp.add(createCharacterMesh("../models/cinderella_crying.png", 'cinderella_crying', 8,10,-15,-8,-2));
-    godmother = createCharacterMesh("../models/fairy_godmother.png", 'fairy_godmother', 16,18,-2,-5,-7);
+    godmother = createCharacterMesh("../models/fairy_godmother.png", 'fairy_godmother', 16,18,-2,30,-7);
     godmother.rotation.y = Math.PI;
     sceneTemp.add(godmother);
 
@@ -307,7 +284,7 @@ function createScene(canvas)
     load3dModel('../models/fountain/fountain.obj', '../models/fountain/fountain.mtl', 'fountain', scenes[3], 3.5, 15, -30, -75, -Math.PI / 18);
     
     // Create carruaje: https://www.blendswap.com/blend/9819 
-    load3dModel('../models/cinderella_carrosse/Cinderella_Carosse.obj', '../models/cinderella_carrosse/Cinderella_Carosse.mtl', 'Cinderella_Carosse', scenes[3], 9, 35, -30, -50, null, Math.PI / 3);
+    load3dModel('../models/cinderella_carrosse/Cinderella_Carosse.obj', '../models/cinderella_carrosse/Cinderella_Carosse.mtl', 'Cinderella_Carosse', scenes[3], 9, 60, -60, -50, null, Math.PI / 3);
 
     /////////////////////////////////////////////////
     //       Scene 5                               //
@@ -360,20 +337,20 @@ function playAnimations()
 {
     switch (scene.name) {
         case "scene1":
-            // console.log("Escena 1");
+            console.log("Escena 1");
             // Animaciones
             break;
         case "scene2":
-            // console.log("Escena 2");
+            console.log("Escena 2");
             // Animaciones
             break;
         case "scene3":
-            // console.log("Escena 3");
+            console.log("Escena 3");
             // Animaciones
             scene.children.forEach(element => {
                 switch (element.name) {
                     case "cinderella_crying":
-                        enterAnimation(0, 0.125, -30, -15, element);
+                        enterAnimationX(0, 0.125, -30, -15, element);
                         break;
                     case "groupStepSistersMother":
                         animator = new KF.KeyFrameAnimator;
@@ -424,15 +401,81 @@ function playAnimations()
             });
             break;
         case "scene4":
-            // console.log("Escena 4");
+            console.log("Escena 4");
             // Animaciones
+            scene.children.forEach(element => {
+                switch (element.name) {
+                    case "cinderella_crying":
+                        //element.material.map = new THREE.TextureLoader().load( "../models/cinderella_crying.png" ); 
+                        //enterAnimationY(0.25, 0.5, -8, -2, element);
+                        /* setTimeout( () => {
+		
+                            element.material.map = new THREE.TextureLoader().load( "../models/cinderella.png" ); 
+                        
+                        }, (duration - 0.2) * 1000 ); */
+                        break;
+                    case "fairy_godmother":
+                        animator = new KF.KeyFrameAnimator;
+                        animator.init({ 
+                            interps:
+                                [
+                                    // Keys for the entry and exit animation
+                                    { 
+                                        keys:[0, 0.125, 0.25], 
+                                        values:[
+                                                { y : 30  },
+                                                { y : 30  },
+                                                { y : -5  },
+                                                ],
+                                        target:element.position
+                                    },
+                                    { 
+                                        keys:[0.125, 0.1875, 0.25], 
+                                        values:[
+                                                { y : -Math.PI },
+                                                { y : Math.PI },
+                                                { y : -Math.PI },
+                                                ],
+                                        target:element.rotation
+                                    },
+                                ],
+                            loop: loopAnimation,
+                            duration: duration * 1000,
+                        });
+                        animator.start();
+                        break;
+                    case "Cinderella_Carosse":
+                        animator = new KF.KeyFrameAnimator;
+                        animator.init({ 
+                            interps:
+                                [
+                                    // Keys for the entry and exit animation
+                                    { 
+                                        keys:[0, 0.750, 1], 
+                                        values:[
+                                                { x : 60, y : -60 },
+                                                { x : 60, y : -60 },
+                                                { x : 35, y : -30 },
+                                                ],
+                                        target:element.position
+                                    }
+                                ],
+                            loop: loopAnimation,
+                            duration: duration * 1000,
+                        });
+                        animator.start();
+                        break;
+                    default:
+                        break;
+                }
+            });
             break;
         case "scene5":
-            // console.log("Escena 5");
+            console.log("Escena 5");
             // Animaciones
             break;
         case "scene6":
-            // console.log("Escena 6");
+            console.log("Escena 6");
             // Animaciones
             break;            
     
@@ -441,17 +484,40 @@ function playAnimations()
     }
 }
 
-function enterAnimation(ti, tf, pos1_x, pos2_x, element){
+function enterAnimationX(ti, tf, pos1_x, pos2_x, element){
     animator = new KF.KeyFrameAnimator;
     animator.init({ 
         interps:
             [
                 // Keys for the entry animation
                 { 
-                    keys:[ti, tf], 
+                    keys:[0, ti, tf], 
                     values:[
+                            { x : pos1_x },    
                             { x : pos1_x },
                             { x : pos2_x },
+                            ],
+                    target: element.position
+                }
+            ],
+        loop: loopAnimation,
+        duration: duration * 1000,
+    });
+    animator.start();
+}
+
+function enterAnimationY(ti, tf, pos1_y, pos2_y, element){
+    animator = new KF.KeyFrameAnimator;
+    animator.init({ 
+        interps:
+            [
+                // Keys for the entry animation
+                { 
+                    keys:[0, ti, tf], 
+                    values:[
+                            { y : pos1_y },
+                            { y : pos1_y },
+                            { y : pos2_y },
                             ],
                     target: element.position
                 }
