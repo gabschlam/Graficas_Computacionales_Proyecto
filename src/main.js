@@ -406,43 +406,17 @@ function playAnimations()
             scene.children.forEach(element => {
                 switch (element.name) {
                     case "cinderella_crying":
-                        //element.material.map = new THREE.TextureLoader().load( "../models/cinderella_crying.png" ); 
-                        //enterAnimationY(0.25, 0.5, -8, -2, element);
-                        /* setTimeout( () => {
+                        element.material.map = new THREE.TextureLoader().load( "../models/cinderella_crying.png" ); 
+                        enterAnimationYRotation(0.3, 0.5, -8, -2, 0.3, 0.5, (8*Math.PI)/3, (16*Math.PI)/3, Math.PI*8, element);
+                        setTimeout( () => {
 		
                             element.material.map = new THREE.TextureLoader().load( "../models/cinderella.png" ); 
                         
-                        }, (duration - 0.2) * 1000 ); */
+                        }, (duration - 0.9) * 1000 );
                         break;
                     case "fairy_godmother":
                         animator = new KF.KeyFrameAnimator;
-                        animator.init({ 
-                            interps:
-                                [
-                                    // Keys for the entry and exit animation
-                                    { 
-                                        keys:[0, 0.125, 0.25], 
-                                        values:[
-                                                { y : 30  },
-                                                { y : 30  },
-                                                { y : -5  },
-                                                ],
-                                        target:element.position
-                                    },
-                                    { 
-                                        keys:[0.125, 0.1875, 0.25], 
-                                        values:[
-                                                { y : -Math.PI },
-                                                { y : Math.PI },
-                                                { y : -Math.PI },
-                                                ],
-                                        target:element.rotation
-                                    },
-                                ],
-                            loop: loopAnimation,
-                            duration: duration * 1000,
-                        });
-                        animator.start();
+                        enterAnimationYRotation(0.125, 0.25, 30, -5, 0.125, 0.25, -Math.PI, Math.PI, -Math.PI, element);
                         break;
                     case "Cinderella_Carosse":
                         animator = new KF.KeyFrameAnimator;
@@ -520,6 +494,37 @@ function enterAnimationY(ti, tf, pos1_y, pos2_y, element){
                             { y : pos2_y },
                             ],
                     target: element.position
+                }
+            ],
+        loop: loopAnimation,
+        duration: duration * 1000,
+    });
+    animator.start();
+}
+
+function enterAnimationYRotation(ti, tf, pos1_y, pos2_y, tiR, tfR, rot1, rot2, rot3, element){
+    animator = new KF.KeyFrameAnimator;
+    animator.init({ 
+        interps:
+            [
+                // Keys for the entry animation
+                { 
+                    keys:[0, ti, tf], 
+                    values:[
+                            { y : pos1_y },
+                            { y : pos1_y },
+                            { y : pos2_y },
+                            ],
+                    target: element.position
+                },
+                { 
+                    keys:[tiR, (tiR+tfR)/2, tfR], 
+                    values:[
+                            { y : rot1 },
+                            { y : rot2 },
+                            { y : rot3 },
+                            ],
+                    target:element.rotation
                 }
             ],
         loop: loopAnimation,
