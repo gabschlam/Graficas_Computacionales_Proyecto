@@ -179,8 +179,8 @@ function createScene(canvas)
     textAnimation('Cinderella', 3,-12,8.5,-1, scenes[0]);
 
     // Slipper
-    var loader = new THREE.FBXLoader();
-    loader.load("../models/slipper/3d-model.fbx", function (object) {
+    var loader = new THREE.OBJLoader();
+    loader.load("../models/slipper/3d-model.obj", function (object) {
         object.traverse( function (child){
             if(child.isMesh){
                 child.material = new THREE.MeshPhysicalMaterial({
@@ -192,6 +192,7 @@ function createScene(canvas)
                     transparent: true,
                     side: THREE.DoubleSide,
                   });
+                  child.material.color.setHex(0x00FF00);
             }
         });
 
@@ -367,7 +368,19 @@ function playAnimations()
             break;
         case "scene2":
             console.log("Escena 2");
-            // Animaciones
+            scene.children.forEach(element => {
+                switch (element.name) {
+                    case "cinderella_cleaning":
+                        enterAnimationX(0, 0.125, -30, -13, element);
+                        break;
+                    case "stepmother":
+                        enterAnimationX(0.125, 0.250, 30, 7, element);
+                        break;
+                    case "stepsisters_normal":
+                        enterAnimationX(0.180, 0.305, 30, 13, element);
+                        break;
+                }
+            });
             break;
         case "scene3":
             console.log("Escena 3");
