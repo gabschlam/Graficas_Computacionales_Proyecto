@@ -292,20 +292,34 @@ function createScene(canvas)
 
     sceneTemp = new THREE.Scene();  
     sceneTemp.name = "scene5";
+
+    let grupoBaile = new THREE.Object3D;
+
+    
+    
+
     // Set the background image 
     sceneTemp.background = new THREE.TextureLoader().load("../images/Backgrounds/scene5-6_background.jpg");
 
     //Loading the prince
-    sceneTemp.add(createCharacterMesh("../models/prince_charming_scene_5.png", 'prince', 10,10,0,-7,0));
+    sceneTemp.add(grupoBaile.add(createCharacterMesh("../models/prince_charming_scene_5.png", 'prince_dancing', 10,10,0,-7,0)));
+    //grupoBaile.add(prince);
 
     //Loading Cinderella
-    sceneTemp.add(createCharacterMesh("../models/cinderella.png", 'cinderella', 9,12,4,-9,-5));
+    sceneTemp.add(grupoBaile.add(createCharacterMesh("../models/cinderella.png", 'cinderella_dancing', 9,12,4,-9,-5)));
+    //grupoBaile.add(cinderella);
 
     scenes.push(sceneTemp);
 
     // Create the columns
     //1
-    load3dModel('../models/Column/Column_Made_By_Tyro_Smith.obj', '../models/Column/Column_Made_By_Tyro_Smith.mtl', 'column', scenes[4], 3.5, 15, -30, -75, -Math.PI / 18);
+    //objModelUrl, mtlModelUrl, name, sceneObj, scale, x, y, z, rotationX, rotationY
+    let directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5);
+    sceneTemp.add( directionalLight );
+    directionalLight.position.set(-15, 0, -10);
+    
+    load3dModel('../models/Column/Column_Made_By_Tyro_Smith.obj', '../models/Column/Column_Made_By_Tyro_Smith.mtl', 'column', scenes[4], 1.8, 16, -1, 0, 0, 0);
+
 
     //Referencias:
     /*
@@ -326,11 +340,23 @@ function createScene(canvas)
     geometry = new THREE.SphereGeometry(5, 20, 20);
     material = new THREE.MeshNormalMaterial();
 
-    sphere = new THREE.Mesh(geometry, material);
-    //sceneTemp.add(sphere);
+    //Loading the prince
+    sceneTemp.add(createCharacterMesh("../models/prince_scene6.png", 'prince', 5,12,-1,-9,-5));
+
+    //Loading Cinderella
+    sceneTemp.add(createCharacterMesh("../models/cinderella_bride.png", 'cinderella', 8,12,4,-9,-5));
+
+    directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5);
+    sceneTemp.add( directionalLight );
+    directionalLight.position.set(-15, 0, -10);
+    
+    load3dModel('../models/Column/Column_Made_By_Tyro_Smith.obj', '../models/Column/Column_Made_By_Tyro_Smith.mtl', 'column1', scenes[5], 1.8, 16, -1, 0, 0, 0);
 
     scenes.push(sceneTemp);
 
+    /*
+    Prince and cinderella https://www.jing.fm/iclipt/Thmwx/
+    */
 }
 
 function playAnimations() 
@@ -446,6 +472,17 @@ function playAnimations()
             break;
         case "scene5":
             console.log("Escena 5");
+            scene.children.forEach(element => {
+                switch (element.name) {
+                    case "cinderella_dancing":
+                        break;
+                    case "prince_dancing":
+                        break;
+                    case "grupoBaile":
+                        enterAnimationX(0, 0.125, -30, -15, element);
+                        break;
+                }
+            });            
             // Animaciones
             break;
         case "scene6":
@@ -559,3 +596,74 @@ function textAnimation(text, size, x, y, z, scene){
         scene.add(mesh);
     } );
 }
+
+//Dance animation
+function danceAnimations()
+{
+    // position animation
+    if (crateAnimator)
+        crateAnimator.stop();
+    
+    grupoBaile.position.set(0, 0, 0);
+    grupoBaile.rotation.set(0, 0, 0);
+
+    if (animateCrate)
+    {
+        crateAnimator = new KF.KeyFrameAnimator;
+        crateAnimator.init({ 
+            interps:
+                [
+                    { 
+                        keys:[0, .11, .11*2, .11*3, .11*4, .11*5, .11*6, .11*7, 1], 
+                        values:[
+                                { x : 0, y:0, z: 0 },
+                                { x : -2, y:0, z: -2 },
+                                { x : -4, y:0, z: 0 },
+                                { x : -2, y:0, z: 2 },
+                                { x : 0, y:0, z: 0 },
+                                { x : 2, y:0, z: -2 },
+                                { x : 4, y:0, z: 0 },
+                                { x : 2, y:0, z: 2 },
+                                { x : 0, y:0, z: 0 },
+                                ],
+                        target:grupoBaile.position
+                    },
+                    { 
+                        keys:[0, .11, .11*2, .11*3, .11*4, .11*5, .11*6, .11*7, 1], 
+                        values:[
+                                { z : (Math.PI)/8},
+                                { z : -(Math.PI)/8},
+                                { z : (Math.PI)/8},
+                                { z : -(Math.PI)/8},
+                                { z : (Math.PI)/8},
+                                { z : -(Math.PI)/8},
+                                { z : (Math.PI)/8 },
+                                { z : -(Math.PI)/8},
+                                { z : (Math.PI)/8}
+                                ],
+                        target:grupoBaile.rotation
+                    }, 
+                    { 
+                        keys:[0, .11, .11*2, .11*3, .11*4, .11*5, .11*6, .11*7, 1], 
+                        values:[
+                                { y : -3*(Math.PI)/4},
+                                { y : -(Math.PI)/4},
+                                { y : (Math.PI)/8},
+                                { y : (Math.PI)/4},
+                                { y : 3*(Math.PI)/4},
+                                { y : 3*(Math.PI)/4},
+                                { y : (Math.PI)/8 },
+                                { y : -(Math.PI)/4},
+                                { y : -3*(Math.PI)/4}
+                                ],
+                        target:grupoBaile.rotation
+                    }                      
+                ],
+            loop: true,
+            duration:duration * 1000,
+
+        });
+        crateAnimator.start();
+    }
+        
+    }
