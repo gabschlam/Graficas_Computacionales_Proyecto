@@ -5,6 +5,7 @@ camera = null,
 cube = null,
 objLoader = null,
 ambientLight = null,
+grupoBaile = null,
 sphere = null;
 
 let index = 0;
@@ -293,10 +294,8 @@ function createScene(canvas)
     sceneTemp = new THREE.Scene();  
     sceneTemp.name = "scene5";
 
-    let grupoBaile = new THREE.Object3D;
-
-    
-    
+    grupoBaile = new THREE.Object3D;
+    grupoBaile.name = "grupoBaile";
 
     // Set the background image 
     sceneTemp.background = new THREE.TextureLoader().load("../images/Backgrounds/scene5-6_background.jpg");
@@ -349,10 +348,10 @@ function createScene(canvas)
     directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5);
     sceneTemp.add( directionalLight );
     directionalLight.position.set(-15, 0, -10);
-    
-    load3dModel('../models/Column/Column_Made_By_Tyro_Smith.obj', '../models/Column/Column_Made_By_Tyro_Smith.mtl', 'column1', scenes[5], 1.8, 16, -1, 0, 0, 0);
 
     scenes.push(sceneTemp);
+
+    load3dModel('../models/Column/Column_Made_By_Tyro_Smith.obj', '../models/Column/Column_Made_By_Tyro_Smith.mtl', 'column1', scenes[5], 1.8, 16, -1, 0, 0, 0);
 
     /*
     Prince and cinderella https://www.jing.fm/iclipt/Thmwx/
@@ -434,6 +433,17 @@ function playAnimations()
                     case "cinderella_crying":
                         element.material.map = new THREE.TextureLoader().load( "../models/cinderella_crying.png" ); 
                         enterAnimationYRotation(0.3, 0.5, -8, -2, 0.3, 0.5, (8*Math.PI)/3, (16*Math.PI)/3, Math.PI*8, element);
+                        /* let promise = new Promise(function(resolve, reject) {
+                            enterAnimationYRotation(0.3, 0.5, -8, -2, 0.3, 0.5, (8*Math.PI)/3, (16*Math.PI)/3, Math.PI*8, element);
+                          
+                                if (animator.running == false) {
+                                    console.log("Entre");
+                                    resolve(element.material.map = new THREE.TextureLoader().load( "../models/cinderella.png" ) )
+                                }
+                            
+                          });
+                          
+                        promise.then(); */
                         setTimeout( () => {
 		
                             element.material.map = new THREE.TextureLoader().load( "../models/cinderella.png" ); 
@@ -441,7 +451,6 @@ function playAnimations()
                         }, (duration - 0.9) * 1000 );
                         break;
                     case "fairy_godmother":
-                        animator = new KF.KeyFrameAnimator;
                         enterAnimationYRotation(0.125, 0.25, 30, -5, 0.125, 0.25, -Math.PI, Math.PI, -Math.PI, element);
                         break;
                     case "Cinderella_Carosse":
@@ -480,6 +489,7 @@ function playAnimations()
                         break;
                     case "grupoBaile":
                         enterAnimationX(0, 0.125, -30, -15, element);
+                        //danceAnimations();
                         break;
                 }
             });            
@@ -570,6 +580,7 @@ function enterAnimationYRotation(ti, tf, pos1_y, pos2_y, tiR, tfR, rot1, rot2, r
     animator.start();
 }
 
+//Dance animation
 function textAnimation(text, size, x, y, z, scene){
     const loaderText = new THREE.FontLoader();
 
@@ -597,73 +608,32 @@ function textAnimation(text, size, x, y, z, scene){
     } );
 }
 
-//Dance animation
-function danceAnimations()
+function danceAnimations() 
 {
-    // position animation
-    if (crateAnimator)
-        crateAnimator.stop();
-    
-    grupoBaile.position.set(0, 0, 0);
-    grupoBaile.rotation.set(0, 0, 0);
-
-    if (animateCrate)
-    {
-        crateAnimator = new KF.KeyFrameAnimator;
-        crateAnimator.init({ 
-            interps:
-                [
-                    { 
-                        keys:[0, .11, .11*2, .11*3, .11*4, .11*5, .11*6, .11*7, 1], 
-                        values:[
-                                { x : 0, y:0, z: 0 },
-                                { x : -2, y:0, z: -2 },
-                                { x : -4, y:0, z: 0 },
-                                { x : -2, y:0, z: 2 },
-                                { x : 0, y:0, z: 0 },
-                                { x : 2, y:0, z: -2 },
-                                { x : 4, y:0, z: 0 },
-                                { x : 2, y:0, z: 2 },
-                                { x : 0, y:0, z: 0 },
-                                ],
-                        target:grupoBaile.position
-                    },
-                    { 
-                        keys:[0, .11, .11*2, .11*3, .11*4, .11*5, .11*6, .11*7, 1], 
-                        values:[
-                                { z : (Math.PI)/8},
-                                { z : -(Math.PI)/8},
-                                { z : (Math.PI)/8},
-                                { z : -(Math.PI)/8},
-                                { z : (Math.PI)/8},
-                                { z : -(Math.PI)/8},
-                                { z : (Math.PI)/8 },
-                                { z : -(Math.PI)/8},
-                                { z : (Math.PI)/8}
-                                ],
-                        target:grupoBaile.rotation
-                    }, 
-                    { 
-                        keys:[0, .11, .11*2, .11*3, .11*4, .11*5, .11*6, .11*7, 1], 
-                        values:[
-                                { y : -3*(Math.PI)/4},
-                                { y : -(Math.PI)/4},
-                                { y : (Math.PI)/8},
-                                { y : (Math.PI)/4},
-                                { y : 3*(Math.PI)/4},
-                                { y : 3*(Math.PI)/4},
-                                { y : (Math.PI)/8 },
-                                { y : -(Math.PI)/4},
-                                { y : -3*(Math.PI)/4}
-                                ],
-                        target:grupoBaile.rotation
-                    }                      
-                ],
-            loop: true,
-            duration:duration * 1000,
-
-        });
-        crateAnimator.start();
-    }
-        
-    }
+    animator = new KF.KeyFrameAnimator;
+    animator.init({ 
+        interps:
+            [
+                // Keys for the movement in ∞ by the group
+                { 
+                    keys:[0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1], 
+                    values:[
+                            { x : 0, z : 0 },
+                            { x : 4, z : -4 },
+                            { x : 8, z : 0 },
+                            { x : 4, z : 4 },
+                            { x : 0, z : 0 },
+                            { x : -4, z : -4 },
+                            { x : -8, z : 0 },
+                            { x : -4, z : 4 },
+                            { x : 0, z : 0 },
+                            ],
+                    target:grupoBaile.position,
+                    easing:TWEEN.Easing.Exponential.Out
+                }
+            ],
+        loop: loopAnimation,
+        duration: duration * 1000,
+    });
+    animator.start();
+}
