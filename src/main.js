@@ -190,7 +190,11 @@ function createScene(canvas)
     scenes.push(sceneTemp);
 
     // //Title
-    textAnimation('Cinderella', 3,-12,8.5,-1, scenes[0]);
+    textAnimation('Cinderella', 3,-10,8.5,-1, scenes[0]);
+
+    // Names
+    textAnimation('Gabriel Schlam Huber - A01024122\nAlejandra Nissan Leizorek - A01024682\nSamantha Barco Mejia - A01196844',2,-80,-46,-100, scenes[0]);
+
 
     // Slipper
     var loader = new THREE.OBJLoader();
@@ -673,13 +677,13 @@ function textAnimation(text, size, x, y, z, scene){
         let textGeometry = new THREE.TextGeometry( text, {
             font: font,
             size: size,
-            height: 1,
-            curveSegments: 12,
+            height: 0.5,
+            curveSegments: 1,
             bevelEnabled: true,
             bevelThickness: 0,
             bevelSize: 0,
             bevelOffset: 0,
-            bevelSegments: 5
+            bevelSegments: 1
         } );
 
         var textMaterial = new THREE.MeshPhongMaterial( 
