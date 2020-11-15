@@ -20,6 +20,13 @@ let currentTime = Date.now();
 
 let controls;
 
+// Raycaster
+let mouseVector = new THREE.Vector2(), INTERSECTED, CLICKED;
+let raycaster = new THREE.Raycaster();
+let width = 0;
+let height = 0;
+let animator = null;
+
 function load3dModel(objModelUrl, mtlModelUrl, name, sceneObj, scale, x, y, z, rotationX, rotationY)
 {
     mtlLoader = new THREE.MTLLoader();
@@ -138,6 +145,7 @@ function createCharacterMesh( address, name, width, height, X, Y, Z ) {
     mesh.position.setY(Y);
     mesh.position.setZ(Z);
     mesh.name = name;
+    mesh.side = THREE.DoubleSide;
     return mesh;
 }
 
@@ -148,6 +156,8 @@ function createScene(canvas)
 
     // Set the viewport size
     renderer.setSize(canvas.width, canvas.height);
+    width = canvas.width;
+    height = canvas.height;
     
     // Create a new Three.js scene
     scene = new THREE.Scene();
@@ -163,6 +173,10 @@ function createScene(canvas)
     // Cannot cast shadows
     ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
     //scene.add(ambientLight);
+
+    // Raycaster
+    renderer.domElement.addEventListener( 'click', raycast, false );
+    initAnimator();
 
     /////////////////////////////////////////////////
     //       Scene 1                               //
@@ -229,6 +243,17 @@ function createScene(canvas)
     sceneTemp.add(createCharacterMesh("../models/stepsisters_normal.png", 'stepsisters_normal' ,14,14,13,-5,0));
     //277x655 px
     sceneTemp.add(createCharacterMesh("../models/stepmother.png", 'stepmother', 7,15,7,-5,0.5));
+
+    //Bubbles
+    bubblesGroup = new THREE.Object3D;
+    bubblesGroup.name = "bubbles";
+    bubblesGroup.add(createCharacterMesh("../models/bubble.png", 'bubble', 1.0,1.0,0,0,0));
+    bubblesGroup.add(createCharacterMesh("../models/bubble.png", 'bubble', 0.8,0.8,0.4,-1.1,0));
+    bubblesGroup.add(createCharacterMesh("../models/bubble.png", 'bubble', 0.8,0.8,-0.7,0.8,0));
+    bubblesGroup.add(createCharacterMesh("../models/bubble.png", 'bubble', 0.3,0.3,0.4,0.7,0));
+    bubblesGroup.add(createCharacterMesh("../models/bubble.png", 'bubble', 0.3,0.3,-0.6,-1.2,0));
+    sceneTemp.add(bubblesGroup);
+    bubblesGroup.position.set(-10,-9.85,2);
 
     scenes.push(sceneTemp);
 
@@ -361,6 +386,7 @@ function createScene(canvas)
 
 function playAnimations() 
 {
+    animator.start();
     switch (scene.name) {
         case "scene1":
             console.log("Escena 1");
@@ -518,6 +544,51 @@ function playAnimations()
     }
 }
 
+function playClickAnimations() 
+{
+    //animator.start();
+    switch (scene.name) {
+        case "scene1":
+            console.log("Escena 1",CLICKED.name);
+            
+            break;
+        case "scene2":
+            console.log("Escena 2", CLICKED.name);
+            switch(CLICKED.name)
+            {
+                case "cinderella_cleaning":
+                    scene.children.forEach(element => {
+                        if(element.name=="bubbles"){
+                            for(i = 0; i< element.children.length;i++)
+                            {
+                                enterAnimationY(0, Math.random() + 0.1, 0, 30, element.children[i]);
+                            }
+                        }
+                    });
+                    break;
+            }
+            // Animaciones
+            break;
+        case "scene3":
+            console.log("Escena 3");
+            break;
+        case "scene4":
+            console.log("Escena 4");
+            break;
+        case "scene5":
+            console.log("Escena 5");
+            break;
+        case "scene6":
+            console.log("Escena 6");
+            // Animaciones
+            break;            
+    
+        default:
+            break;
+    }
+}
+
+
 function enterAnimationX(ti, tf, pos1_x, pos2_x, element){
     animator = new KF.KeyFrameAnimator;
     animator.init({ 
@@ -649,4 +720,52 @@ function danceAnimations()
         duration: duration * 1000,
     });
     animator.start();
+}
+
+// /Computer-Graphics/13_threejsInteraction/threejsInteraction.html
+function initAnimator()
+{
+    animator = new KF.KeyFrameAnimator;
+    animator.init({ 
+        interps:
+            [
+                { 
+                    keys:[0, .5, 1], 
+                    values:[
+                            { y : 0 },
+                            { y : Math.PI  },
+                            { y : Math.PI * 2 },
+                            ],
+                },
+            ],
+        loop: loopAnimation,
+        duration:duration * 1000,
+    });
+}
+
+// /Computer-Graphics/13_threejsInteraction/threejsInteraction.html
+//https://threejs.org/docs/#api/en/core/Raycaster.intersectObjects
+//https://riptutorial.com/three-js/example/17088/object-picking---raycasting
+function raycast ( e )
+{
+    mouseVector.x = 2 * (e.clientX / width) - 1;
+	mouseVector.y = 1 - 2 * ( e.clientY / height );
+
+    raycaster.setFromCamera(mouseVector, camera);
+    
+    let intersects = raycaster.intersectObjects(scene.children, true);
+
+    if(intersects.length > 0)
+    {
+        CLICKED = intersects[ intersects.length - 1 ].object;
+        //CLICKED.material.emissive.setHex( 0x00ff00 );
+        playClickAnimations();
+    }
+    else 
+    {
+        if ( CLICKED ) 
+            CLICKED.material.emissive.setHex( CLICKED.currentHex );
+        CLICKED = null;
+    }
+
 }
