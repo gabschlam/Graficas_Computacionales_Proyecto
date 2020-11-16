@@ -378,6 +378,12 @@ function createScene(canvas)
     //Loading Cinderella
     sceneTemp.add(createCharacterMesh("../models/cinderella_bride.png", 'cinderella', 8,12,4,-9,-5));
 
+    //Loading Mice
+    sceneTemp.add(createCharacterMesh("../models/ratones_scene6.png", 'mice', 5,3,12,-12.5,-5));
+
+    //Loading Birds
+    sceneTemp.add(createCharacterMesh("../models/birds_scene6.png", 'birds', 5,3,12,12,-5));
+
     directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5);
     sceneTemp.add( directionalLight );
     directionalLight.position.set(-15, 0, -10);
