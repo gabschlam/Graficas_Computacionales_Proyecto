@@ -185,7 +185,7 @@ function createScene(canvas)
     sceneTemp = new THREE.Scene();
     sceneTemp.name = "scene1";
     // Set the background image 
-    sceneTemp.background = new THREE.Color( 0xffffff);
+    sceneTemp.background = new THREE.Color( 0x000000);
 
     scenes.push(sceneTemp);
 
@@ -197,20 +197,35 @@ function createScene(canvas)
 
 
     // Slipper
+    let imgTexture = new THREE.TextureLoader().load( "../models/slipper/moon.jpg" );
+    imgTexture.wrapS = imgTexture.wrapT = THREE.RepeatWrapping;
+    imgTexture.anisotropy = 16;
+    imgTexture = null;
     var loader = new THREE.OBJLoader();
+    const params = {
+        color: 0xffffff,
+        transmission: 0.90,
+        envMapIntensity: 1,
+        lightIntensity: 1,
+        exposure: 1
+    };
+    
     loader.load("../models/slipper/3d-model.obj", function (object) {
         object.traverse( function (child){
             if(child.isMesh){
                 child.material = new THREE.MeshPhysicalMaterial({
-                    color: 0x80c4e2,
-                    opacity: 0.6,
-                    roughness: 0.3,
-                    metalness:1,
-                    reflectivity: 0.88,
-                    transparent: true,
+                    color: params.color,
+					metalness: 0,
+                    roughness: 0,
+					alphaTest: 0.5,
+					envMapIntensity: params.envMapIntensity,
+					depthWrite: false,
+					transmission: params.transmission, // use material.transmission for glass materials
+					opacity: 1, // set material.opacity to 1 when material.transmission is non-zero
+					transparent: true,
                     side: THREE.DoubleSide,
+                    reflectivity: 0,
                   });
-                  child.material.color.setHex(0x00FF00);
             }
         });
 
@@ -221,11 +236,6 @@ function createScene(canvas)
         // console.log(object);
     });
     
-    //Slipper
-     // Create the table https://sketchfab.com/3d-models/classic-coffee-table-0b151b371da847d3a2dd960f9339eef1
-     //load3dFbxModel("../models/slipper/source/Heel.fbx", null, null, null, null, null, scenes[0], 1,0, 0, 0, 0, 0);
-
-
     // Choosing default scene as scene1
     scene = sceneTemp;
     scene.add(camera);
@@ -771,5 +781,19 @@ function raycast ( e )
             CLICKED.material.emissive.setHex( CLICKED.currentHex );
         CLICKED = null;
     }
+
+}
+
+function generateTexture() {
+
+    const canvas = document.createElement( 'canvas' );
+    canvas.width = 2;
+    canvas.height = 2;
+
+    const context = canvas.getContext( '2d' );
+    context.fillStyle = 'white';
+    context.fillRect( 0, 1, 2, 1 );
+
+    return canvas;
 
 }
