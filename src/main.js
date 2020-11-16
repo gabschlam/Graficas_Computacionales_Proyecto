@@ -300,6 +300,9 @@ function createScene(canvas)
     objectGroup.position.x = 20;
     sceneTemp.add(objectGroup)
 
+    waterSplash = createCharacterMesh("../models/water_splash.png", 'water_splash', 8, 10, 6.3,-3.7,-13);
+    waterSplash.visible = false;
+    sceneTemp.add(waterSplash);
     scenes.push(sceneTemp);
 
     // Create the fountain: https://sketchfab.com/3d-models/fountain-9812aa1535454df886fea502373edf08
@@ -584,7 +587,49 @@ function playClickAnimations()
             // Animaciones
             break;
         case "scene3":
-            console.log("Escena 3");
+            console.log("Escena 3", CLICKED.name);
+            switch(CLICKED.name)
+            {
+                case "fountain":
+                    scene.children.forEach(element => {
+                        if(element.name=="water_splash"){
+                            element.scale.y = 0.5;
+                            element.scale.x = 0.15;
+                            element.position.y = -3.7;
+                            element.visible = !element.visible;
+                            animator = new KF.KeyFrameAnimator;
+                            animator.init({ 
+                                interps:
+                                    [
+                                        // Keys for the entry animation
+                                        { 
+                                            keys:[0, 0.05, 0.1], 
+                                            values:[
+                                                    { y : -3.7 },
+                                                    { y : -3.2 },
+                                                    { y : -2.7 },
+                                                    ],
+                                            target: element.position
+                                        },
+                                        { 
+                                            keys:[0, 0.05, 0.1], 
+                                            values:[
+                                                    { x : 0.15, y : 0.5 },
+                                                    { x : 0.5, y : 0.75 },
+                                                    { x : 1, y : 1 },
+                                                    ],
+                                            target: element.scale
+                                        }
+                                    ],
+                                loop: loopAnimation,
+                                duration: duration * 1000,
+                            });
+                            animator.start();
+                            return;
+                        }
+                    });
+                    break;
+            }
             break;
         case "scene4":
             console.log("Escena 4");
