@@ -373,7 +373,7 @@ function createScene(canvas)
     material = new THREE.MeshNormalMaterial();
 
     //Loading the prince
-    sceneTemp.add(createCharacterMesh("../models/prince_scene6.png", 'prince', 5,12,-1,-9,-5));
+    sceneTemp.add(createCharacterMesh("../models/prince_scene6.png", 'prince', 5,12,-4,-9,-5));
 
     //Loading Cinderella
     sceneTemp.add(createCharacterMesh("../models/cinderella_bride.png", 'cinderella', 8,12,4,-9,-5));
@@ -382,7 +382,7 @@ function createScene(canvas)
     sceneTemp.add(createCharacterMesh("../models/ratones_scene6.png", 'mice', 5,3,12,-12.5,-5));
 
     //Loading Birds
-    sceneTemp.add(createCharacterMesh("../models/birds_scene6.png", 'birds', 5,3,12,12,-5));
+    sceneTemp.add(createCharacterMesh("../models/birds_scene6.png", 'birds', 5,3,12,12.5,-5));
 
     directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5);
     sceneTemp.add( directionalLight );
@@ -540,7 +540,7 @@ function playAnimations()
                     case "prince_dancing":
                         break;
                     case "grupoBaile":
-                        enterAnimationX(0, 0.125, -30, -15, element);
+                        enterAnimationX(0, 0.125, -30, 0, element);
                         //danceAnimations();
                         break;
                 }
@@ -550,6 +550,16 @@ function playAnimations()
         case "scene6":
             console.log("Escena 6");
             // Animaciones
+            scene.children.forEach(element => {
+                switch (element.name) {
+                    case "cinderella":
+                        enterAnimationX(0, 0.125, 12, 5.3, element);
+                        break;
+                    case "prince":
+                        enterAnimationX(0, 0.125, -4, -0.5, element);
+                        break;
+                }
+            });            
             break;            
     
         default:
