@@ -642,7 +642,16 @@ function playClickAnimations()
             break;
         case "scene5":
             console.log("Escena 5");
+            switch(CLICKED.name)
+            {
+                case "cinderella_cleaning":
+                    scene.children.forEach(element => {
+                        if(element.name=="grupoBaile"){
+                            danceAnimations();
+                        }
+            });
             break;
+        }
         case "scene6":
             console.log("Escena 6");
             // Animaciones
