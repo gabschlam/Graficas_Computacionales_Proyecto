@@ -293,6 +293,13 @@ function createScene(canvas)
     waterSplash = createCharacterMesh("../models/water_splash.png", 'water_splash', 8, 10, 6.3,-3.7,-13);
     waterSplash.visible = false;
     sceneTemp.add(waterSplash);
+
+    gusGus = createCharacterMesh("../models/gusgus.png", 'gusgus', 4,5,-16,-10,-5);
+    gusGus.visible = false;
+    sceneTemp.add(gusGus);
+    jackJack = createCharacterMesh("../models/jackjack.png", 'jackjack', 5,5,-19,-10,-5);
+    jackJack.visible = false;
+    sceneTemp.add(jackJack);
     scenes.push(sceneTemp);
 
     // Create the fountain: https://sketchfab.com/3d-models/fountain-9812aa1535454df886fea502373edf08
@@ -428,6 +435,11 @@ function playAnimations()
                 switch (element.name) {
                     case "cinderella_crying":
                         enterAnimationX(0, 0.125, -30, -15, element);
+                        break;
+                    case "gusgus":
+                    case "jackjack":
+                    case "water_splash":
+                        element.visible = false;
                         break;
                     case "groupStepSistersMother":
                         animator = new KF.KeyFrameAnimator;
@@ -635,16 +647,58 @@ function playClickAnimations()
                         }
                     });
                     break;
+                case "cinderella_crying":
+                case "gusgus":
+                case "jackjack":
+                    scene.children.forEach(element => {
+                        if(element.name=="gusgus"){
+                            element.visible = !element.visible;
+                            AnimationRotationMouse(0.1, 0.2, 0.3, -16, -10, -10, -10, -Math.PI, element);
+                        }
+                        if(element.name=="jackjack"){
+                            element.visible = !element.visible;
+                            AnimationRotationMouse(0.1, 0.2, 0.3, -16, -20, -20, -16, -Math.PI, element);
+                        }
+                    });
+                    break;
             }
             break;
         case "scene4":
-            console.log("Escena 4");
+            console.log("Escena 4", CLICKED.name);
+            if (CLICKED.parent.name == "Cinderella_Carosse") {
+                console.log("Carrouse");
+                /* animator = new KF.KeyFrameAnimator;
+                animator.init({ 
+                    interps:
+                        [
+                            // Keys for the entry animation
+                            { 
+                                keys:[0, 0.1, 0.2], 
+                                values:[
+                                        { y : -60 },
+                                        { y : -80 },
+                                        { y : -60 },
+                                        ],
+                                target: CLICKED.parent.position
+                            }
+                                    
+                        ],
+                    loop: loopAnimation,
+                    duration: duration * 1000,
+                });
+                animator.start(); */
+                return;
+            }
+            else 
+            {
+                
+            }
             break;
         case "scene5":
-            console.log("Escena 5");
+            console.log("Escena 5", CLICKED.name);
             switch(CLICKED.name)
             {
-                case "cinderella_cleaning":
+                case "cinderella_dancing":
                     scene.children.forEach(element => {
                         if(element.name=="grupoBaile"){
                             danceAnimations();
@@ -728,6 +782,38 @@ function enterAnimationYRotation(ti, tf, pos1_y, pos2_y, tiR, tfR, rot1, rot2, r
                             { y : rot1 },
                             { y : rot2 },
                             { y : rot3 },
+                            ],
+                    target:element.rotation
+                }
+            ],
+        loop: loopAnimation,
+        duration: duration * 1000,
+    });
+    animator.start();
+}
+
+function AnimationRotationMouse(t1, t2, t3, pos1_x, pos2_x, pos3_x, pos4_x, rot, element){
+    animator = new KF.KeyFrameAnimator;
+    animator.init({ 
+        interps:
+            [
+                // Keys for the entry animation
+                { 
+                    keys:[0, t1, t2, t3], 
+                    values:[
+                            { x : pos1_x, y : -10, z : -5 },
+                            { x : pos2_x, y : -10, z : -5 },
+                            { x : pos3_x, y : -10, z : -2.5 },
+                            { x : pos4_x, y : -10, z : 0 },
+                            ],
+                    target: element.position
+                },
+                { 
+                    keys:[0, t2, t3], 
+                    values:[
+                            { y : 0 },
+                            { y : 0 },
+                            { y : rot },
                             ],
                     target:element.rotation
                 }
