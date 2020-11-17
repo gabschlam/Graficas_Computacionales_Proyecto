@@ -502,6 +502,7 @@ function playAnimations()
                 switch (element.name) {
                     case "cinderella_crying":
                         element.material.map = new THREE.TextureLoader().load( "../models/cinderella_crying.png" ); 
+                        element.scale.set(1, 1, 1);
                         enterAnimationYRotation(0.3, 0.5, -8, -2, 0.3, 0.5, (8*Math.PI)/3, (16*Math.PI)/3, Math.PI*8, element);
                         /* let promise = new Promise(function(resolve, reject) {
                             enterAnimationYRotation(0.3, 0.5, -8, -2, 0.3, 0.5, (8*Math.PI)/3, (16*Math.PI)/3, Math.PI*8, element);
@@ -517,8 +518,8 @@ function playAnimations()
                         setTimeout( () => {
 		
                             element.material.map = new THREE.TextureLoader().load( "../models/cinderella.png" ); 
-                        
-                        }, (duration - 0.9) * 1000 );
+                            element.scale.set(1.5, 1.5, 1.5);
+                        }, (duration - 0.99) * 1000 );
                         break;
                     case "fairy_godmother":
                         enterAnimationYRotation(0.125, 0.25, 30, -5, 0.125, 0.25, -Math.PI, Math.PI, -Math.PI, element);
