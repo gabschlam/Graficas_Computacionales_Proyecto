@@ -197,10 +197,6 @@ function createScene(canvas)
 
 
     // Slipper
-    let imgTexture = new THREE.TextureLoader().load( "../models/slipper/moon.jpg" );
-    imgTexture.wrapS = imgTexture.wrapT = THREE.RepeatWrapping;
-    imgTexture.anisotropy = 16;
-    imgTexture = null;
     var loader = new THREE.OBJLoader();
     const params = {
         color: 0xffffff,
