@@ -248,11 +248,11 @@ function createScene(canvas)
     
     // Put in a ground plane to show off the lighting
     //727 x 902 px
-    sceneTemp.add(createCharacterMesh("../models/cinderella_cleaning.png", 'cinderella_cleaning' ,12,15,-13,-5,-2));
+    sceneTemp.add(createCharacterMesh("../models/cinderella_cleaning.png", 'cinderella_cleaning' ,12,15,-30,-5,-2));
     //470x496px
-    sceneTemp.add(createCharacterMesh("../models/stepsisters_normal.png", 'stepsisters_normal' ,14,14,13,-5,0));
+    sceneTemp.add(createCharacterMesh("../models/stepsisters_normal.png", 'stepsisters_normal' ,14,14,30,-5,0));
     //277x655 px
-    sceneTemp.add(createCharacterMesh("../models/stepmother.png", 'stepmother', 7,15,7,-5,0.5));
+    sceneTemp.add(createCharacterMesh("../models/stepmother.png", 'stepmother', 7,15,30,-5,0.5));
 
     //Bubbles
     bubblesGroup = new THREE.Object3D;
@@ -503,7 +503,7 @@ function playAnimations()
                     case "cinderella_crying":
                         element.material.map = new THREE.TextureLoader().load( "../models/cinderella_crying.png" ); 
                         element.scale.set(1, 1, 1);
-                        enterAnimationYRotation(0.3, 0.5, -8, -2, 0.3, 0.5, (8*Math.PI)/3, (16*Math.PI)/3, Math.PI*8, element);
+                        enterAnimationYRotation(0, 0.3, 0.5, -8, -8, -2, 0.3, 0.5, (8*Math.PI)/3, (16*Math.PI)/3, Math.PI*8, element);
                         /* let promise = new Promise(function(resolve, reject) {
                             enterAnimationYRotation(0.3, 0.5, -8, -2, 0.3, 0.5, (8*Math.PI)/3, (16*Math.PI)/3, Math.PI*8, element);
                           
@@ -522,7 +522,7 @@ function playAnimations()
                         }, (duration - 0.99) * 1000 );
                         break;
                     case "fairy_godmother":
-                        enterAnimationYRotation(0.125, 0.25, 30, -5, 0.125, 0.25, -Math.PI, Math.PI, -Math.PI, element);
+                        enterAnimationYRotation(0, 0.125, 0.25, 30, 30, -5, 0.125, 0.25, -Math.PI, Math.PI, -Math.PI, element);
                         break;
                     case "Cinderella_Carosse":
                         animator = new KF.KeyFrameAnimator;
@@ -674,26 +674,7 @@ function playClickAnimations()
             console.log("Escena 4", CLICKED.name);
             if (CLICKED.parent.name == "Cinderella_Carosse") {
                 console.log("Carrouse");
-                /* animator = new KF.KeyFrameAnimator;
-                animator.init({ 
-                    interps:
-                        [
-                            // Keys for the entry animation
-                            { 
-                                keys:[0, 0.1, 0.2], 
-                                values:[
-                                        { y : -60 },
-                                        { y : -80 },
-                                        { y : -60 },
-                                        ],
-                                target: CLICKED.parent.position
-                            }
-                                    
-                        ],
-                    loop: loopAnimation,
-                    duration: duration * 1000,
-                });
-                animator.start(); */
+                enterAnimationYRotation(0, 0.1, 0.2, -30, -10, -30, 0, 0.2, 0, Math.PI, (7*Math.PI) / 3, CLICKED.parent);
                 return;
             }
             else 
@@ -768,18 +749,18 @@ function enterAnimationY(ti, tf, pos1_y, pos2_y, element){
     animator.start();
 }
 
-function enterAnimationYRotation(ti, tf, pos1_y, pos2_y, tiR, tfR, rot1, rot2, rot3, element){
+function enterAnimationYRotation(t1, t2, t3, pos1_y, pos2_y, pos3_y, tiR, tfR, rot1, rot2, rot3, element){
     animator = new KF.KeyFrameAnimator;
     animator.init({ 
         interps:
             [
                 // Keys for the entry animation
                 { 
-                    keys:[0, ti, tf], 
+                    keys:[t1, t2, t3], 
                     values:[
                             { y : pos1_y },
-                            { y : pos1_y },
                             { y : pos2_y },
+                            { y : pos3_y },
                             ],
                     target: element.position
                 },
