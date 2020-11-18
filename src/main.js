@@ -303,7 +303,7 @@ function createScene(canvas)
     gusGus = createCharacterMesh("../models/gusgus.png", 'gusgus', 4,5,-16,-10,-5);
     gusGus.visible = false;
     sceneTemp.add(gusGus);
-    jackJack = createCharacterMesh("../models/jackjack.png", 'jackjack', 5,5,-19,-10,-5);
+    jackJack = createCharacterMesh("../models/jackjack.png", 'jackjack', 5,5,-16,-10,-5);
     jackJack.visible = false;
     sceneTemp.add(jackJack);
     scenes.push(sceneTemp);
@@ -677,9 +677,8 @@ function playClickAnimations()
                 enterAnimationYRotation(0, 0.1, 0.2, -30, -10, -30, 0, 0.2, 0, Math.PI, (7*Math.PI) / 3, CLICKED.parent);
                 return;
             }
-            else 
-            {
-                
+            if (CLICKED.name == "fairy_godmother") {
+                enterAnimationYRotation(0, 0.15, 0.3, -5, 7, -5, 0, 0.3, -Math.PI, Math.PI, -Math.PI, CLICKED);
             }
             break;
         case "scene5":
