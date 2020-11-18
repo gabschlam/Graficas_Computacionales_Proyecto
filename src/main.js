@@ -12,6 +12,8 @@ let index = 0;
 
 let scenes = [];
 
+let manager;
+
 //let animator = null;
 let duration = 10, // sec
 loopAnimation = false;
@@ -29,14 +31,14 @@ let animator = null;
 
 function load3dModel(objModelUrl, mtlModelUrl, name, sceneObj, scale, x, y, z, rotationX, rotationY)
 {
-    mtlLoader = new THREE.MTLLoader();
+    mtlLoader = new THREE.MTLLoader(manager);
 
     mtlLoader.load(mtlModelUrl, materials =>{
         
         materials.preload();
         // // console.log(materials);
 
-        objLoader = new THREE.OBJLoader();
+        objLoader = new THREE.OBJLoader(manager);
         
         objLoader.setMaterials(materials);
 
@@ -67,29 +69,29 @@ function load3dModel(objModelUrl, mtlModelUrl, name, sceneObj, scale, x, y, z, r
 
 function load3dFbxModel(modelUrl, textureUrl, normalUrl, aoUrl, metalUrl, roughnessUrl, name, sceneObj, scale, x, y, z, rotationX, rotationY)
 {
-    var loader = new THREE.FBXLoader();
+    var loader = new THREE.FBXLoader(manager);
     loader.load(modelUrl, function (object) {
         object.traverse( function (child){
             if(child.isMesh){
-                let texture = new THREE.TextureLoader().load(textureUrl);
+                let texture = new THREE.TextureLoader(manager).load(textureUrl);
                 let normal = null;
                 let ao = null;
                 let metallic = null;
                 let roughness = null;
                 if(normalUrl != null){
-                    normal = new THREE.TextureLoader().load(normalUrl);
+                    normal = new THREE.TextureLoader(manager).load(normalUrl);
                     // console.log("loaded normal", normalUrl)
                 }
                 if(aoUrl != null){
-                    ao = new THREE.TextureLoader().load(aoUrl);
+                    ao = new THREE.TextureLoader(manager).load(aoUrl);
                     // console.log("loaded ao",aoUrl)
                 }
                 if(metalUrl != null){
-                    metallic = new THREE.TextureLoader().load(metalUrl);
+                    metallic = new THREE.TextureLoader(manager).load(metalUrl);
                     // console.log("loaded metal",metalUrl)
                 }
                 if(roughnessUrl != null){
-                    roughness = new THREE.TextureLoader().load(roughnessUrl);
+                    roughness = new THREE.TextureLoader(manager).load(roughnessUrl);
                     // console.log("loaded rough",roughnessUrl)
                 }
                 child.material = new THREE.MeshStandardMaterial( { map: texture, normalMap: normal, aoMap:ao, aoMapIntensity: 1, metalnessMap: metallic, metalness: 0,  roughnessMap: roughness, roughness: 0 } );
@@ -137,7 +139,7 @@ function run() {
 }
 
 function createCharacterMesh( address, name, width, height, X, Y, Z ) {
-    let map = new THREE.TextureLoader().load(address);
+    let map = new THREE.TextureLoader(manager).load(address);
 
     let geometry = new THREE.PlaneGeometry(width, height, 5, 5);
     let mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({map:map, side:THREE.DoubleSide, transparent:true}));
@@ -178,6 +180,35 @@ function createScene(canvas)
     renderer.domElement.addEventListener( 'click', raycast, false );
     initAnimator();
 
+    // For loading objects before starting story
+    loadingDiv = document.getElementById("loading");
+
+    manager = new THREE.LoadingManager();
+    manager.onStart = function ( url, itemsLoaded, itemsTotal ) {
+        console.log( 'Started loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
+        document.getElementById('nextButton').style.display = 'none';
+    };
+
+    manager.onLoad = function ( ) {
+        console.log( 'Loading complete!');
+        loadingDiv.remove();
+        // Choosing default scene as scene1
+        scene = scenes[0];
+        scene.add(camera);
+        scene.add(ambientLight)
+        document.getElementById('nextButton').style.display = 'inline';
+
+    };
+
+    manager.onProgress = function ( url, itemsLoaded, itemsTotal ) {
+        console.log( 'Loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
+    };
+
+    manager.onError = function ( url ) {
+        console.log( 'There was an error loading ' + url );
+
+    };
+
     /////////////////////////////////////////////////
     //       Scene 1                               //
     /////////////////////////////////////////////////
@@ -197,7 +228,7 @@ function createScene(canvas)
 
 
     // Slipper
-    var loader = new THREE.OBJLoader();
+    var loader = new THREE.OBJLoader(manager);
     const params = {
         color: 0xffffff,
         transmission: 0.90,
@@ -231,11 +262,6 @@ function createScene(canvas)
         // console.log("FBX");
         // console.log(object);
     });
-    
-    // Choosing default scene as scene1
-    scene = sceneTemp;
-    scene.add(camera);
-    scene.add(ambientLight)
 
     /////////////////////////////////////////////////
     //       Scene 2                               //
@@ -244,7 +270,7 @@ function createScene(canvas)
     sceneTemp = new THREE.Scene();
     sceneTemp.name = "scene2";
     // Set the background image 
-    sceneTemp.background = new THREE.TextureLoader().load("../images/Backgrounds/scene2_background.jpg");
+    sceneTemp.background = new THREE.TextureLoader(manager).load("../images/Backgrounds/scene2_background.jpg");
     
     // Put in a ground plane to show off the lighting
     //727 x 902 px
@@ -284,7 +310,7 @@ function createScene(canvas)
     sceneTemp = new THREE.Scene();
     sceneTemp.name = "scene3";
     // Set the background image 
-    sceneTemp.background = new THREE.TextureLoader().load("../images/Backgrounds/scene3-4_background.jpg");
+    sceneTemp.background = new THREE.TextureLoader(manager).load("../images/Backgrounds/scene3-4_background.jpg");
     sceneTemp.add(createCharacterMesh("../models/cinderella_crying.png", 'cinderella_crying', 8,10,-30,-8,-2));
     objectGroup = new THREE.Object3D;
     objectGroup.name = "groupStepSistersMother"
@@ -318,7 +344,7 @@ function createScene(canvas)
     sceneTemp = new THREE.Scene();
     sceneTemp.name = "scene4";
     // Set the background image 
-    sceneTemp.background = new THREE.TextureLoader().load("../images/Backgrounds/scene3-4_background.jpg");
+    sceneTemp.background = new THREE.TextureLoader(manager).load("../images/Backgrounds/scene3-4_background.jpg");
 
     sceneTemp.add(createCharacterMesh("../models/cinderella_crying.png", 'cinderella_crying', 8,10,-15,-8,-2));
     godmother = createCharacterMesh("../models/fairy_godmother.png", 'fairy_godmother', 16,18,-2,30,-7);
@@ -344,7 +370,7 @@ function createScene(canvas)
     grupoBaile.name = "grupoBaile";
 
     // Set the background image 
-    sceneTemp.background = new THREE.TextureLoader().load("../images/Backgrounds/scene5-6_background.jpg");
+    sceneTemp.background = new THREE.TextureLoader(manager).load("../images/Backgrounds/scene5-6_background.jpg");
 
     //Loading the prince
     sceneTemp.add(grupoBaile.add(createCharacterMesh("../models/prince_charming_scene_5.png", 'prince_dancing', 10,10,0,-7,0)));
@@ -381,9 +407,7 @@ function createScene(canvas)
     sceneTemp = new THREE.Scene();
     sceneTemp.name = "scene6";
     // Set the background image 
-    sceneTemp.background = new THREE.TextureLoader().load("../images/Backgrounds/scene5-6_background.jpg");
-    geometry = new THREE.SphereGeometry(5, 20, 20);
-    material = new THREE.MeshNormalMaterial();
+    sceneTemp.background = new THREE.TextureLoader(manager).load("../images/Backgrounds/scene5-6_background.jpg");
 
     //Loading the prince
     sceneTemp.add(createCharacterMesh("../models/prince_scene6.png", 'prince', 5,12,-4,-9,-5));
@@ -813,7 +837,7 @@ function AnimationRotationMouse(t1, t2, t3, pos1_x, pos2_x, pos3_x, pos4_x, rot,
 
 //Dance animation
 function textAnimation(text, size, x, y, z, scene){
-    const loaderText = new THREE.FontLoader();
+    const loaderText = new THREE.FontLoader(manager);
 
     loaderText.load( '../fonts/book.json', function ( font ) {
 
@@ -895,6 +919,7 @@ function initAnimator()
 //https://riptutorial.com/three-js/example/17088/object-picking---raycasting
 function raycast ( e )
 {
+    e.preventDefault();
     mouseVector.x = 2 * (e.clientX / width) - 1;
 	mouseVector.y = 1 - 2 * ( e.clientY / height );
 
@@ -914,19 +939,5 @@ function raycast ( e )
             CLICKED.material.emissive.setHex( CLICKED.currentHex );
         CLICKED = null;
     }
-
-}
-
-function generateTexture() {
-
-    const canvas = document.createElement( 'canvas' );
-    canvas.width = 2;
-    canvas.height = 2;
-
-    const context = canvas.getContext( '2d' );
-    context.fillStyle = 'white';
-    context.fillRect( 0, 1, 2, 1 );
-
-    return canvas;
 
 }
