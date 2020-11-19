@@ -599,7 +599,7 @@ function playAnimations()
 		
                             element.material.map = new THREE.TextureLoader().load( "../models/cinderella.png" ); 
                             element.scale.set(1.5, 1.5, 1.5);
-                        }, (duration - 0.99) * 1000 );
+                        }, (duration - 6) * 1000 );
                         break;
                     case "fairy_godmother":
                         enterAnimationYRotation(0, 0.125, 0.25, 30, 30, -5, 0.125, 0.25, -Math.PI, Math.PI, -Math.PI, element);
