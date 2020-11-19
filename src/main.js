@@ -407,11 +407,11 @@ function createScene(canvas)
     // Create carruaje: https://www.blendswap.com/blend/9819 
     load3dModel('../models/cinderella_carrosse/Cinderella_Carosse.obj', '../models/cinderella_carrosse/Cinderella_Carosse.mtl', 'Cinderella_Carosse', scenes[3], 9, 60, -60, -50, null, Math.PI / 3);
 
-    textScene3Array =  splitText(textScenes[2], 37);
+    textScene4Array =  splitText(textScenes[2], 37);
     textGroup = new THREE.Object3D;
     textGroup.name = "textGroup";
     scenes[3].add(textGroup);
-    textScene3Array.forEach((line, i) => {
+    textScene4Array.forEach((line, i) => {
         textCreation(line, 2.8,0,25-(i*3.5),-100, scenes[3], textGroup, true);
     });
 
@@ -569,7 +569,6 @@ function playAnimations()
                         break;
                     case "textGroup":
                         textAnimation(0, 0.7, 0.5, 70, 0.5, element.children);
-
                         break;
                 
                     default:
@@ -586,15 +585,6 @@ function playAnimations()
                         element.material.map = new THREE.TextureLoader().load( "../models/cinderella_crying.png" ); 
                         element.scale.set(1, 1, 1);
                         enterAnimationYRotation(0, 0.3, 0.5, -8, -8, -2, 0.3, 0.5, (8*Math.PI)/3, (16*Math.PI)/3, Math.PI*8, element);
-                        /* let p = new Promise((resolve, reject) => {
-                            enterAnimationYRotation(0.3, 0.5, -8, -2, 0.3, 0.5, (8*Math.PI)/3, (16*Math.PI)/3, Math.PI*8, element);
-                            resolve();
-                        });
-                        
-                        p.then(() => {
-                            element.material.map = new THREE.TextureLoader().load( "../models/cinderella.png" ); 
-                            element.scale.set(1.5, 1.5, 1.5);
-                        })*/
                         setTimeout( () => {
 		
                             element.material.map = new THREE.TextureLoader().load( "../models/cinderella.png" ); 
@@ -644,7 +634,6 @@ function playAnimations()
                         break;
                     case "grupoBaile":
                         enterAnimationX(0, 0.125, -30, 0, element);
-                        //danceAnimations();
                         break;
                 }
             });            
