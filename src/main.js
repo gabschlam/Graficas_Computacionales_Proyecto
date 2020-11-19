@@ -69,7 +69,7 @@ function loadOnly3dObjModel(objModelUrl, scale, x, y, z)
     var loader = new THREE.OBJLoader(manager);
     const params = {
         color: 0xffffff,
-        transmission: 0.90,
+        transmission: 0.80,
         envMapIntensity: 1,
         lightIntensity: 1,
         exposure: 1
@@ -90,6 +90,8 @@ function loadOnly3dObjModel(objModelUrl, scale, x, y, z)
 					transparent: true,
                     side: THREE.DoubleSide,
                     reflectivity: 0,
+                    clearcoat: 1,
+                    clearcoatRoughness:0,
                   });
             }
         });
@@ -254,7 +256,7 @@ function createScene(canvas)
     sceneTemp = new THREE.Scene();
     sceneTemp.name = "scene1";
     // Set the background image 
-    sceneTemp.background = new THREE.Color( 0x000000);
+    sceneTemp.background = new THREE.Color( 0x0c3052);
 
     scenes.push(sceneTemp);
 
@@ -266,6 +268,31 @@ function createScene(canvas)
 
     // Slipper
     loadOnly3dObjModel("../models/slipper/3d-model.obj", 0.3, 0,-8,0);
+
+    // Floor
+    const geometry = new THREE.PlaneGeometry( 90, 70, 50 );
+    const material = new THREE.MeshPhysicalMaterial( {color: 0x000000, side: THREE.DoubleSide, reflectivity: 1} );
+    const plane = new THREE.Mesh( geometry, material );
+    plane.rotation.x = -Math.PI/2;
+    plane.position.y = -10;
+    scenes[0].add( plane );
+
+
+    // Spotlight, https://threejs.org/docs/#api/en/lights/SpotLight
+    const spotLight = new THREE.SpotLight( 0xffffff );
+    spotLight.position.set( 20, 0, 20 );
+
+    spotLight.castShadow = true;
+
+    spotLight.shadow.mapSize.width = 1024;
+    spotLight.shadow.mapSize.height = 1024;
+
+    spotLight.shadow.camera.near = 500;
+    spotLight.shadow.camera.far = 4000;
+    spotLight.shadow.camera.fov = 30;
+
+    scenes[0].add( spotLight );
+
 
     /////////////////////////////////////////////////
     //       Scene 2                               //
@@ -623,7 +650,16 @@ function playClickAnimations()
     switch (scene.name) {
         case "scene1":
             console.log("Escena 1",CLICKED.name);
-            
+            if (CLICKED.name.search("Group")>=0)
+            {
+                console.log("Zapatillas",CLICKED);
+                enterAnimationYRotation(0, 0.25, 0.5, -8, -8, -8, 0, 0.2, 0, Math.PI, 2*Math.PI, CLICKED.parent);
+            }
+            else
+            {
+                console.log("pos",CLICKED.name.search("Group"));
+                console.log("No zapatilla");
+            }
             break;
         case "scene2":
             console.log("Escena 2", CLICKED.name);
