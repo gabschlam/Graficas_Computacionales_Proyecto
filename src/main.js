@@ -12,15 +12,11 @@ let index = 0;
 
 let scenes = [];
 
+// For LoadingManager
 let manager;
 
-//let animator = null;
 let duration = 10, // sec
 loopAnimation = false;
-
-let currentTime = Date.now();
-
-let controls;
 
 // Raycaster
 let mouseVector = new THREE.Vector2(), INTERSECTED, CLICKED;
@@ -29,6 +25,7 @@ let width = 0;
 let height = 0;
 let animator = null;
 
+// Function for loading OBJ 3d model with MTL file
 function load3dModel(objModelUrl, mtlModelUrl, name, sceneObj, scale, x, y, z, rotationX, rotationY)
 {
     mtlLoader = new THREE.MTLLoader(manager);
@@ -36,10 +33,9 @@ function load3dModel(objModelUrl, mtlModelUrl, name, sceneObj, scale, x, y, z, r
     mtlLoader.load(mtlModelUrl, materials =>{
         
         materials.preload();
-        // // console.log(materials);
+        // console.log(materials);
 
         objLoader = new THREE.OBJLoader(manager);
-        
         objLoader.setMaterials(materials);
 
         objLoader.load(objModelUrl, object=>{
@@ -67,6 +63,46 @@ function load3dModel(objModelUrl, mtlModelUrl, name, sceneObj, scale, x, y, z, r
 
 }
 
+// Function for loading OBJ 3d model without MTL file
+function loadOnly3dObjModel(objModelUrl, scale, x, y, z) 
+{
+    var loader = new THREE.OBJLoader(manager);
+    const params = {
+        color: 0xffffff,
+        transmission: 0.90,
+        envMapIntensity: 1,
+        lightIntensity: 1,
+        exposure: 1
+    };
+    
+    loader.load(objModelUrl, function (object) {
+        object.traverse( function (child){
+            if(child.isMesh){
+                child.material = new THREE.MeshPhysicalMaterial({
+                    color: params.color,
+					metalness: 0,
+                    roughness: 0,
+					alphaTest: 0.5,
+					envMapIntensity: params.envMapIntensity,
+					depthWrite: false,
+					transmission: params.transmission, // use material.transmission for glass materials
+					opacity: 1, // set material.opacity to 1 when material.transmission is non-zero
+					transparent: true,
+                    side: THREE.DoubleSide,
+                    reflectivity: 0,
+                  });
+            }
+        });
+
+        object.scale.x = object.scale.y = object.scale.z = scale;
+        object.position.set(x,y,z);
+        scenes[0].add(object);
+        // console.log("FBX");
+        // console.log(object);
+    });
+}
+
+// Function for loading FBX 3d model
 function load3dFbxModel(modelUrl, textureUrl, normalUrl, aoUrl, metalUrl, roughnessUrl, name, sceneObj, scale, x, y, z, rotationX, rotationY)
 {
     var loader = new THREE.FBXLoader(manager);
@@ -113,12 +149,29 @@ function load3dFbxModel(modelUrl, textureUrl, normalUrl, aoUrl, metalUrl, roughn
     });
 }
 
-function run() {
+// Function for creating mesh for 2d characters
+function createCharacterMesh( address, name, width, height, X, Y, Z ) 
+{
+    let map = new THREE.TextureLoader(manager).load(address);
+
+    let geometry = new THREE.PlaneGeometry(width, height, 5, 5);
+    let mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({map:map, side:THREE.DoubleSide, transparent:true}));
+    mesh.position.setX(X);
+    mesh.position.setY(Y);
+    mesh.position.setZ(Z);
+    mesh.name = name;
+    mesh.side = THREE.DoubleSide;
+    return mesh;
+}
+
+function run() 
+{
     requestAnimationFrame(function() { run(); });
     
     // Render the scene
     renderer.render( scene, camera );
 
+    // Validations for showing or hidding previous and next buttons
     if (index < 1) {
         document.getElementById('previousButton').style.display = 'none';
         document.getElementById('nextButton').style.marginLeft = "850px";
@@ -138,19 +191,6 @@ function run() {
     KF.update();
 }
 
-function createCharacterMesh( address, name, width, height, X, Y, Z ) {
-    let map = new THREE.TextureLoader(manager).load(address);
-
-    let geometry = new THREE.PlaneGeometry(width, height, 5, 5);
-    let mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({map:map, side:THREE.DoubleSide, transparent:true}));
-    mesh.position.setX(X);
-    mesh.position.setY(Y);
-    mesh.position.setZ(Z);
-    mesh.name = name;
-    mesh.side = THREE.DoubleSide;
-    return mesh;
-}
-
 function createScene(canvas)
 {    
     // Create the Three.js renderer and attach it to our canvas
@@ -168,27 +208,24 @@ function createScene(canvas)
     camera = new THREE.PerspectiveCamera( 45, canvas.width / canvas.height, 1, 4000 );
     camera.position.z = 30;
 
-    //Orbit controls for test
-    //controls = new THREE.OrbitControls (camera, renderer.domElement);
-
     // This light globally illuminates all objects in the scene equally.
-    // Cannot cast shadows
     ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
-    //scene.add(ambientLight);
 
     // Raycaster
     renderer.domElement.addEventListener( 'click', raycast, false );
     initAnimator();
 
-    // For loading objects before starting story
+    // For loading objects before showing scenes
     loadingDiv = document.getElementById("loading");
 
     manager = new THREE.LoadingManager();
+    // On start function for loading objects
     manager.onStart = function ( url, itemsLoaded, itemsTotal ) {
         console.log( 'Started loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
         document.getElementById('nextButton').style.display = 'none';
     };
 
+    // When finishing loading all object
     manager.onLoad = function ( ) {
         console.log( 'Loading complete!');
         loadingDiv.remove();
@@ -200,6 +237,7 @@ function createScene(canvas)
 
     };
 
+    // On progress for loading each object
     manager.onProgress = function ( url, itemsLoaded, itemsTotal ) {
         console.log( 'Loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
     };
@@ -226,42 +264,8 @@ function createScene(canvas)
     // Names
     textAnimation('Gabriel Schlam Huber - A01024122\nAlejandra Nissan Leizorek - A01024682\nSamantha Barco Mejia - A01196844',2,-80,-46,-100, scenes[0]);
 
-
     // Slipper
-    var loader = new THREE.OBJLoader(manager);
-    const params = {
-        color: 0xffffff,
-        transmission: 0.90,
-        envMapIntensity: 1,
-        lightIntensity: 1,
-        exposure: 1
-    };
-    
-    loader.load("../models/slipper/3d-model.obj", function (object) {
-        object.traverse( function (child){
-            if(child.isMesh){
-                child.material = new THREE.MeshPhysicalMaterial({
-                    color: params.color,
-					metalness: 0,
-                    roughness: 0,
-					alphaTest: 0.5,
-					envMapIntensity: params.envMapIntensity,
-					depthWrite: false,
-					transmission: params.transmission, // use material.transmission for glass materials
-					opacity: 1, // set material.opacity to 1 when material.transmission is non-zero
-					transparent: true,
-                    side: THREE.DoubleSide,
-                    reflectivity: 0,
-                  });
-            }
-        });
-
-        object.scale.x = object.scale.y = object.scale.z = 0.3;
-        object.position.set(0,-8,0);
-        scenes[0].add(object);
-        // console.log("FBX");
-        // console.log(object);
-    });
+    loadOnly3dObjModel("../models/slipper/3d-model.obj", 0.3, 0,-8,0);
 
     /////////////////////////////////////////////////
     //       Scene 2                               //
@@ -322,10 +326,12 @@ function createScene(canvas)
     objectGroup.position.x = 20;
     sceneTemp.add(objectGroup)
 
+    // Fountain's water splash
     waterSplash = createCharacterMesh("../models/water_splash.png", 'water_splash', 8, 10, 6.3,-3.7,-13);
     waterSplash.visible = false;
     sceneTemp.add(waterSplash);
 
+    // Mice
     gusGus = createCharacterMesh("../models/gusgus.png", 'gusgus', 4,5,-16,-10,-5);
     gusGus.visible = false;
     sceneTemp.add(gusGus);
@@ -336,6 +342,9 @@ function createScene(canvas)
 
     // Create the fountain: https://sketchfab.com/3d-models/fountain-9812aa1535454df886fea502373edf08
     load3dModel('../models/fountain/fountain.obj', '../models/fountain/fountain.mtl', 'fountain', scenes[2], 3.5, 15, -30, -75, -Math.PI / 18);
+
+    textScene3 = 'One day, the prince announced a grand ball, and invited all young women who would like to marry him so that he could choose the most beautiful and make her his princess. The stepmother prepared her two daughters with the best ball gowns and made them up so that they would be pretty, but she prohibited Cinderella from attending the ball. She ordered her to stay at home mopping the floor and preparing dinner so that it would be ready when the three of them returned home. Cinderella obeyed, but as she watched her stepsisters leave for the ball at the royal palace, she couldn’t help but feel miserable and began to cry.';
+    textAnimation(splitText(textScene3, 37), 2.8,-75,25,-100, scenes[2]);
 
     /////////////////////////////////////////////////
     //       Scene 4                               //
@@ -382,15 +391,12 @@ function createScene(canvas)
 
     scenes.push(sceneTemp);
 
-    // Create the columns
-    //1
-    //objModelUrl, mtlModelUrl, name, sceneObj, scale, x, y, z, rotationX, rotationY
     let directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5);
     sceneTemp.add( directionalLight );
     directionalLight.position.set(-15, 0, -10);
     
+    // Create the columns
     load3dModel('../models/Column/Column_Made_By_Tyro_Smith.obj', '../models/Column/Column_Made_By_Tyro_Smith.mtl', 'column', scenes[4], 1.8, 16, -1, 0, 0, 0);
-
 
     //Referencias:
     /*
@@ -444,6 +450,7 @@ function playAnimations()
             break;
         case "scene2":
             console.log("Escena 2");
+            // Animations
             scene.children.forEach(element => {
                 switch (element.name) {
                     case "cinderella_cleaning":
@@ -460,7 +467,7 @@ function playAnimations()
             break;
         case "scene3":
             console.log("Escena 3");
-            // Animaciones
+            // Animations
             scene.children.forEach(element => {
                 switch (element.name) {
                     case "cinderella_crying":
@@ -521,7 +528,7 @@ function playAnimations()
             break;
         case "scene4":
             console.log("Escena 4");
-            // Animaciones
+            // Animations
             scene.children.forEach(element => {
                 switch (element.name) {
                     case "cinderella_crying":
@@ -576,6 +583,7 @@ function playAnimations()
             break;
         case "scene5":
             console.log("Escena 5");
+            // Animations
             scene.children.forEach(element => {
                 switch (element.name) {
                     case "cinderella_dancing":
@@ -588,11 +596,10 @@ function playAnimations()
                         break;
                 }
             });            
-            // Animaciones
             break;
         case "scene6":
             console.log("Escena 6");
-            // Animaciones
+            // Animations
             scene.children.forEach(element => {
                 switch (element.name) {
                     case "cinderella":
@@ -620,6 +627,7 @@ function playClickAnimations()
             break;
         case "scene2":
             console.log("Escena 2", CLICKED.name);
+            // Animations
             switch(CLICKED.name)
             {
                 case "cinderella_cleaning":
@@ -633,10 +641,10 @@ function playClickAnimations()
                     });
                     break;
             }
-            // Animaciones
             break;
         case "scene3":
             console.log("Escena 3", CLICKED.name);
+            // Animations
             switch(CLICKED.name)
             {
                 case "fountain":
@@ -696,6 +704,7 @@ function playClickAnimations()
             break;
         case "scene4":
             console.log("Escena 4", CLICKED.name);
+            // Animations
             if (CLICKED.parent.name == "Cinderella_Carosse") {
                 console.log("Carrouse");
                 enterAnimationYRotation(0, 0.1, 0.2, -30, -10, -30, 0, 0.2, 0, Math.PI, (7*Math.PI) / 3, CLICKED.parent);
@@ -706,6 +715,7 @@ function playClickAnimations()
             }
             break;
         case "scene5":
+            // Animations
             console.log("Escena 5", CLICKED.name);
             switch(CLICKED.name)
             {
@@ -726,7 +736,6 @@ function playClickAnimations()
             break;
     }
 }
-
 
 function enterAnimationX(ti, tf, pos1_x, pos2_x, element){
     animator = new KF.KeyFrameAnimator;
@@ -835,7 +844,6 @@ function AnimationRotationMouse(t1, t2, t3, pos1_x, pos2_x, pos3_x, pos4_x, rot,
     animator.start();
 }
 
-//Dance animation
 function textAnimation(text, size, x, y, z, scene){
     const loaderText = new THREE.FontLoader(manager);
 
@@ -863,6 +871,7 @@ function textAnimation(text, size, x, y, z, scene){
     } );
 }
 
+// Dance animation
 function danceAnimations() 
 {
     animator = new KF.KeyFrameAnimator;
@@ -940,4 +949,24 @@ function raycast ( e )
         CLICKED = null;
     }
 
+}
+
+function splitText(text, limit) 
+{
+    words = text.split(' ');
+    newText = words.shift();
+    charCount = newText.length;
+
+    words.forEach(word => {
+        charCount += word.length + 1;
+        if (charCount <= limit) {
+            newText += ' ';
+        } 
+        else {
+            newText += '\n';
+            charCount = word.length
+        }
+        newText += word;
+    });
+    return newText;
 }
