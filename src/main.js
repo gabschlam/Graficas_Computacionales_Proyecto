@@ -11,6 +11,13 @@ sphere = null;
 let index = 0;
 
 let scenes = [];
+let textScenes = [
+    'Once upon a time there was a very beautiful and kind young woman who had lost both her parents, and was left with her stepmother. This woman had two very ugly daughters, but their mother spoiled them and always made Cinderella do all the difficult housework. Because of this, Cinderella found herself often kneeling on the floor, covered in dirt and ashes, exhausted and with her clothes torn to rags. What’s more, she was left no time for any other activities. Since she was always dirty from ash and cinders, the townspeople called her Cinderella.',
+    'One day, the prince announced a grand ball, and invited all young women who would like to marry him so that he could choose the most beautiful and make her his princess. The stepmother prepared her two daughters with the best ball gowns and made them up so that they would be pretty, but she prohibited Cinderella from attending the ball. She ordered her to stay at home mopping the floor and preparing dinner so that it would be ready when the three of them returned home. Cinderella obeyed, but as she watched her stepsisters leave for the ball at the royal palace, she couldn’t help but feel miserable and began to cry.',
+    'Suddenly, her Fairy Godmother appeared, telling her she didn’t have to worry. She would be able to go to the ball too, but with one condition: she must return home before the palace clock struck midnight. Cinderella looked down at the rags she was wearing. “I can’t go to the ball wearing this,” she cried. The Fairy Godmother waved her magic wand and said the magic words, “Bippidy boppidy boo”, and transformed Cinderella’s ragged clothes into a beautiful ball gown with a pair of glass slippers on her feet. She was exquisitely beautiful.',
+    'When Cinderella arrived and entered the ballroom, everyone gazed at her in awe. The prince, seeing her incredible beauty, approached her and danced the whole night with her. Nobody recognized her, not even her stepsisters. It was just like her most beautiful dreams. Suddenly, the palace clock rang out. It was midnight already! Cinderella dashed across the room as her ballgown began to transform back into rags, and she ran so fast that she lost one of her glass slippers on the palace stairs. The prince found the slipper and kept it, intent on finding the mysterious young woman again.',
+    'The next day, the prince announced that he would marry whoever fit into the glass slipper. All of his heralds searched the kingdom for the woman to whom the shoe belonged. Finally, they arrived at the house of Cinderella’s stepmother. Her first step sister’s feet would not fit into the shoe, and the second step sister couldn’t fit either. When the herald asked if there were any other young women in the house, the step sisters laughed and said, “Only Cinderella, the girl who is covered in soot and ash”. But when Cinderella arrived, they saw that her foot fit perfectly in the glass slipper. The step sisters were furious. The prince was overjoyed and decided to marry Cinderella.'
+]
 
 // For LoadingManager
 let manager;
@@ -261,10 +268,10 @@ function createScene(canvas)
     scenes.push(sceneTemp);
 
     // //Title
-    textAnimation('Cinderella', 3,-10,8.5,-1, scenes[0]);
+    textCreation('Cinderella', 3,-10,8.5,-1, scenes[0]);
 
     // Names
-    textAnimation('Gabriel Schlam Huber - A01024122\nAlejandra Nissan Leizorek - A01024682\nSamantha Barco Mejia - A01196844',2,-80,-46,-100, scenes[0]);
+    textCreation('Gabriel Schlam Huber - A01024122\nAlejandra Nissan Leizorek - A01024682\nSamantha Barco Mejia - A01196844',2,-80,-46,-100, scenes[0]);
 
     // Slipper
     loadOnly3dObjModel("../models/slipper/3d-model.obj", 0.3, 0,-8,0);
@@ -370,8 +377,13 @@ function createScene(canvas)
     // Create the fountain: https://sketchfab.com/3d-models/fountain-9812aa1535454df886fea502373edf08
     load3dModel('../models/fountain/fountain.obj', '../models/fountain/fountain.mtl', 'fountain', scenes[2], 3.5, 15, -30, -75, -Math.PI / 18);
 
-    textScene3 = 'One day, the prince announced a grand ball, and invited all young women who would like to marry him so that he could choose the most beautiful and make her his princess. The stepmother prepared her two daughters with the best ball gowns and made them up so that they would be pretty, but she prohibited Cinderella from attending the ball. She ordered her to stay at home mopping the floor and preparing dinner so that it would be ready when the three of them returned home. Cinderella obeyed, but as she watched her stepsisters leave for the ball at the royal palace, she couldn’t help but feel miserable and began to cry.';
-    textAnimation(splitText(textScene3, 37), 2.8,-75,25,-100, scenes[2]);
+    textScene3Array =  splitText(textScenes[1], 37);
+    textGroup = new THREE.Object3D;
+    textGroup.name = "textGroup";
+    scenes[2].add(textGroup);
+    textScene3Array.forEach((line, i) => {
+        textCreation(line, 2.8,-75,25-(i*3.5),-100, scenes[2], textGroup, true);
+    });
 
     /////////////////////////////////////////////////
     //       Scene 4                               //
@@ -394,6 +406,14 @@ function createScene(canvas)
     
     // Create carruaje: https://www.blendswap.com/blend/9819 
     load3dModel('../models/cinderella_carrosse/Cinderella_Carosse.obj', '../models/cinderella_carrosse/Cinderella_Carosse.mtl', 'Cinderella_Carosse', scenes[3], 9, 60, -60, -50, null, Math.PI / 3);
+
+    textScene3Array =  splitText(textScenes[2], 37);
+    textGroup = new THREE.Object3D;
+    textGroup.name = "textGroup";
+    scenes[3].add(textGroup);
+    textScene3Array.forEach((line, i) => {
+        textCreation(line, 2.8,0,25-(i*3.5),-100, scenes[3], textGroup, true);
+    });
 
     /////////////////////////////////////////////////
     //       Scene 5                               //
@@ -547,6 +567,10 @@ function playAnimations()
                         });
                         animator.start();
                         break;
+                    case "textGroup":
+                        textAnimation(0, 0.7, 0.5, 70, 0.5, element.children);
+
+                        break;
                 
                     default:
                         break;
@@ -562,17 +586,15 @@ function playAnimations()
                         element.material.map = new THREE.TextureLoader().load( "../models/cinderella_crying.png" ); 
                         element.scale.set(1, 1, 1);
                         enterAnimationYRotation(0, 0.3, 0.5, -8, -8, -2, 0.3, 0.5, (8*Math.PI)/3, (16*Math.PI)/3, Math.PI*8, element);
-                        /* let promise = new Promise(function(resolve, reject) {
+                        /* let p = new Promise((resolve, reject) => {
                             enterAnimationYRotation(0.3, 0.5, -8, -2, 0.3, 0.5, (8*Math.PI)/3, (16*Math.PI)/3, Math.PI*8, element);
-                          
-                                if (animator.running == false) {
-                                    console.log("Entre");
-                                    resolve(element.material.map = new THREE.TextureLoader().load( "../models/cinderella.png" ) )
-                                }
-                            
-                          });
-                          
-                        promise.then(); */
+                            resolve();
+                        });
+                        
+                        p.then(() => {
+                            element.material.map = new THREE.TextureLoader().load( "../models/cinderella.png" ); 
+                            element.scale.set(1.5, 1.5, 1.5);
+                        })*/
                         setTimeout( () => {
 		
                             element.material.map = new THREE.TextureLoader().load( "../models/cinderella.png" ); 
@@ -602,6 +624,9 @@ function playAnimations()
                             duration: duration * 1000,
                         });
                         animator.start();
+                        break;
+                    case "textGroup":
+                        textAnimation(0, 0.7, 0.5, 70, 0.45, element.children);
                         break;
                     default:
                         break;
@@ -880,7 +905,7 @@ function AnimationRotationMouse(t1, t2, t3, pos1_x, pos2_x, pos3_x, pos4_x, rot,
     animator.start();
 }
 
-function textAnimation(text, size, x, y, z, scene){
+function textCreation(text, size, x, y, z, scene, textGroup, shown){
     const loaderText = new THREE.FontLoader(manager);
 
     loaderText.load( '../fonts/book.json', function ( font ) {
@@ -903,8 +928,53 @@ function textAnimation(text, size, x, y, z, scene){
         var mesh = new THREE.Mesh(textGeometry, textMaterial);
 
         mesh.position.set(x, y, z);
-        scene.add(mesh);
+        if (shown) {
+            mesh.visible = false;
+        }
+        if (textGroup) {
+            textGroup.add(mesh);
+        }
+        else {
+            scene.add(mesh);
+        }
     } );
+}
+
+function splitText(text, limit) 
+{
+    let arr = [];
+    words = text.split(' ');
+    newText = words.shift();
+    charCount = newText.length;
+
+    words.forEach(word => {
+        charCount += word.length + 1;
+        if (charCount <= limit) {
+            newText += ' ';
+        } 
+        else {
+            arr.push(newText);
+            newText = '';
+            charCount = word.length
+        }
+        newText += word;
+    });
+    arr.push(newText);
+    return arr;
+}
+
+function textAnimation(ti, tf, pos1_y, pos2_y, speed, textArray)
+{
+    len = textArray.length;
+    for (let i = 0, p = Promise.resolve(); i < len; i++) {
+        p = p.then(_ => new Promise(resolve =>
+            setTimeout(function () {
+                textArray[i].visible = true;
+                enterAnimationY(ti, tf, pos1_y + (i*1), pos2_y, textArray[i]);
+                resolve();
+            }, speed * 1000)
+        ));
+    }    
 }
 
 // Dance animation
@@ -985,24 +1055,4 @@ function raycast ( e )
         CLICKED = null;
     }
 
-}
-
-function splitText(text, limit) 
-{
-    words = text.split(' ');
-    newText = words.shift();
-    charCount = newText.length;
-
-    words.forEach(word => {
-        charCount += word.length + 1;
-        if (charCount <= limit) {
-            newText += ' ';
-        } 
-        else {
-            newText += '\n';
-            charCount = word.length
-        }
-        newText += word;
-    });
-    return newText;
 }
