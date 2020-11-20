@@ -8,6 +8,8 @@ ambientLight = null,
 grupoBaile = null,
 sphere = null;
 
+let animationMice = false;
+
 let index = 0;
 
 let scenes = [];
@@ -584,7 +586,7 @@ function playAnimations()
                         animator.start();
                         break;
                     case "textGroup":
-                        textAnimation(0, 0.7, 0.5, 70, 0.5, element.children);
+                        textAnimation(0, 1, 0.5, 55, 0.8, element.children);
                         break;
                 
                     default:
@@ -600,12 +602,12 @@ function playAnimations()
                     case "cinderella_crying":
                         element.material.map = new THREE.TextureLoader().load( "../models/cinderella_crying.png" ); 
                         element.scale.set(1, 1, 1);
-                        enterAnimationYRotation(0, 0.3, 0.5, -8, -8, -2, 0.3, 0.5, (8*Math.PI)/3, (16*Math.PI)/3, Math.PI*8, element);
+                        enterAnimationYRotation(0, 0.8, 0.95, -8, -8, -2, 0.8, 0.95, (8*Math.PI)/3, (16*Math.PI)/3, Math.PI*8, element);
                         setTimeout( () => {
 		
                             element.material.map = new THREE.TextureLoader().load( "../models/cinderella.png" ); 
                             element.scale.set(1.5, 1.5, 1.5);
-                        }, (duration - 6) * 1000 );
+                        }, (duration - 1) * 1000 );
                         break;
                     case "fairy_godmother":
                         enterAnimationYRotation(0, 0.125, 0.25, 30, 30, -5, 0.125, 0.25, -Math.PI, Math.PI, -Math.PI, element);
@@ -617,7 +619,7 @@ function playAnimations()
                                 [
                                     // Keys for the entry and exit animation
                                     { 
-                                        keys:[0, 0.750, 1], 
+                                        keys:[0, 0.85, 1], 
                                         values:[
                                                 { x : 60, y : -60 },
                                                 { x : 60, y : -60 },
@@ -632,7 +634,7 @@ function playAnimations()
                         animator.start();
                         break;
                     case "textGroup":
-                        textAnimation(0, 0.7, 0.5, 70, 0.45, element.children);
+                        textAnimation(0, 1, 0.5, 55, 0.8, element.children);
                         break;
                     default:
                         break;
@@ -652,7 +654,7 @@ function playAnimations()
                         enterAnimationX(0, 0.125, -30, 0, element);
                         break;
                     case "textGroup":
-                        textAnimation(0, 0.7, 0.5, 70, 0.5, element.children);
+                        textAnimation(0, 0.7, 0.5, 55, 0.5, element.children);
                         break;
                 }
             });            
@@ -669,7 +671,7 @@ function playAnimations()
                         enterAnimationX(0, 0.125, -4, -0.5, element);
                         break;
                         case "textGroup":
-                            textAnimation(0, 0.7, 0.5, 70, 0.5, element.children);
+                            textAnimation(0, 0.7, 0.5, 55, 0.5, element.children);
                             break;
                 }
             });            
@@ -760,14 +762,31 @@ function playClickAnimations()
                 case "jackjack":
                     scene.children.forEach(element => {
                         if(element.name=="gusgus"){
-                            element.visible = !element.visible;
-                            AnimationRotationMouse(0.1, 0.2, 0.3, -16, -10, -10, -10, -Math.PI, element);
+                            element.visible = true;
+                            if (animationMice == true) {
+                                AnimationRotationMouse(0.1, 0.2, 0.3, -10, -10, -10, -16, 0, -2.5, -5, -5, -Math.PI, 0, -Math.PI, element);
+                                setTimeout( () => {
+                                    element.visible = !element.visible;
+                                }, (duration - 6) * 1000 );
+                            } 
+                            else {
+                                AnimationRotationMouse(0.1, 0.2, 0.3, -16, -10, -10, -10, -5, -5, -2.5, 0, 0, 0, -Math.PI, element);   
+                            }
                         }
                         if(element.name=="jackjack"){
-                            element.visible = !element.visible;
-                            AnimationRotationMouse(0.1, 0.2, 0.3, -16, -20, -20, -16, -Math.PI, element);
+                            element.visible = true;
+                            if (animationMice == true) {
+                                AnimationRotationMouse(0.1, 0.2, 0.3, -16, -20, -20, -16, 0, -2.5, -5, -5, -Math.PI, 0, -Math.PI, element);
+                                setTimeout( () => {
+                                    element.visible = !element.visible;
+                                }, (duration - 6) * 1000 );
+                            } 
+                            else {
+                                AnimationRotationMouse(0.1, 0.2, 0.3, -16, -20, -20, -16, -5, -5, -2.5, 0, 0, 0, -Math.PI, element);
+                            }
                         }
                     });
+                    animationMice = !animationMice
                     break;
             }
             break;
@@ -881,7 +900,7 @@ function enterAnimationYRotation(t1, t2, t3, pos1_y, pos2_y, pos3_y, tiR, tfR, r
     animator.start();
 }
 
-function AnimationRotationMouse(t1, t2, t3, pos1_x, pos2_x, pos3_x, pos4_x, rot, element){
+function AnimationRotationMouse(t1, t2, t3, pos1_x, pos2_x, pos3_x, pos4_x, pos1_z, pos2_z, pos3_z, pos4_z, rot1, rot2, rot3, element){
     animator = new KF.KeyFrameAnimator;
     animator.init({ 
         interps:
@@ -890,19 +909,19 @@ function AnimationRotationMouse(t1, t2, t3, pos1_x, pos2_x, pos3_x, pos4_x, rot,
                 { 
                     keys:[0, t1, t2, t3], 
                     values:[
-                            { x : pos1_x, y : -10, z : -5 },
-                            { x : pos2_x, y : -10, z : -5 },
-                            { x : pos3_x, y : -10, z : -2.5 },
-                            { x : pos4_x, y : -10, z : 0 },
+                            { x : pos1_x, y : -10, z : pos1_z },
+                            { x : pos2_x, y : -10, z : pos2_z },
+                            { x : pos3_x, y : -10, z : pos3_z },
+                            { x : pos4_x, y : -10, z : pos4_z },
                             ],
                     target: element.position
                 },
                 { 
                     keys:[0, t2, t3], 
                     values:[
-                            { y : 0 },
-                            { y : 0 },
-                            { y : rot },
+                            { y : rot1 },
+                            { y : rot2 },
+                            { y : rot3 },
                             ],
                     target:element.rotation
                 }
