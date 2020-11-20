@@ -451,7 +451,7 @@ function createScene(canvas)
     textGroup.name = "textGroup";
     scenes[4].add(textGroup);
     textScene5Array.forEach((line, i) => {
-        textCreation(line, 2.8,-75,25-(i*3.5),-100, scenes[4], textGroup, true);
+        textCreation(line, 2.8,-75,25-(i*3.5),-100, 0x000000, scenes[4], textGroup, true);
     });
 
     //Referencias:
@@ -496,7 +496,7 @@ function createScene(canvas)
     textGroup.name = "textGroup";
     scenes[5].add(textGroup);
     textScene6Array.forEach((line, i) => {
-        textCreation(line, 2.8,-75,25-(i*3.5),-100, scenes[5], textGroup, true);
+        textCreation(line, 2.8,-75,25-(i*3.5),-100, 0x000000, scenes[5], textGroup, true);
     });
     /*
     Prince and cinderella https://www.jing.fm/iclipt/Thmwx/
