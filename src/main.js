@@ -61,12 +61,24 @@ function load3dModel(objModelUrl, mtlModelUrl, name, sceneObj, scale, x, y, z, r
             object.traverse( function( child ) {
                 if ( child.isMesh ) 
                 {
+                    /* if (name != "Cinderella_Carosse") {
+                        // wireframe
+                        var geo = new THREE.EdgesGeometry( child.geometry );
+                        var mat = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 4 } );
+                        var wireframe = new THREE.LineSegments( geo, mat );
+                        wireframe.renderOrder = 1; // make sure wireframes are rendered 2nd
+                        wireframe.name = name;
+                        object.add( wireframe );
+                    } */
+                    
                     child.geometry.computeVertexNormals();
+                   
                     // child.geometry.computeBoundingBox();
                 }
             } );
 
             sceneObj.add(object);
+            
         });
     });
 
@@ -375,6 +387,31 @@ function createScene(canvas)
     jackJack = createCharacterMesh("../models/jackjack.png", 'jackjack', 5,5,-16,-10,-5);
     jackJack.visible = false;
     sceneTemp.add(jackJack);
+
+    // Click here text1
+    textGroup = new THREE.Object3D;
+    textGroup.name = "clickHere";
+    sceneTemp.add(textGroup);
+    var from = new THREE.Vector3( 2, -2, 2 );
+    var to = new THREE.Vector3( 4, -4, 0 );
+    var direction = to.clone().sub(from);
+    var length = direction.length();
+    var arrowHelper = new THREE.ArrowHelper(direction.normalize(), from, length, 0xd6ecef );
+    textGroup.add(arrowHelper);
+    textCreation("Click here!", 2.5,0,-6,-100, 0xd6ecef, sceneTemp, textGroup);
+
+    // Click here text2
+    textGroup = new THREE.Object3D;
+    textGroup.name = "clickHere2";
+    sceneTemp.add(textGroup);
+    var from = new THREE.Vector3( -10, -2, 2 );
+    var to = new THREE.Vector3( -12, -4, 0 );
+    var direction = to.clone().sub(from);
+    var length = direction.length();
+    var arrowHelper = new THREE.ArrowHelper(direction.normalize(), from, length, 0xd6ecef );
+    textGroup.add(arrowHelper);
+    textCreation("Click here!", 2.5,-48,-6,-100, 0xd6ecef, sceneTemp, textGroup);
+
     scenes.push(sceneTemp);
 
     // Create the fountain: https://sketchfab.com/3d-models/fountain-9812aa1535454df886fea502373edf08
@@ -753,7 +790,14 @@ function playClickAnimations()
                                 duration: duration * 1000,
                             });
                             animator.start();
-                            return;
+                        }
+                        if (element.name=="clickHere") {
+                            element.visible = false;
+                            setTimeout( () => {
+		
+                                element.visible = true;
+
+                            }, (duration - 5) * 1000 );
                         }
                     });
                     break;
@@ -785,8 +829,16 @@ function playClickAnimations()
                                 AnimationRotationMouse(0.1, 0.2, 0.3, -16, -20, -20, -16, -5, -5, -2.5, 0, 0, 0, -Math.PI, element);
                             }
                         }
+                        if (element.name=="clickHere2") {
+                            element.visible = false;
+                            setTimeout( () => {
+		
+                                element.visible = true;
+
+                            }, (duration - 5) * 1000 );
+                        }
                     });
-                    animationMice = !animationMice
+                    animationMice = !animationMice;
                     break;
             }
             break;
