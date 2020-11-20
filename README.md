@@ -79,4 +79,4 @@ Nuestro plan de trabajo se dividirá en diferentes sprints, con diferentes entre
 2. Animaciones de objetos con interacción de usuario: movimiento y/o sonido (raycasting). **¿Quién? -> Todo el equipo, dividido por escenas, liderado por Samantha**
 ### Tercer Sprint: 17/11 - 26/11
 1. Animaciones de texto de cuento. **¿Quién? -> Todo el equipo, dividido por escenas, liderado por Gabriel**
-2. Animaciones de cámara (alejamiento, acercamiento, etc.). **¿Quién? -> Todo el equipo**
+2. Loading Manager para optimizar carga de objetos. **¿Quién? -> Todo el equipo**
