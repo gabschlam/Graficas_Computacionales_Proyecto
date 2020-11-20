@@ -446,6 +446,14 @@ function createScene(canvas)
     // Create the columns
     load3dModel('../models/Column/Column_Made_By_Tyro_Smith.obj', '../models/Column/Column_Made_By_Tyro_Smith.mtl', 'column', scenes[4], 1.8, 16, -1, 0, 0, 0);
 
+    textScene5Array =  splitText(textScenes[3], 37);
+    textGroup = new THREE.Object3D;
+    textGroup.name = "textGroup";
+    scenes[4].add(textGroup);
+    textScene5Array.forEach((line, i) => {
+        textCreation(line, 2.8,-75,25-(i*3.5),-100, scenes[4], textGroup, true);
+    });
+
     //Referencias:
     /*
     Princesa 
@@ -483,6 +491,13 @@ function createScene(canvas)
 
     load3dModel('../models/Column/Column_Made_By_Tyro_Smith.obj', '../models/Column/Column_Made_By_Tyro_Smith.mtl', 'column1', scenes[5], 1.8, 16, -1, 0, 0, 0);
 
+    textScene6Array =  splitText(textScenes[4], 37);
+    textGroup = new THREE.Object3D;
+    textGroup.name = "textGroup";
+    scenes[5].add(textGroup);
+    textScene6Array.forEach((line, i) => {
+        textCreation(line, 2.8,-75,25-(i*3.5),-100, scenes[5], textGroup, true);
+    });
     /*
     Prince and cinderella https://www.jing.fm/iclipt/Thmwx/
     */
@@ -636,6 +651,9 @@ function playAnimations()
                     case "grupoBaile":
                         enterAnimationX(0, 0.125, -30, 0, element);
                         break;
+                    case "textGroup":
+                        textAnimation(0, 0.7, 0.5, 70, 0.5, element.children);
+                        break;
                 }
             });            
             break;
@@ -650,6 +668,9 @@ function playAnimations()
                     case "prince":
                         enterAnimationX(0, 0.125, -4, -0.5, element);
                         break;
+                        case "textGroup":
+                            textAnimation(0, 0.7, 0.5, 70, 0.5, element.children);
+                            break;
                 }
             });            
             break;            
