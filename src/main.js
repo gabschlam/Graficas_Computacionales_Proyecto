@@ -71,7 +71,7 @@ function load3dModel(objModelUrl, mtlModelUrl, name, sceneObj, scale, x, y, z, r
 }
 
 // Function for loading OBJ 3d model without MTL file
-function loadOnly3dObjModel(objModelUrl, scale, x, y, z) 
+function loadOnly3dObjModel(objModelUrl, name, scale, x, y, z) 
 {
     var loader = new THREE.OBJLoader(manager);
     const params = {
@@ -105,6 +105,7 @@ function loadOnly3dObjModel(objModelUrl, scale, x, y, z)
 
         object.scale.x = object.scale.y = object.scale.z = scale;
         object.position.set(x,y,z);
+        object.name = name;
         scenes[0].add(object);
         // console.log("FBX");
         // console.log(object);
@@ -268,13 +269,13 @@ function createScene(canvas)
     scenes.push(sceneTemp);
 
     // //Title
-    textCreation('Cinderella', 3,-10,8.5,-1, scenes[0]);
+    textCreation('Cinderella', 3,-10,8.5,-1, 0xd6ecef, scenes[0]);
 
     // Names
-    textCreation('Gabriel Schlam Huber - A01024122\nAlejandra Nissan Leizorek - A01024682\nSamantha Barco Mejia - A01196844',2,-80,-46,-100, scenes[0]);
+    textCreation('Gabriel Schlam Huber - A01024122\nAlejandra Nissan Leizorek - A01024682\nSamantha Barco Mejia - A01196844',2,-80,-46,-100, 0xd6ecef, scenes[0]);
 
     // Slipper
-    loadOnly3dObjModel("../models/slipper/3d-model.obj", 0.3, 0,-8,0);
+    loadOnly3dObjModel("../models/slipper/3d-model.obj", 'slipper', 0.3, 0,-8,0);
 
     // Floor
     const geometry = new THREE.PlaneGeometry( 90, 70, 50 );
@@ -382,7 +383,7 @@ function createScene(canvas)
     textGroup.name = "textGroup";
     scenes[2].add(textGroup);
     textScene3Array.forEach((line, i) => {
-        textCreation(line, 2.8,-75,25-(i*3.5),-100, scenes[2], textGroup, true);
+        textCreation(line, 2.8,-75,25-(i*3.5),-100, 0xd6ecef, scenes[2], textGroup, true);
     });
 
     /////////////////////////////////////////////////
@@ -412,7 +413,7 @@ function createScene(canvas)
     textGroup.name = "textGroup";
     scenes[3].add(textGroup);
     textScene4Array.forEach((line, i) => {
-        textCreation(line, 2.8,0,25-(i*3.5),-100, scenes[3], textGroup, true);
+        textCreation(line, 2.8,0,25-(i*3.5),-100, 0xd6ecef, scenes[3], textGroup, true);
     });
 
     /////////////////////////////////////////////////
@@ -664,15 +665,12 @@ function playClickAnimations()
     switch (scene.name) {
         case "scene1":
             console.log("Escena 1",CLICKED.name);
-            if (CLICKED.name.search("Group")>=0)
-            {
-                console.log("Zapatillas",CLICKED);
+            if (CLICKED.parent.name == "slipper") {
                 enterAnimationYRotation(0, 0.25, 0.5, -8, -8, -8, 0, 0.2, 0, Math.PI, 2*Math.PI, CLICKED.parent);
             }
-            else
-            {
-                console.log("pos",CLICKED.name.search("Group"));
-                console.log("No zapatilla");
+            // Para mariposa
+            if (CLICKED.name == "mariposa") {
+            
             }
             break;
         case "scene2":
@@ -894,7 +892,7 @@ function AnimationRotationMouse(t1, t2, t3, pos1_x, pos2_x, pos3_x, pos4_x, rot,
     animator.start();
 }
 
-function textCreation(text, size, x, y, z, scene, textGroup, shown){
+function textCreation(text, size, x, y, z, color, scene, textGroup, shown){
     const loaderText = new THREE.FontLoader(manager);
 
     loaderText.load( '../fonts/book.json', function ( font ) {
@@ -912,7 +910,7 @@ function textCreation(text, size, x, y, z, scene, textGroup, shown){
         } );
 
         var textMaterial = new THREE.MeshPhongMaterial( 
-            { color: 0xd6ecef, specular: 0xffffff }
+            { color: color, specular: 0xffffff }
         );
         var mesh = new THREE.Mesh(textGeometry, textMaterial);
 
