@@ -90,7 +90,7 @@ function loadOnly3dObjModel(objModelUrl, name, scale, x, y, z)
     var loader = new THREE.OBJLoader(manager);
     const params = {
         color: 0xffffff,
-        transmission: 0.80,
+        transmission: 0.60,
         envMapIntensity: 1,
         lightIntensity: 1,
         exposure: 1
@@ -278,7 +278,7 @@ function createScene(canvas)
     sceneTemp = new THREE.Scene();
     sceneTemp.name = "scene1";
     // Set the background image 
-    sceneTemp.background = new THREE.Color( 0x0c3052);
+    sceneTemp.background = new THREE.Color( 0x89d0f1);
 
     scenes.push(sceneTemp);
 
@@ -286,23 +286,37 @@ function createScene(canvas)
     textCreation('Cinderella', 3,-10,8.5,-1, 0xd6ecef, scenes[0]);
 
     // Names
-    textCreation('Gabriel Schlam Huber - A01024122\nAlejandra Nissan Leizorek - A01024682\nSamantha Barco Mejia - A01196844',2,-80,-46,-100, 0xd6ecef, scenes[0]);
+    textCreation('Gabriel Schlam Huber - A01024122\nAlejandra Nissan Leizorek - A01024682\nSamantha Barco Mejia - A01196844',0.3,-9,-5,15, 0x115e82, scenes[0]);
 
     // Slipper
     loadOnly3dObjModel("../models/slipper/3d-model.obj", 'slipper', 0.3, 0,-8,0);
 
+    //Butterfly https://www.pngegg.com/es/png-dktlp
+    butterfly = createCharacterMesh("../models/butterfly.png", 'butterfly' ,10,7.5,9.5,8,-12);
+    //butterfly.color.setHex(0xff00ff);
+    butterfly.material.emissive.setHex(0x000000);
+    sceneTemp.add(butterfly);
+
+    //Group for butterfly and slippers
+    objectGroup = new THREE.Object3D;
+    objectGroup.name = "groupSlippersButterfly";
+    //objectGroup.add(butterfly);
+    //objectGroup.add(scenes[0].getObjectByName('slipper'));
+    
+
     // Floor
-    const geometry = new THREE.PlaneGeometry( 90, 70, 50 );
-    const material = new THREE.MeshPhysicalMaterial( {color: 0x000000, side: THREE.DoubleSide, reflectivity: 1} );
+    const geometry = new THREE.PlaneGeometry( 120, 100, 1 );
+    const material = new THREE.MeshPhongMaterial( {color: 0x45b5e9, side: THREE.DoubleSide, reflectivity: 1} );
     const plane = new THREE.Mesh( geometry, material );
     plane.rotation.x = -Math.PI/2;
-    plane.position.y = -10;
+    plane.position.y = -12;
     scenes[0].add( plane );
 
 
     // Spotlight, https://threejs.org/docs/#api/en/lights/SpotLight
     const spotLight = new THREE.SpotLight( 0xffffff );
-    spotLight.position.set( 20, 0, 20 );
+    // Alternative position to increase light 20,0,20
+    spotLight.position.set( 29, 0, 29 );
 
     spotLight.castShadow = true;
 
@@ -343,6 +357,11 @@ function createScene(canvas)
     bubblesGroup.add(createCharacterMesh("../models/bubble.png", 'bubble', 0.3,0.3,-0.6,-1.2,0));
     sceneTemp.add(bubblesGroup);
     bubblesGroup.position.set(-10,-9.85,2);
+
+    //Mouse
+    gusGus = createCharacterMesh("../models/gusgus.png", 'gusgus', 3,4,6,-10,-1);
+    sceneTemp.add(gusGus);
+    
 
     scenes.push(sceneTemp);
 
@@ -564,6 +583,9 @@ function playAnimations()
                     case "stepsisters_normal":
                         enterAnimationX(0.180, 0.305, 30, 13, element);
                         break;
+                    case "gusgus":
+                        enterAnimationX(0.125, 0.250, 30, 6, element);
+                        break;
                 }
             });
             break;
@@ -729,8 +751,9 @@ function playClickAnimations()
                 enterAnimationYRotation(0, 0.25, 0.5, -8, -8, -8, 0, 0.2, 0, Math.PI, 2*Math.PI, CLICKED.parent);
             }
             // Para mariposa
-            if (CLICKED.name == "mariposa") {
-            
+            if (CLICKED.name == "butterfly") {
+                zigzagAnimation(0.05,0.3,8,10,6,9.5,-20,CLICKED);
+                //zigzagAnimation(0.05,0.3,11.5,13.5,9.5,-20,8,CLICKED);
             }
             break;
         case "scene2":
@@ -748,6 +771,9 @@ function playClickAnimations()
                         }
                     });
                     break;
+                    case "stepsisters_normal":
+                        outZigzagAnimation(0.05,0.3,-10,-9,6,-25,scenes[1].getObjectByName("gusgus"));
+                        break;
             }
             break;
         case "scene3":
@@ -877,6 +903,106 @@ function playClickAnimations()
     }
 }
 
+function zigzagAnimation(ti, tf, y_init, y_top, y_bottom, pos1_x, pos2_x, element){
+    animator = new KF.KeyFrameAnimator;
+    animator2 = new KF.KeyFrameAnimator;
+    timeJump = (tf-ti)/6;
+    xJump = (pos2_x - pos1_x)/3;
+    animator.init({ 
+        interps:
+            [
+                // Keys for the entry animation
+                { 
+                    keys:[0, ti, ti+timeJump, ti+timeJump*2, ti+timeJump*3, ti+timeJump*4, ti+timeJump*5, tf], 
+                    values:[
+                            { y : y_init },    
+                            { y : y_top },    
+                            { y : y_bottom },
+                            { y : y_top },
+                            { y : y_bottom },
+                            { y : y_top },
+                            { y : y_init },
+                            { y : y_init },
+                            ],
+                    target: element.position
+                },
+                // Keys for the entry animation
+                { 
+                    keys:[0, ti, ti+timeJump, ti+timeJump*2, ti+timeJump*3, ti+timeJump*4, ti+timeJump*5, tf],
+                    values:[
+                            { x : pos1_x },    
+                            { x : pos1_x + xJump},
+                            { x : pos1_x + xJump*2},    
+                            { x : pos2_x },  
+                            { x : pos1_x + xJump*2 },  
+                            { x : pos1_x + xJump },
+                            { x : pos1_x },
+                            ],
+                    target: element.position
+                }
+            ],
+        loop: loopAnimation,
+        duration: duration * 1000,
+    });
+    animator.start();
+}
+
+function outZigzagAnimation(ti, tf, y_init, y_bottom, pos1_x, pos2_x, element){
+    animator = new KF.KeyFrameAnimator;
+    animator2 = new KF.KeyFrameAnimator;
+    timeJump = (tf-ti)/6;
+    xJump = (pos2_x - pos1_x)/3;
+    animator.init({ 
+        interps:
+            [
+                // Keys for the entry animation
+                { 
+                    keys:[0, ti, ti+timeJump, ti+timeJump*2, ti+timeJump*3, ti+timeJump*4, ti+timeJump*5, tf], 
+                    values:[
+                            { y : y_init },    
+                            { y : y_init },    
+                            { y : y_bottom },
+                            { y : y_init },
+                            { y : y_bottom },
+                            { y : y_init },
+                            { y : y_bottom },
+                            { y : y_init },
+                            ],
+                    target: element.position
+                },
+                // Keys for the entry animation
+                { 
+                    keys:[0, ti, ti+timeJump, ti+timeJump*2, ti+timeJump*3, ti+timeJump*4, ti+timeJump*5, tf], 
+                    values:[
+                            { z : -1 },    
+                            { z : -1 },    
+                            { z : -1 },
+                            { z : -1 },
+                            { z : -1 },
+                            { z : 1 },
+                            { z : 1 },
+                            { z : 1 },
+                            ],
+                    target: element.position
+                },
+                
+                // Keys for the entry animation
+                { 
+                    keys:[0, ti, tf],
+                    values:[
+                            { x : pos1_x },
+                            { x : pos1_x },
+                            { x : pos2_x },
+                            ],
+                    target: element.position
+                }
+            ],
+        loop: loopAnimation,
+        duration: duration * 1000,
+    });
+    animator.start();
+}
+
 function enterAnimationX(ti, tf, pos1_x, pos2_x, element){
     animator = new KF.KeyFrameAnimator;
     animator.init({ 
@@ -992,7 +1118,7 @@ function textCreation(text, size, x, y, z, color, scene, textGroup, shown){
         let textGeometry = new THREE.TextGeometry( text, {
             font: font,
             size: size,
-            height: 0.5,
+            height: 0.1,
             curveSegments: 1,
             bevelEnabled: true,
             bevelThickness: 0,
