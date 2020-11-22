@@ -5,7 +5,6 @@ camera = null,
 cube = null,
 objLoader = null,
 ambientLight = null,
-grupoBaile = null,
 sphere = null;
 
 let animationMice = false;
@@ -762,17 +761,13 @@ function playClickAnimations()
             switch(CLICKED.name)
             {
                 case "cinderella_cleaning":
-                    scene.children.forEach(element => {
-                        if(element.name=="bubbles"){
-                            for(i = 0; i< element.children.length;i++)
-                            {
-                                enterAnimationY(0, Math.random() + 0.1, 0, 30, element.children[i]);
-                            }
-                        }
-                    });
+                    for(i = 0; i< scene.getObjectByName("bubbles").children.length;i++)
+                    {
+                        enterAnimationY(0, Math.random() + 0.1, 0, 30, scene.getObjectByName("bubbles").children[i]);
+                    }
                     break;
                     case "stepsisters_normal":
-                        outZigzagAnimation(0.05,0.3,-10,-9,6,-25,scenes[1].getObjectByName("gusgus"));
+                        outZigzagAnimation(0.05,0.3,-10,-9,6,-25,scene.getObjectByName("gusgus"));
                         break;
             }
             break;
@@ -782,50 +777,49 @@ function playClickAnimations()
             switch(CLICKED.name)
             {
                 case "fountain":
-                    scene.children.forEach(element => {
-                        if(element.name=="water_splash"){
-                            element.scale.y = 0.5;
-                            element.scale.x = 0.15;
-                            element.position.y = -3.7;
-                            element.visible = !element.visible;
-                            animator = new KF.KeyFrameAnimator;
-                            animator.init({ 
-                                interps:
-                                    [
-                                        // Keys for the entry animation
-                                        { 
-                                            keys:[0, 0.05, 0.1], 
-                                            values:[
-                                                    { y : -3.7 },
-                                                    { y : -3.2 },
-                                                    { y : -2.7 },
-                                                    ],
-                                            target: element.position
-                                        },
-                                        { 
-                                            keys:[0, 0.05, 0.1], 
-                                            values:[
-                                                    { x : 0.15, y : 0.5 },
-                                                    { x : 0.5, y : 0.75 },
-                                                    { x : 1, y : 1 },
-                                                    ],
-                                            target: element.scale
-                                        }
-                                    ],
-                                loop: loopAnimation,
-                                duration: duration * 1000,
-                            });
-                            animator.start();
-                        }
-                        if (element.name=="clickHere") {
-                            element.visible = false;
-                            setTimeout( () => {
-		
-                                element.visible = true;
-
-                            }, (duration - 5) * 1000 );
-                        }
+                    // For water splash
+                    element = scene.getObjectByName("water_splash");        
+                    element.scale.y = 0.5;
+                    element.scale.x = 0.15;
+                    element.position.y = -3.7;
+                    element.visible = !element.visible;
+                    animator = new KF.KeyFrameAnimator;
+                    animator.init({ 
+                        interps:
+                            [
+                                // Keys for the entry animation
+                                { 
+                                    keys:[0, 0.05, 0.1], 
+                                    values:[
+                                            { y : -3.7 },
+                                            { y : -3.2 },
+                                            { y : -2.7 },
+                                            ],
+                                    target: element.position
+                                },
+                                { 
+                                    keys:[0, 0.05, 0.1], 
+                                    values:[
+                                            { x : 0.15, y : 0.5 },
+                                            { x : 0.5, y : 0.75 },
+                                            { x : 1, y : 1 },
+                                            ],
+                                    target: element.scale
+                                }
+                            ],
+                        loop: loopAnimation,
+                        duration: duration * 1000,
                     });
+                    animator.start();
+                    
+                    // For clickHere text
+                    element = scene.getObjectByName("clickHere");
+                    element.visible = false;
+                    setTimeout( () => {
+
+                        element.visible = true;
+
+                    }, (duration - 5) * 1000 );
                     break;
                 case "cinderella_crying":
                 case "gusgus":
@@ -886,13 +880,10 @@ function playClickAnimations()
             switch(CLICKED.name)
             {
                 case "cinderella_dancing":
-                    scene.children.forEach(element => {
-                        if(element.name=="grupoBaile"){
-                            danceAnimations();
-                        }
-            });
-            break;
-        }
+                    element = scene.getObjectByName("grupoBaile");    
+                    danceAnimations(element);
+                    break;
+            }
         case "scene6":
             console.log("Escena 6");
             // Animaciones
@@ -1183,7 +1174,7 @@ function textAnimation(ti, tf, pos1_y, pos2_y, speed, textArray)
 }
 
 // Dance animation
-function danceAnimations() 
+function danceAnimations(element) 
 {
     animator = new KF.KeyFrameAnimator;
     animator.init({ 
@@ -1203,7 +1194,7 @@ function danceAnimations()
                             { x : -4, z : 4 },
                             { x : 0, z : 0 },
                             ],
-                    target:grupoBaile.position,
+                    target:element.position,
                     easing:TWEEN.Easing.Exponential.Out
                 }
             ],
