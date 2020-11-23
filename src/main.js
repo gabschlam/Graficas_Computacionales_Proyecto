@@ -34,7 +34,7 @@ let height = 0;
 let animator = null;
 
 // Function for loading OBJ 3d model with MTL file
-function load3dModel(objModelUrl, mtlModelUrl, name, sceneObj, scale, x, y, z, rotationX, rotationY)
+function load3dModel(objModelUrl, mtlModelUrl, name, sceneObj, scale, x, y, z, rotationX, rotationY, outline)
 {
     mtlLoader = new THREE.MTLLoader(manager);
 
@@ -60,17 +60,24 @@ function load3dModel(objModelUrl, mtlModelUrl, name, sceneObj, scale, x, y, z, r
             object.traverse( function( child ) {
                 if ( child.isMesh ) 
                 {
-                    /* if (name != "Cinderella_Carosse") {
-                        // wireframe
-                        var geo = new THREE.EdgesGeometry( child.geometry );
-                        var mat = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 4 } );
-                        var wireframe = new THREE.LineSegments( geo, mat );
-                        wireframe.renderOrder = 1; // make sure wireframes are rendered 2nd
-                        wireframe.name = name;
-                        object.add( wireframe );
-                    } */
-                    
                     child.geometry.computeVertexNormals();
+
+                    if (outline) {
+                        if (name == "column" || name == "column1") {
+                            // only show edges with 50 degrees or more angle between faces
+                            var thresholdAngle = 50;
+                        }
+                        else {
+                            // only show edges with 35 degrees or more angle between faces
+                            var thresholdAngle = 35;
+                        }
+                        var lineGeometry = new THREE.EdgesGeometry(child.geometry, thresholdAngle);
+                        var material = new THREE.LineBasicMaterial({color: 0xff0000});
+                        //material.linewidth = 4.0;
+                        var mesh = new THREE.LineSegments(lineGeometry, material);
+                        mesh.name = name;
+                        object.add(mesh);
+                    }
                    
                     // child.geometry.computeBoundingBox();
                 }
@@ -340,9 +347,9 @@ function createScene(canvas)
     
     // Put in a ground plane to show off the lighting
     //727 x 902 px
-    sceneTemp.add(createCharacterMesh("../models/cinderella_cleaning.png", 'cinderella_cleaning' ,12,15,-30,-5,-2));
+    sceneTemp.add(createCharacterMesh("../models/cinderella_cleaningOutline.png", 'cinderella_cleaning' ,12,15,-30,-5,-2));
     //470x496px
-    sceneTemp.add(createCharacterMesh("../models/stepsisters_normal.png", 'stepsisters_normal' ,14,14,30,-5,0));
+    sceneTemp.add(createCharacterMesh("../models/stepsisters_normalOutline.png", 'stepsisters_normal' ,14,14,30,-5,0));
     //277x655 px
     sceneTemp.add(createCharacterMesh("../models/stepmother.png", 'stepmother', 7,15,30,-5,0.5));
 
@@ -382,7 +389,7 @@ function createScene(canvas)
     sceneTemp.name = "scene3";
     // Set the background image 
     sceneTemp.background = new THREE.TextureLoader(manager).load("../images/Backgrounds/scene3-4_background.jpg");
-    sceneTemp.add(createCharacterMesh("../models/cinderella_crying.png", 'cinderella_crying', 8,10,-30,-8,-2));
+    sceneTemp.add(createCharacterMesh("../models/cinderella_cryingOutline2.png", 'cinderella_crying', 8,10,-30,-8,-2));
     objectGroup = new THREE.Object3D;
     objectGroup.name = "groupStepSistersMother"
     stepSisters = createCharacterMesh("../models/stepsisters_party.png", 'stepsisters_party', 13,14,16,-8,-5);
@@ -406,34 +413,10 @@ function createScene(canvas)
     jackJack.visible = false;
     sceneTemp.add(jackJack);
 
-    // Click here text1
-    textGroup = new THREE.Object3D;
-    textGroup.name = "clickHere";
-    sceneTemp.add(textGroup);
-    var from = new THREE.Vector3( 2, -2, 2 );
-    var to = new THREE.Vector3( 4, -4, 0 );
-    var direction = to.clone().sub(from);
-    var length = direction.length();
-    var arrowHelper = new THREE.ArrowHelper(direction.normalize(), from, length, 0xd6ecef );
-    textGroup.add(arrowHelper);
-    textCreation("Click here!", 2.5,0,-6,-100, 0xd6ecef, sceneTemp, textGroup);
-
-    // Click here text2
-    textGroup = new THREE.Object3D;
-    textGroup.name = "clickHere2";
-    sceneTemp.add(textGroup);
-    var from = new THREE.Vector3( -10, -2, 2 );
-    var to = new THREE.Vector3( -12, -4, 0 );
-    var direction = to.clone().sub(from);
-    var length = direction.length();
-    var arrowHelper = new THREE.ArrowHelper(direction.normalize(), from, length, 0xd6ecef );
-    textGroup.add(arrowHelper);
-    textCreation("Click here!", 2.5,-48,-6,-100, 0xd6ecef, sceneTemp, textGroup);
-
     scenes.push(sceneTemp);
 
     // Create the fountain: https://sketchfab.com/3d-models/fountain-9812aa1535454df886fea502373edf08
-    load3dModel('../models/fountain/fountain.obj', '../models/fountain/fountain.mtl', 'fountain', scenes[2], 3.5, 15, -30, -75, -Math.PI / 18);
+    load3dModel('../models/fountain/fountain.obj', '../models/fountain/fountain.mtl', 'fountain', scenes[2], 3.5, 15, -30, -75, -Math.PI / 18, null, true);
 
     textScene3Array =  splitText(textScenes[1], 37);
     textGroup = new THREE.Object3D;
@@ -453,17 +436,17 @@ function createScene(canvas)
     sceneTemp.background = new THREE.TextureLoader(manager).load("../images/Backgrounds/scene3-4_background.jpg");
 
     sceneTemp.add(createCharacterMesh("../models/cinderella_crying.png", 'cinderella_crying', 8,10,-15,-8,-2));
-    godmother = createCharacterMesh("../models/fairy_godmother.png", 'fairy_godmother', 16,18,-2,30,-7);
+    godmother = createCharacterMesh("../models/fairy_godmotherOutline2.png", 'fairy_godmother', 16,18,-2,30,-7);
     godmother.rotation.y = Math.PI;
     sceneTemp.add(godmother);
 
     scenes.push(sceneTemp);
 
     // Create the fountain: https://sketchfab.com/3d-models/fountain-9812aa1535454df886fea502373edf08
-    load3dModel('../models/fountain/fountain.obj', '../models/fountain/fountain.mtl', 'fountain', scenes[3], 3.5, 15, -30, -75, -Math.PI / 18);
+    load3dModel('../models/fountain/fountain.obj', '../models/fountain/fountain.mtl', 'fountain', scenes[3], 3.5, 15, -30, -75, -Math.PI / 18, null, false);
     
     // Create carruaje: https://www.blendswap.com/blend/9819 
-    load3dModel('../models/cinderella_carrosse/Cinderella_Carosse.obj', '../models/cinderella_carrosse/Cinderella_Carosse.mtl', 'Cinderella_Carosse', scenes[3], 9, 60, -60, -50, null, Math.PI / 3);
+    load3dModel('../models/cinderella_carrosse/Cinderella_Carosse.obj', '../models/cinderella_carrosse/Cinderella_Carosse.mtl', 'Cinderella_Carosse', scenes[3], 9, 60, -60, -50, null, Math.PI / 3, true);
 
     textScene4Array =  splitText(textScenes[2], 37);
     textGroup = new THREE.Object3D;
@@ -487,11 +470,11 @@ function createScene(canvas)
     sceneTemp.background = new THREE.TextureLoader(manager).load("../images/Backgrounds/scene5-6_background.jpg");
 
     //Loading the prince
-    sceneTemp.add(grupoBaile.add(createCharacterMesh("../models/prince_charming_scene_5.png", 'prince_dancing', 10,10,0,-7,0)));
+    sceneTemp.add(grupoBaile.add(createCharacterMesh("../models/prince_charming_scene_5_Outline.png", 'prince_dancing', 10,10,0,-7,0)));
     //grupoBaile.add(prince);
 
     //Loading Cinderella
-    sceneTemp.add(grupoBaile.add(createCharacterMesh("../models/cinderella.png", 'cinderella_dancing', 9,12,4,-9,-5)));
+    sceneTemp.add(grupoBaile.add(createCharacterMesh("../models/cinderellaOutline.png", 'cinderella_dancing', 9,12,4,-9,-5)));
     //grupoBaile.add(cinderella);
 
     scenes.push(sceneTemp);
@@ -501,7 +484,7 @@ function createScene(canvas)
     directionalLight.position.set(-15, 0, -10);
     
     // Create the columns
-    load3dModel('../models/Column/Column_Made_By_Tyro_Smith.obj', '../models/Column/Column_Made_By_Tyro_Smith.mtl', 'column', scenes[4], 1.8, 16, -1, 0, 0, 0);
+    load3dModel('../models/Column/Column_Made_By_Tyro_Smith.obj', '../models/Column/Column_Made_By_Tyro_Smith.mtl', 'column', scenes[4], 1.8, 16, -1, 0, 0, 0, true);
 
     textScene5Array =  splitText(textScenes[3], 37);
     textGroup = new THREE.Object3D;
@@ -546,7 +529,7 @@ function createScene(canvas)
 
     scenes.push(sceneTemp);
 
-    load3dModel('../models/Column/Column_Made_By_Tyro_Smith.obj', '../models/Column/Column_Made_By_Tyro_Smith.mtl', 'column1', scenes[5], 1.8, 16, -1, 0, 0, 0);
+    load3dModel('../models/Column/Column_Made_By_Tyro_Smith.obj', '../models/Column/Column_Made_By_Tyro_Smith.mtl', 'column1', scenes[5], 1.8, 16, -1, 0, 0, 0, true);
 
     textScene6Array =  splitText(textScenes[4], 37);
     textGroup = new THREE.Object3D;
@@ -758,6 +741,12 @@ function playClickAnimations()
         case "scene2":
             console.log("Escena 2", CLICKED.name);
             // Animations
+            if (CLICKED.parent.name == "sofa") {
+                for(i = 0; i< scene.getObjectByName("bubbles").children.length;i++)
+                {
+                    enterAnimationY(0, Math.random() + 0.1, 0, 30, scene.getObjectByName("bubbles").children[i]);
+                }
+            }
             switch(CLICKED.name)
             {
                 case "cinderella_cleaning":
@@ -766,9 +755,9 @@ function playClickAnimations()
                         enterAnimationY(0, Math.random() + 0.1, 0, 30, scene.getObjectByName("bubbles").children[i]);
                     }
                     break;
-                    case "stepsisters_normal":
-                        outZigzagAnimation(0.05,0.3,-10,-9,6,-25,scene.getObjectByName("gusgus"));
-                        break;
+                case "stepsisters_normal":
+                    outZigzagAnimation(0.05,0.3,-10,-9,6,-25,scene.getObjectByName("gusgus"));
+                    break;
             }
             break;
         case "scene3":
@@ -811,15 +800,6 @@ function playClickAnimations()
                         duration: duration * 1000,
                     });
                     animator.start();
-                    
-                    // For clickHere text
-                    element = scene.getObjectByName("clickHere");
-                    element.visible = false;
-                    setTimeout( () => {
-
-                        element.visible = true;
-
-                    }, (duration - 5) * 1000 );
                     break;
                 case "cinderella_crying":
                 case "gusgus":
@@ -849,14 +829,6 @@ function playClickAnimations()
                                 AnimationRotationMouse(0.1, 0.2, 0.3, -16, -20, -20, -16, -5, -5, -2.5, 0, 0, 0, -Math.PI, element);
                             }
                         }
-                        if (element.name=="clickHere2") {
-                            element.visible = false;
-                            setTimeout( () => {
-		
-                                element.visible = true;
-
-                            }, (duration - 5) * 1000 );
-                        }
                     });
                     animationMice = !animationMice;
                     break;
@@ -884,6 +856,7 @@ function playClickAnimations()
                     danceAnimations(element);
                     break;
             }
+            break;
         case "scene6":
             console.log("Escena 6");
             // Animaciones
