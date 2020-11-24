@@ -303,13 +303,6 @@ function createScene(canvas)
     butterfly.material.emissive.setHex(0x000000);
     sceneTemp.add(butterfly);
 
-    //Group for butterfly and slippers
-    objectGroup = new THREE.Object3D;
-    objectGroup.name = "groupSlippersButterfly";
-    //objectGroup.add(butterfly);
-    //objectGroup.add(scenes[0].getObjectByName('slipper'));
-    
-
     // Floor
     const geometry = new THREE.PlaneGeometry( 120, 100, 1 );
     const material = new THREE.MeshPhongMaterial( {color: 0x45b5e9, side: THREE.DoubleSide, reflectivity: 1} );
@@ -366,9 +359,9 @@ function createScene(canvas)
 
     //Mouse
     gusGus = createCharacterMesh("../models/gusgus.png", 'gusgus', 3,4,6,-10,-1);
+    gusGus.rotation.y = Math.PI;
     sceneTemp.add(gusGus);
     
-
     scenes.push(sceneTemp);
 
     // Create the table https://sketchfab.com/3d-models/classic-coffee-table-0b151b371da847d3a2dd960f9339eef1
@@ -877,33 +870,18 @@ function zigzagAnimation(ti, tf, y_init, y_top, y_bottom, pos1_x, pos2_x, elemen
             [
                 // Keys for the entry animation
                 { 
-                    keys:[0, ti, ti+timeJump, ti+timeJump*2, ti+timeJump*3, ti+timeJump*4, ti+timeJump*5, tf], 
+                    keys:[0, ti, ti+timeJump, ti+timeJump*2, ti+timeJump*3, ti+timeJump*4, tf], 
                     values:[
-                            { y : y_init },    
-                            { y : y_top },    
-                            { y : y_bottom },
-                            { y : y_top },
-                            { y : y_bottom },
-                            { y : y_top },
-                            { y : y_init },
-                            { y : y_init },
+                            { x : pos1_x, y : y_init },    
+                            { x : pos1_x + xJump, y : y_top },    
+                            { x : pos1_x + xJump*2, y : y_bottom },
+                            { x : pos2_x, y : y_top },
+                            { x : pos1_x + xJump*2, y : y_bottom },
+                            { x : pos1_x + xJump, y : y_top },
+                            { x : pos1_x, y : y_init },
                             ],
                     target: element.position
                 },
-                // Keys for the entry animation
-                { 
-                    keys:[0, ti, ti+timeJump, ti+timeJump*2, ti+timeJump*3, ti+timeJump*4, ti+timeJump*5, tf],
-                    values:[
-                            { x : pos1_x },    
-                            { x : pos1_x + xJump},
-                            { x : pos1_x + xJump*2},    
-                            { x : pos2_x },  
-                            { x : pos1_x + xJump*2 },  
-                            { x : pos1_x + xJump },
-                            { x : pos1_x },
-                            ],
-                    target: element.position
-                }
             ],
         loop: loopAnimation,
         duration: duration * 1000,
@@ -923,29 +901,14 @@ function outZigzagAnimation(ti, tf, y_init, y_bottom, pos1_x, pos2_x, element){
                 { 
                     keys:[0, ti, ti+timeJump, ti+timeJump*2, ti+timeJump*3, ti+timeJump*4, ti+timeJump*5, tf], 
                     values:[
-                            { y : y_init },    
-                            { y : y_init },    
-                            { y : y_bottom },
-                            { y : y_init },
-                            { y : y_bottom },
-                            { y : y_init },
-                            { y : y_bottom },
-                            { y : y_init },
-                            ],
-                    target: element.position
-                },
-                // Keys for the entry animation
-                { 
-                    keys:[0, ti, ti+timeJump, ti+timeJump*2, ti+timeJump*3, ti+timeJump*4, ti+timeJump*5, tf], 
-                    values:[
-                            { z : -1 },    
-                            { z : -1 },    
-                            { z : -1 },
-                            { z : -1 },
-                            { z : -1 },
-                            { z : 1 },
-                            { z : 1 },
-                            { z : 1 },
+                            { y : y_init, z : -1 },    
+                            { y : y_init, z : -1 },    
+                            { y : y_bottom, z : -1 },
+                            { y : y_init, z : -1 },
+                            { y : y_bottom, z : -1 },
+                            { y : y_init, z : 1 },
+                            { y : y_bottom, z : 1 },
+                            { y : y_init, z : 1 },
                             ],
                     target: element.position
                 },
