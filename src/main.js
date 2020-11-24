@@ -315,7 +315,7 @@ function createScene(canvas)
 
 
     // Spotlight, https://threejs.org/docs/#api/en/lights/SpotLight
-    const spotLight = new THREE.SpotLight( 0xffffff );
+    let spotLight = new THREE.SpotLight( 0xffffff );
     // Alternative position to increase light 20,0,20
     spotLight.position.set( 29, 0, 29 );
 
@@ -489,6 +489,24 @@ function createScene(canvas)
         textCreation(line, 2.8,-75,25-(i*3.5),-100, 0x000000, scenes[4], textGroup, true);
     });
 
+    // Spotlight, https://threejs.org/docs/#api/en/lights/SpotLight
+    spotLight = new THREE.SpotLight( 0xffffff );
+    spotLight.name = "light";
+    // Alternative position to increase light 20,0,20
+    spotLight.position.set( 29, 0, 29 );
+
+    spotLight.castShadow = true;
+
+    spotLight.shadow.mapSize.width = 1024;
+    spotLight.shadow.mapSize.height = 1024;
+
+    spotLight.shadow.camera.near = 500;
+    spotLight.shadow.camera.far = 4000;
+    spotLight.shadow.camera.fov = 30;
+
+    scenes[4].add( spotLight );
+
+
     //Referencias:
     /*
     Princesa 
@@ -513,7 +531,7 @@ function createScene(canvas)
     sceneTemp.add(createCharacterMesh("../models/cinderella_bride.png", 'cinderella', 8,12,4,-9,-5));
 
     //Loading Mice
-    sceneTemp.add(createCharacterMesh("../models/ratones_scene6.png", 'mice', 5,3,12,-12.5,-5));
+    sceneTemp.add(createCharacterMesh("../models/ratones_scene6.png", 'mice', 5,3,12,-10,-8));
 
     //Loading Birds
     sceneTemp.add(createCharacterMesh("../models/birds_scene6.png", 'birds', 5,3,12,12.5,-5));
@@ -533,6 +551,7 @@ function createScene(canvas)
     textScene6Array.forEach((line, i) => {
         textCreation(line, 2.8,-75,25-(i*3.5),-100, 0x000000, scenes[5], textGroup, true);
     });
+
     /*
     Prince and cinderella https://www.jing.fm/iclipt/Thmwx/
     */
@@ -690,7 +709,7 @@ function playAnimations()
                         enterAnimationX(0, 0.125, -30, 0, element);
                         break;
                     case "textGroup":
-                        textAnimation(0, 0.7, 0.5, 55, 0.5, element.children);
+                        textAnimation(0, 1, 0.5, 55, 0.8, element.children);
                         break;
                 }
             });            
@@ -844,21 +863,27 @@ function playClickAnimations()
         case "scene5":
             // Animations
             console.log("Escena 5", CLICKED.name);
-            switch(CLICKED.name)
+            if(CLICKED.name=="cinderella_dancing")
             {
-                case "cinderella_dancing":
-                    element = scene.getObjectByName("grupoBaile");    
-                    danceAnimations(element);
-                    break;
+                element = scene.getObjectByName("grupoBaile");    
+                danceAnimations(element);
             }
+            if(CLICKED.parent.name=="column"){
+                scene.getObjectByName("light").intensity= 0;
+                //outZigzagAnimation(0.05,0.3,-10,-9,12,-25,scene.getObjectByName("mice"));
+            }   
             break;
         case "scene6":
-            console.log("Escena 6");
             // Animaciones
-            break;            
-    
-        default:
-            break;
+            console.log("Escena 6", CLICKED.name);
+            if(CLICKED.name=="birds")
+            {
+                zigzagAnimation(0.05,0.3,12,10,6,12.5,-12,CLICKED);
+            }
+            if(CLICKED.parent.name=="column1"){
+                outZigzagAnimation(0.05,0.3,-10,-9,12,-25,scene.getObjectByName("mice"));
+            }   
+            break;    
     }
 }
 
