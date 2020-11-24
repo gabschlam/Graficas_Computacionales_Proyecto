@@ -80,3 +80,29 @@ Nuestro plan de trabajo se dividirá en diferentes sprints, con diferentes entre
 ### Tercer Sprint: 17/11 - 26/11
 1. Animaciones de texto de cuento. **¿Quién? -> Todo el equipo, dividido por escenas, liderado por Gabriel**
 2. Loading Manager para optimizar carga de objetos. **¿Quién? -> Todo el equipo**
+
+## Referencias Modelos 3D
+**Escena 1:**
+* Mariposa: https://www.pngegg.com/es/png-dktlp
+
+**Escena 2:**
+* Mesa: https://sketchfab.com/3d-models/classic-coffee-table-0b151b371da847d3a2dd960f9339eef1
+* Cubeta: https://sketchfab.com/3d-models/old-wooden-bucket-7649d45e7d6f408b9b5929ab51895dfa
+* Sillón: https://sketchfab.com/3d-models/sofa-a9695e97f8c74667a2c89f7d98ca3a9f
+
+**Escena 3:**
+* Fuente: https://sketchfab.com/3d-models/fountain-9812aa1535454df886fea502373edf08
+
+**Escena 4:**
+* Fuente: https://sketchfab.com/3d-models/fountain-9812aa1535454df886fea502373edf08
+* Carruaje: https://www.blendswap.com/blend/9819
+
+**Escena 5:**
+* Príncipe: https://www.pngwing.com/es/free-png-zdlha
+* Columna: https://free3d.com/3d-model/white-column-44873.html
+* Textura columna: https://www.pinterest.es/pin/825495806689115334/
+
+**Escena 6:**
+* Columna: https://free3d.com/3d-model/white-column-44873.html
+* Textura columna: https://www.pinterest.es/pin/825495806689115334/
+* Príncipe y cenicienta: https://www.jing.fm/iclipt/Thmwx/
