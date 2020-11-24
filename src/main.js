@@ -63,16 +63,18 @@ function load3dModel(objModelUrl, mtlModelUrl, name, sceneObj, scale, x, y, z, r
                     child.geometry.computeVertexNormals();
 
                     if (outline) {
-                        if (name == "column" || name == "column1") {
-                            // only show edges with 50 degrees or more angle between faces
-                            var thresholdAngle = 50;
-                        }
-                        else {
+                        if (name == "fountain") {
                             // only show edges with 35 degrees or more angle between faces
                             var thresholdAngle = 35;
+                            var color = 0xffffff;
+                        }
+                        else {
+                            // only show edges with 50 degrees or more angle between faces
+                            var thresholdAngle = 50;
+                            var color = 0xff0000;
                         }
                         var lineGeometry = new THREE.EdgesGeometry(child.geometry, thresholdAngle);
-                        var material = new THREE.LineBasicMaterial({color: 0xff0000});
+                        var material = new THREE.LineBasicMaterial({color: color});
                         //material.linewidth = 4.0;
                         var mesh = new THREE.LineSegments(lineGeometry, material);
                         mesh.name = name;
