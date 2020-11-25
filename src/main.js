@@ -33,6 +33,9 @@ let width = 0;
 let height = 0;
 let animator = null;
 
+//Scene 5 light
+let spotlightOn = 1;
+
 // Function for loading OBJ 3d model with MTL file
 function load3dModel(objModelUrl, mtlModelUrl, name, sceneObj, scale, x, y, z, rotationX, rotationY, outline)
 {
@@ -291,7 +294,7 @@ function createScene(canvas)
     scenes.push(sceneTemp);
 
     // //Title
-    textCreation('Cinderella', 3,-10,8.5,-1, 0xd6ecef, scenes[0]);
+    textCreation('Cinderella', 3,-10,8.5,-1, 0x0D4F6E, scenes[0]);
 
     // Names
     textCreation('Gabriel Schlam Huber - A01024122\nAlejandra Nissan Leizorek - A01024682\nSamantha Barco Mejia - A01196844',0.3,-9,-5,15, 0x115e82, scenes[0]);
@@ -300,7 +303,7 @@ function createScene(canvas)
     loadOnly3dObjModel("../models/slipper/3d-model.obj", 'slipper', 0.3, 0,-8,0);
 
     //Butterfly https://www.pngegg.com/es/png-dktlp
-    butterfly = createCharacterMesh("../models/butterfly.png", 'butterfly' ,10,7.5,9.5,8,-12);
+    butterfly = createCharacterMesh("../models/butterfly.png", 'butterfly' ,8,6,13,13,-12);
     //butterfly.color.setHex(0xff00ff);
     butterfly.material.emissive.setHex(0x000000);
     sceneTemp.add(butterfly);
@@ -375,6 +378,15 @@ function createScene(canvas)
     //Sofa https://sketchfab.com/3d-models/sofa-a9695e97f8c74667a2c89f7d98ca3a9f
     load3dFbxModel("../models/sofa/source/Sofa010_001.FBX", "../models/sofa/textures/Sofa010_D1024.png", "../models/sofa/textures/Sofa010_N1024.png", "../models/sofa/textures/Sofa010_AO1024.png", "../models/sofa/textures/Sofa010_S1024.png", null, 'sofa', scenes[1], 0.06,-16,-12,-14, 0, 0.7);
 
+    // Text
+    textScene3Array =  splitText(textScenes[0], 37);
+    textGroup = new THREE.Object3D;
+    textGroup.name = "textGroup";
+    scenes[1].add(textGroup);
+    textScene3Array.forEach((line, i) => {
+        textCreation(line, 2.8,0,25-(i*3.5),-100, 0x301934, scenes[1], textGroup, true);
+    });
+
 
     /////////////////////////////////////////////////
     //       Scene 3                               //
@@ -448,7 +460,7 @@ function createScene(canvas)
     textGroup.name = "textGroup";
     scenes[3].add(textGroup);
     textScene4Array.forEach((line, i) => {
-        textCreation(line, 2.8,0,25-(i*3.5),-100, 0xd6ecef, scenes[3], textGroup, true);
+        textCreation(line, 2.8,0,25-(i*3.5),-100, 0x4B5354, scenes[3], textGroup, true);
     });
 
     /////////////////////////////////////////////////
@@ -504,6 +516,8 @@ function createScene(canvas)
     spotLight.shadow.camera.far = 4000;
     spotLight.shadow.camera.fov = 30;
 
+    spotLight.intensity = 0.3;
+
     scenes[4].add( spotLight );
 
 
@@ -531,7 +545,7 @@ function createScene(canvas)
     sceneTemp.add(createCharacterMesh("../models/cinderella_bride.png", 'cinderella', 8,12,4,-9,-5));
 
     //Loading Mice
-    sceneTemp.add(createCharacterMesh("../models/ratones_scene6.png", 'mice', 5,3,12,-10,-8));
+    sceneTemp.add(createCharacterMesh("../models/ratones_scene6.png", 'mice', 5,3,18,-14,-8));
 
     //Loading Birds
     sceneTemp.add(createCharacterMesh("../models/birds_scene6Outline.png", 'birds', 5,3,12,12.5,-5));
@@ -581,6 +595,9 @@ function playAnimations()
                         break;
                     case "gusgus":
                         enterAnimationX(0.125, 0.250, 30, 6, element);
+                        break;
+                    case "textGroup":
+                        textAnimation(0, 1, 10, 64, 0.8, element.children);
                         break;
                 }
             });
@@ -748,7 +765,7 @@ function playClickAnimations()
             }
             // Para mariposa
             if (CLICKED.name == "butterfly") {
-                zigzagAnimation(0.05,0.3,8,10,6,9.5,-20,CLICKED);
+                zigzagAnimation(0.05,0.3,13,15,11,13,-20,CLICKED);
                 //zigzagAnimation(0.05,0.3,11.5,13.5,9.5,-20,8,CLICKED);
             }
             break;
@@ -770,7 +787,7 @@ function playClickAnimations()
                     }
                     break;
                 case "stepsisters_normal":
-                    outZigzagAnimation(0.05,0.3,-10,-9,6,-25,scene.getObjectByName("gusgus"));
+                    outZigzagAnimation(0.05,0.3,-10,-9,6,-25, -1, 1,scene.getObjectByName("gusgus"));
                     break;
             }
             break;
@@ -869,7 +886,16 @@ function playClickAnimations()
                 danceAnimations(element);
             }
             if(CLICKED.parent.name=="column"){
-                scene.getObjectByName("light").intensity= 0;
+                if (spotlightOn == 1) 
+                {
+                    scene.getObjectByName("light").intensity= 0;
+                    spotlightOn = 0;
+                }
+                else
+                {
+                    scene.getObjectByName("light").intensity= 0.3;
+                    spotlightOn = 1;
+                }
                 //outZigzagAnimation(0.05,0.3,-10,-9,12,-25,scene.getObjectByName("mice"));
             }   
             break;
@@ -881,7 +907,8 @@ function playClickAnimations()
                 zigzagAnimation(0.05,0.3,12,10,6,12.5,-12,CLICKED);
             }
             if(CLICKED.parent.name=="column1"){
-                outZigzagAnimation(0.05,0.3,-10,-9,12,-25,scene.getObjectByName("mice"));
+                // 15, -13, -8
+                outZigzagAnimation(0.05,0.3,-14,-12,18,-30, -8, -8,scene.getObjectByName("mice"));
             }   
             break;    
     }
@@ -916,7 +943,7 @@ function zigzagAnimation(ti, tf, y_init, y_top, y_bottom, pos1_x, pos2_x, elemen
     animator.start();
 }
 
-function outZigzagAnimation(ti, tf, y_init, y_bottom, pos1_x, pos2_x, element){
+function outZigzagAnimation(ti, tf, y_init, y_bottom, pos1_x, pos2_x, z_init, z_end,element){
     animator = new KF.KeyFrameAnimator;
     animator2 = new KF.KeyFrameAnimator;
     timeJump = (tf-ti)/6;
@@ -928,14 +955,14 @@ function outZigzagAnimation(ti, tf, y_init, y_bottom, pos1_x, pos2_x, element){
                 { 
                     keys:[0, ti, ti+timeJump, ti+timeJump*2, ti+timeJump*3, ti+timeJump*4, ti+timeJump*5, tf], 
                     values:[
-                            { y : y_init, z : -1 },    
-                            { y : y_init, z : -1 },    
-                            { y : y_bottom, z : -1 },
-                            { y : y_init, z : -1 },
-                            { y : y_bottom, z : -1 },
-                            { y : y_init, z : 1 },
-                            { y : y_bottom, z : 1 },
-                            { y : y_init, z : 1 },
+                            { y : y_init, z : z_init },    
+                            { y : y_init, z : z_init },    
+                            { y : y_bottom, z : z_init },
+                            { y : y_init, z : z_init },
+                            { y : y_bottom, z : z_init },
+                            { y : y_init, z : z_end },
+                            { y : y_bottom, z : z_end },
+                            { y : y_init, z : z_end },
                             ],
                     target: element.position
                 },
