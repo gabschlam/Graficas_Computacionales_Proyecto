@@ -34,7 +34,7 @@ let height = 0;
 let animator = null;
 
 //Scene 5 light
-let spotlightOn = 1;
+let spotlightOn = 0;
 
 // Function for loading OBJ 3d model with MTL file
 function load3dModel(objModelUrl, mtlModelUrl, name, sceneObj, scale, x, y, z, rotationX, rotationY, outline)
@@ -379,12 +379,12 @@ function createScene(canvas)
     load3dFbxModel("../models/sofa/source/Sofa010_001.FBX", "../models/sofa/textures/Sofa010_D1024.png", "../models/sofa/textures/Sofa010_N1024.png", "../models/sofa/textures/Sofa010_AO1024.png", "../models/sofa/textures/Sofa010_S1024.png", null, 'sofa', scenes[1], 0.06,-16,-12,-14, 0, 0.7);
 
     // Text
-    textScene3Array =  splitText(textScenes[0], 37);
+    textScene2Array =  splitText(textScenes[0], 37);
     textGroup = new THREE.Object3D;
     textGroup.name = "textGroup";
     scenes[1].add(textGroup);
-    textScene3Array.forEach((line, i) => {
-        textCreation(line, 2.8,0,25-(i*3.5),-100, 0x301934, scenes[1], textGroup, true);
+    textScene2Array.forEach((line, i) => {
+        textCreation(line, 2.8,0,25-(i*3.5),-100, 0xffffff, scenes[1], textGroup, true);
     });
 
 
@@ -460,7 +460,7 @@ function createScene(canvas)
     textGroup.name = "textGroup";
     scenes[3].add(textGroup);
     textScene4Array.forEach((line, i) => {
-        textCreation(line, 2.8,0,25-(i*3.5),-100, 0x4B5354, scenes[3], textGroup, true);
+        textCreation(line, 2.8,0,25-(i*3.5),-100, 0xffffff, scenes[3], textGroup, true);
     });
 
     /////////////////////////////////////////////////
@@ -516,7 +516,7 @@ function createScene(canvas)
     spotLight.shadow.camera.far = 4000;
     spotLight.shadow.camera.fov = 30;
 
-    spotLight.intensity = 0.3;
+    spotLight.intensity = 0;
 
     scenes[4].add( spotLight );
 
@@ -1129,8 +1129,8 @@ function textCreation(text, size, x, y, z, color, scene, textGroup, shown){
             bevelSegments: 1
         } );
 
-        var textMaterial = new THREE.MeshPhongMaterial( 
-            { color: color, specular: 0xffffff }
+        var textMaterial = new THREE.MeshBasicMaterial( 
+            { color: color }
         );
         var mesh = new THREE.Mesh(textGeometry, textMaterial);
 
@@ -1177,7 +1177,7 @@ function textAnimation(ti, tf, pos1_y, pos2_y, speed, textArray)
         p = p.then(_ => new Promise(resolve =>
             setTimeout(function () {
                 textArray[i].visible = true;
-                enterAnimationY(ti, tf, pos1_y + (i*1), pos2_y, textArray[i]);
+                enterAnimationY(ti, tf, pos1_y + (i*0.7), pos2_y, textArray[i]);
                 resolve();
             }, speed * 1000)
         ));
