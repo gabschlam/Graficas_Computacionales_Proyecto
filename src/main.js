@@ -550,6 +550,23 @@ function createScene(canvas)
     //Loading Birds
     sceneTemp.add(createCharacterMesh("../models/birds_scene6Outline.png", 'birds', 5,3,12,12.5,-5));
 
+    // Pteals rain
+    // Rose Petals group
+    petalsGroup = new THREE.Object3D;
+    petalsGroup.name = "petals";
+    //sceneTemp.add(bubblesGroup);
+    //bubblesGroup.position.set(-10,-9.85,2);
+    // Generate 20 petals in random positions (above cinderella and prince)
+    for ( let petalCount = 0; petalCount<25; petalCount++ )
+    {
+        let width = Math.random() * 0.4;
+        let height = width * 1.1;
+        let x = Math.random() * 10 -2; // Adds petals randomly over Cinderella and the prince
+        // https://www.pngkey.com/maxpic/u2q8a9i1y3e6q8y3/
+        petalsGroup.add(createCharacterMesh("../models/rose_petal.png", 'petal', width,height,x,13,1))
+    }
+    sceneTemp.add(petalsGroup);
+
     directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5);
     sceneTemp.add( directionalLight );
     directionalLight.position.set(-15, 0, -10);
@@ -905,6 +922,10 @@ function playClickAnimations()
             if(CLICKED.name=="birds")
             {
                 zigzagAnimation(0.05,0.3,12,10,6,12.5,-12,CLICKED);
+                for(i = 0; i< scene.getObjectByName("petals").children.length;i++)
+                {
+                    enterAnimationY(0, Math.random() + 0.5, 13, -30, scene.getObjectByName("petals").children[i]);
+                }
             }
             if(CLICKED.parent.name=="column1"){
                 // 15, -13, -8
