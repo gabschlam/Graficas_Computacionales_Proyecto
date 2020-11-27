@@ -78,7 +78,6 @@ function load3dModel(objModelUrl, mtlModelUrl, name, sceneObj, scale, x, y, z, r
                         }
                         var lineGeometry = new THREE.EdgesGeometry(child.geometry, thresholdAngle);
                         var material = new THREE.LineBasicMaterial({color: color});
-                        //material.linewidth = 4.0;
                         var mesh = new THREE.LineSegments(lineGeometry, material);
                         mesh.name = name;
                         object.add(mesh);
@@ -250,10 +249,16 @@ function createScene(canvas)
     renderer.domElement.addEventListener( 'click', raycast, false );
     initAnimator();
 
-    // For loading objects before showing scenes
+    //////////////////////////////////////////////////
+    //   Load objects before rendering scenes       //
+    //////////////////////////////////////////////////
+
+    // Loading screen
     loadingDiv = document.getElementById("loading");
 
+    // Initialize Loading Manager
     manager = new THREE.LoadingManager();
+
     // On start function for loading objects
     manager.onStart = function ( url, itemsLoaded, itemsTotal ) {
         console.log( 'Started loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
@@ -263,11 +268,13 @@ function createScene(canvas)
     // When finishing loading all object
     manager.onLoad = function ( ) {
         console.log( 'Loading complete!');
+        // Removing Loading Screen
         loadingDiv.remove();
         // Choosing default scene as scene1
         scene = scenes[0];
         scene.add(camera);
         scene.add(ambientLight)
+        // Displaying next button
         document.getElementById('nextButton').style.display = 'inline';
 
     };
@@ -277,6 +284,7 @@ function createScene(canvas)
         console.log( 'Loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
     };
 
+    // On error when loading some object
     manager.onError = function ( url ) {
         console.log( 'There was an error loading ' + url );
 
@@ -288,27 +296,28 @@ function createScene(canvas)
 
     sceneTemp = new THREE.Scene();
     sceneTemp.name = "scene1";
-    // Set the background image 
+    // Set the background for scene 1 
     sceneTemp.background = new THREE.Color( 0x89d0f1);
 
+    // Adding scene to Array of Scenes
     scenes.push(sceneTemp);
 
-    // //Title
+    // Title
     textCreation('Cinderella', 3,-10,8.5,-1, 0x0D4F6E, scenes[0]);
 
     // Names
     textCreation('Gabriel Schlam Huber - A01024122\nAlejandra Nissan Leizorek - A01024682\nSamantha Barco Mejia - A01196844',0.3,-9,-5,15, 0x115e82, scenes[0]);
 
-    // Slipper
+    // Loading slippers
     loadOnly3dObjModel("../models/slipper/3d-model.obj", 'slipper', 0.3, 0,-8,0);
 
-    //Butterfly https://www.pngegg.com/es/png-dktlp
+    // Loading butterfly https://www.pngegg.com/es/png-dktlp
     butterfly = createCharacterMesh("../models/butterfly.png", 'butterfly' ,8,6,13,13,-12);
     //butterfly.color.setHex(0xff00ff);
     butterfly.material.emissive.setHex(0x000000);
     sceneTemp.add(butterfly);
 
-    // Floor
+    // Loading floor
     const geometry = new THREE.PlaneGeometry( 120, 100, 1 );
     const material = new THREE.MeshPhongMaterial( {color: 0x45b5e9, side: THREE.DoubleSide, reflectivity: 1} );
     const plane = new THREE.Mesh( geometry, material );
@@ -316,21 +325,16 @@ function createScene(canvas)
     plane.position.y = -12;
     scenes[0].add( plane );
 
-
-    // Spotlight, https://threejs.org/docs/#api/en/lights/SpotLight
+    // Creating spotlight, https://threejs.org/docs/#api/en/lights/SpotLight
     let spotLight = new THREE.SpotLight( 0xffffff );
     // Alternative position to increase light 20,0,20
     spotLight.position.set( 29, 0, 29 );
-
     spotLight.castShadow = true;
-
     spotLight.shadow.mapSize.width = 1024;
     spotLight.shadow.mapSize.height = 1024;
-
     spotLight.shadow.camera.near = 500;
     spotLight.shadow.camera.far = 4000;
     spotLight.shadow.camera.fov = 30;
-
     scenes[0].add( spotLight );
 
 
@@ -344,14 +348,19 @@ function createScene(canvas)
     sceneTemp.background = new THREE.TextureLoader(manager).load("../images/Backgrounds/scene2_background.jpg");
     
     // Put in a ground plane to show off the lighting
-    //727 x 902 px
+    // 727 x 902 px
+    // Loading Cinderella's 2D object
     sceneTemp.add(createCharacterMesh("../models/cinderella_cleaningOutline.png", 'cinderella_cleaning' ,12,15,-30,-5,-2));
-    //470x496px
+    
+    // 470x496px
+    // Loading Stepsisters' 2D objects
     sceneTemp.add(createCharacterMesh("../models/stepsisters_normalOutline.png", 'stepsisters_normal' ,14,14,30,-5,0));
-    //277x655 px
+    
+    // 277x655 px
+    // Loading Stepmother's 2D object
     sceneTemp.add(createCharacterMesh("../models/stepmother.png", 'stepmother', 7,15,30,-5,0.5));
 
-    //Bubbles
+    // Loading Bubbles
     bubblesGroup = new THREE.Object3D;
     bubblesGroup.name = "bubbles";
     bubblesGroup.add(createCharacterMesh("../models/bubble.png", 'bubble', 1.0,1.0,0,0,0));
@@ -362,27 +371,29 @@ function createScene(canvas)
     sceneTemp.add(bubblesGroup);
     bubblesGroup.position.set(-10,-9.85,2);
 
-    //Mouse
+    // Loading Mouse's 2D object
     gusGus = createCharacterMesh("../models/gusgus.png", 'gusgus', 3,4,6,-10,-1);
     gusGus.rotation.y = Math.PI;
     sceneTemp.add(gusGus);
     
+    // Adding scene to Array of Scenes
     scenes.push(sceneTemp);
 
-    // Create the table https://sketchfab.com/3d-models/classic-coffee-table-0b151b371da847d3a2dd960f9339eef1
+    // Loading the table
     load3dFbxModel("../models/table/source/table.fbx", "../models/table/textures/texture.jpg", null, null, null, null, 'table', scenes[1], 0.1,-4, -11, 0.2, 0, 0);
 
-    // Create the bucket https://sketchfab.com/3d-models/old-wooden-bucket-7649d45e7d6f408b9b5929ab51895dfa
+    // Loading the bucket
     load3dFbxModel("../models/bucket/source/Bucket.fbx", "../models/bucket/textures/Bucket_Albedo.png", "../models/bucket/textures/Bucket_Normal.png", "../models/bucket/textures/Bucket_AO.png", "../models/bucket/textures/Bucket_Metallic.png", "../models/bucket/textures/Bucket_Roughness.png", 'bucket', scenes[1], 5,-10,-11,2, 80, 0);
 
-    //Sofa https://sketchfab.com/3d-models/sofa-a9695e97f8c74667a2c89f7d98ca3a9f
+    // Loading the Sofa
     load3dFbxModel("../models/sofa/source/Sofa010_001.FBX", "../models/sofa/textures/Sofa010_D1024.png", "../models/sofa/textures/Sofa010_N1024.png", "../models/sofa/textures/Sofa010_AO1024.png", "../models/sofa/textures/Sofa010_S1024.png", null, 'sofa', scenes[1], 0.06,-16,-12,-14, 0, 0.7);
 
-    // Text
-    textScene2Array =  splitText(textScenes[0], 37);
+    // Creating text
+    textScene2Array = splitText(textScenes[0], 37);
     textGroup = new THREE.Object3D;
     textGroup.name = "textGroup";
     scenes[1].add(textGroup);
+    // Create for each line a Text Object
     textScene2Array.forEach((line, i) => {
         textCreation(line, 2.8,0,25-(i*3.5),-100, 0xffffff, scenes[1], textGroup, true);
     });
@@ -396,10 +407,16 @@ function createScene(canvas)
     sceneTemp.name = "scene3";
     // Set the background image 
     sceneTemp.background = new THREE.TextureLoader(manager).load("../images/Backgrounds/scene3-4_background.jpg");
-    sceneTemp.add(createCharacterMesh("../models/cinderella_cryingOutline2.png", 'cinderella_crying', 8,10,-30,-8,-2));
+
+    // Loading Cinderella Crying's 2D object
+    sceneTemp.add(createCharacterMesh("../models/cinderella_cryingOutline.png", 'cinderella_crying', 8,10,-30,-8,-2));
+
+    // Creating group for Stepsisters and Mother
     objectGroup = new THREE.Object3D;
     objectGroup.name = "groupStepSistersMother"
+    // Loading Stepsisters' 2D objects
     stepSisters = createCharacterMesh("../models/stepsisters_party.png", 'stepsisters_party', 13,14,16,-8,-5);
+    // Loading Stepmother's 2D object
     stepMother = createCharacterMesh("../models/stepmother_party.png", 'stepmother_party', 8,15,9,-8,-5);
     stepSisters.rotation.y = Math.PI;
     objectGroup.add(stepSisters);
@@ -407,12 +424,12 @@ function createScene(canvas)
     objectGroup.position.x = 20;
     sceneTemp.add(objectGroup)
 
-    // Fountain's water splash
+    // Loading fountain's water splash
     waterSplash = createCharacterMesh("../models/water_splash.png", 'water_splash', 8, 10, 6.3,-3.7,-13);
     waterSplash.visible = false;
     sceneTemp.add(waterSplash);
 
-    // Mice
+    // Loading mice
     gusGus = createCharacterMesh("../models/gusgus.png", 'gusgus', 4,5,-16,-10,-5);
     gusGus.visible = false;
     sceneTemp.add(gusGus);
@@ -420,15 +437,18 @@ function createScene(canvas)
     jackJack.visible = false;
     sceneTemp.add(jackJack);
 
+    // Adding scene to Array of Scenes
     scenes.push(sceneTemp);
 
-    // Create the fountain: https://sketchfab.com/3d-models/fountain-9812aa1535454df886fea502373edf08
+    // Create the fountain:
     load3dModel('../models/fountain/fountain.obj', '../models/fountain/fountain.mtl', 'fountain', scenes[2], 3.5, 15, -30, -75, -Math.PI / 18, null, true);
 
+    // Creating text
     textScene3Array =  splitText(textScenes[1], 37);
     textGroup = new THREE.Object3D;
     textGroup.name = "textGroup";
     scenes[2].add(textGroup);
+    // Create for each line a Text Object
     textScene3Array.forEach((line, i) => {
         textCreation(line, 2.8,-75,25-(i*3.5),-100, 0xd6ecef, scenes[2], textGroup, true);
     });
@@ -447,18 +467,21 @@ function createScene(canvas)
     godmother.rotation.y = Math.PI;
     sceneTemp.add(godmother);
 
+    // Adding scene to Array of Scenes
     scenes.push(sceneTemp);
 
-    // Create the fountain: https://sketchfab.com/3d-models/fountain-9812aa1535454df886fea502373edf08
+    // Loading the fountain:
     load3dModel('../models/fountain/fountain.obj', '../models/fountain/fountain.mtl', 'fountain', scenes[3], 3.5, 15, -30, -75, -Math.PI / 18, null, false);
     
-    // Create carruaje: https://www.blendswap.com/blend/9819 
+    // Loading the carruaje:
     load3dModel('../models/cinderella_carrosse/Cinderella_Carosse.obj', '../models/cinderella_carrosse/Cinderella_Carosse.mtl', 'Cinderella_Carosse', scenes[3], 9, 60, -60, -50, null, Math.PI / 3, true);
 
-    textScene4Array =  splitText(textScenes[2], 37);
+    // Creating text
+    textScene4Array = splitText(textScenes[2], 37);
     textGroup = new THREE.Object3D;
     textGroup.name = "textGroup";
     scenes[3].add(textGroup);
+    // Create for each line a Text Object
     textScene4Array.forEach((line, i) => {
         textCreation(line, 2.8,0,25-(i*3.5),-100, 0xffffff, scenes[3], textGroup, true);
     });
@@ -469,65 +492,54 @@ function createScene(canvas)
 
     sceneTemp = new THREE.Scene();  
     sceneTemp.name = "scene5";
-
-    grupoBaile = new THREE.Object3D;
-    grupoBaile.name = "grupoBaile";
-
     // Set the background image 
     sceneTemp.background = new THREE.TextureLoader(manager).load("../images/Backgrounds/scene5-6_background.jpg");
 
-    //Loading the prince
+    // Creating group for Cinderella and Prince for dancing animation
+    grupoBaile = new THREE.Object3D;
+    grupoBaile.name = "grupoBaile";
+
+    // Loading the prince
     sceneTemp.add(grupoBaile.add(createCharacterMesh("../models/prince_charming_scene_5_Outline.png", 'prince_dancing', 10,10,0,-7,0)));
-    //grupoBaile.add(prince);
 
-    //Loading Cinderella
+    // Loading Cinderella
     sceneTemp.add(grupoBaile.add(createCharacterMesh("../models/cinderellaOutline.png", 'cinderella_dancing', 9,12,4,-9,-5)));
-    //grupoBaile.add(cinderella);
 
+    // Adding scene to Array of Scenes
     scenes.push(sceneTemp);
 
+    // Adding light for the column
     let directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5);
     sceneTemp.add( directionalLight );
     directionalLight.position.set(-15, 0, -10);
     
-    // Create the columns
+    // Loading the column
     load3dModel('../models/Column/Column_Made_By_Tyro_Smith.obj', '../models/Column/Column_Made_By_Tyro_Smith.mtl', 'column', scenes[4], 1.8, 16, -1, 0, 0, 0, true);
 
+    // Creating text
     textScene5Array =  splitText(textScenes[3], 37);
     textGroup = new THREE.Object3D;
     textGroup.name = "textGroup";
     scenes[4].add(textGroup);
+    // Create for each line a Text Object
     textScene5Array.forEach((line, i) => {
         textCreation(line, 2.8,-75,25-(i*3.5),-100, 0x000000, scenes[4], textGroup, true);
     });
 
-    // Spotlight, https://threejs.org/docs/#api/en/lights/SpotLight
+    // Creating spotlight, https://threejs.org/docs/#api/en/lights/SpotLight
     spotLight = new THREE.SpotLight( 0xffffff );
     spotLight.name = "light";
     // Alternative position to increase light 20,0,20
     spotLight.position.set( 29, 0, 29 );
-
     spotLight.castShadow = true;
-
     spotLight.shadow.mapSize.width = 1024;
     spotLight.shadow.mapSize.height = 1024;
-
     spotLight.shadow.camera.near = 500;
     spotLight.shadow.camera.far = 4000;
     spotLight.shadow.camera.fov = 30;
-
     spotLight.intensity = 0;
-
     scenes[4].add( spotLight );
 
-
-    //Referencias:
-    /*
-    Princesa 
-    Príncipe https://www.pngwing.com/es/free-png-zdlha
-     Columna https://free3d.com/3d-model/white-column-44873.html
-     Textura columna https://www.pinterest.es/pin/825495806689115334/
-    */
    
     /////////////////////////////////////////////////
     //       Scene 6                               //
@@ -538,24 +550,23 @@ function createScene(canvas)
     // Set the background image 
     sceneTemp.background = new THREE.TextureLoader(manager).load("../images/Backgrounds/scene5-6_background.jpg");
 
-    //Loading the prince
+    // Loading the prince
     sceneTemp.add(createCharacterMesh("../models/prince_scene6.png", 'prince', 5,12,-4,-9,-5));
 
-    //Loading Cinderella
+    // Loading Cinderella
     sceneTemp.add(createCharacterMesh("../models/cinderella_bride.png", 'cinderella', 8,12,4,-9,-5));
 
-    //Loading Mice
+    // Loading Mice
     sceneTemp.add(createCharacterMesh("../models/ratones_scene6.png", 'mice', 5,3,18,-14,-8));
 
-    //Loading Birds
+    // Loading Birds
     sceneTemp.add(createCharacterMesh("../models/birds_scene6Outline.png", 'birds', 5,3,12,12.5,-5));
 
-    // Pteals rain
+    // For the petals rain
     // Rose Petals group
     petalsGroup = new THREE.Object3D;
     petalsGroup.name = "petals";
-    //sceneTemp.add(bubblesGroup);
-    //bubblesGroup.position.set(-10,-9.85,2);
+
     // Generate 20 petals in random positions (above cinderella and prince)
     for ( let petalCount = 0; petalCount<25; petalCount++ )
     {
@@ -565,37 +576,87 @@ function createScene(canvas)
         // https://www.pngkey.com/maxpic/u2q8a9i1y3e6q8y3/
         petalsGroup.add(createCharacterMesh("../models/rose_petal.png", 'petal', width,height,x,13,1))
     }
+    // Adding petals group to the scene
     sceneTemp.add(petalsGroup);
 
+    // Adding light for the column
     directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5);
     sceneTemp.add( directionalLight );
     directionalLight.position.set(-15, 0, -10);
 
+    // Adding scene to Array of Scenes
     scenes.push(sceneTemp);
 
+    // Loading the columns
     load3dModel('../models/Column/Column_Made_By_Tyro_Smith.obj', '../models/Column/Column_Made_By_Tyro_Smith.mtl', 'column1', scenes[5], 1.8, 16, -1, 0, 0, 0, true);
 
+    // Creating text
     textScene6Array =  splitText(textScenes[4], 37);
     textGroup = new THREE.Object3D;
     textGroup.name = "textGroup";
     scenes[5].add(textGroup);
+    // Create for each line a Text Object
     textScene6Array.forEach((line, i) => {
         textCreation(line, 2.8,-75,25-(i*3.5),-100, 0x000000, scenes[5], textGroup, true);
     });
 
-    /*
-    Prince and cinderella https://www.jing.fm/iclipt/Thmwx/
-    */
 }
 
+// Function for initing Animation
+// Computer-Graphics/13_threejsInteraction/threejsInteraction.html
+function initAnimator()
+{
+    animator = new KF.KeyFrameAnimator;
+    animator.init({ 
+        interps:
+            [
+                { 
+                    keys:[0, .5, 1], 
+                    values:[
+                            { y : 0 },
+                            { y : Math.PI  },
+                            { y : Math.PI * 2 },
+                            ],
+                },
+            ],
+        loop: loopAnimation,
+        duration:duration * 1000,
+    });
+}
+
+// Function for using raycasting for managing the user click on object
+// Computer-Graphics/13_threejsInteraction/threejsInteraction.html
+// https://threejs.org/docs/#api/en/core/Raycaster.intersectObjects
+// https://riptutorial.com/three-js/example/17088/object-picking---raycasting
+function raycast ( e )
+{
+    e.preventDefault();
+    mouseVector.x = 2 * (e.clientX / width) - 1;
+	mouseVector.y = 1 - 2 * ( e.clientY / height );
+
+    raycaster.setFromCamera(mouseVector, camera);
+    
+    let intersects = raycaster.intersectObjects(scene.children, true);
+
+    if(intersects.length > 0)
+    {
+        CLICKED = intersects[ intersects.length - 1 ].object;
+        //CLICKED.material.emissive.setHex( 0x00ff00 );
+        playClickAnimations();
+    }
+    else 
+    {
+        if ( CLICKED ) 
+            CLICKED.material.emissive.setHex( CLICKED.currentHex );
+        CLICKED = null;
+    }
+}
+
+// Function for playing enter and exit animations
 function playAnimations() 
 {
     animator.start();
     switch (scene.name) {
-        case "scene1":
-            console.log("Escena 1");
-            // Animaciones
-            break;
         case "scene2":
             console.log("Escena 2");
             // Animations
@@ -633,11 +694,11 @@ function playAnimations()
                         element.visible = false;
                         break;
                     case "groupStepSistersMother":
+                        // Animation for position and different rotation for the stepsisters and stepmother
                         animator = new KF.KeyFrameAnimator;
                         animator.init({ 
                             interps:
                                 [
-                                    // Keys for the entry and exit animation
                                     { 
                                         keys:[0.125, 0.25, 0.9, 1], 
                                         values:[
@@ -677,7 +738,6 @@ function playAnimations()
                     case "textGroup":
                         textAnimation(0, 1, 0.5, 55, 0.8, element.children);
                         break;
-                
                     default:
                         break;
                 }
@@ -689,11 +749,13 @@ function playAnimations()
             scene.children.forEach(element => {
                 switch (element.name) {
                     case "cinderella_crying":
+                        // Reset texture and scale
                         element.material.map = new THREE.TextureLoader().load( "../models/cinderella_crying.png" ); 
                         element.scale.set(1, 1, 1);
                         enterAnimationYRotation(0, 0.8, 0.95, -8, -8, -2, 0.8, 0.95, (8*Math.PI)/3, (16*Math.PI)/3, Math.PI*8, element);
+                        
+                        // Set timeout for changing texture and scale for cinderella's in dress                 
                         setTimeout( () => {
-		
                             element.material.map = new THREE.TextureLoader().load( "../models/cinderella.png" ); 
                             element.scale.set(1.5, 1.5, 1.5);
                         }, (duration - 1) * 1000 );
@@ -702,11 +764,11 @@ function playAnimations()
                         enterAnimationYRotation(0, 0.125, 0.25, 30, 30, -5, 0.125, 0.25, -Math.PI, Math.PI, -Math.PI, element);
                         break;
                     case "Cinderella_Carosse":
+                        // Animation for position in x and y axis
                         animator = new KF.KeyFrameAnimator;
                         animator.init({ 
                             interps:
                                 [
-                                    // Keys for the entry and exit animation
                                     { 
                                         keys:[0, 0.85, 1], 
                                         values:[
@@ -735,15 +797,13 @@ function playAnimations()
             // Animations
             scene.children.forEach(element => {
                 switch (element.name) {
-                    case "cinderella_dancing":
-                        break;
-                    case "prince_dancing":
-                        break;
                     case "grupoBaile":
                         enterAnimationX(0, 0.125, -30, 0, element);
                         break;
                     case "textGroup":
                         textAnimation(0, 1, 0.5, 55, 0.8, element.children);
+                        break;
+                    default:
                         break;
                 }
             });            
@@ -759,31 +819,30 @@ function playAnimations()
                     case "prince":
                         enterAnimationX(0, 0.125, -4, -0.5, element);
                         break;
-                        case "textGroup":
-                            textAnimation(0, 0.7, 0.5, 55, 0.5, element.children);
-                            break;
+                    case "textGroup":
+                        textAnimation(0, 0.7, 0.5, 55, 0.5, element.children);
+                        break;
+                    default:
+                        break;
                 }
             });            
-            break;            
-    
+            break;
         default:
             break;
     }
 }
 
+// Function for playing animations on click
 function playClickAnimations() 
 {
-    //animator.start();
     switch (scene.name) {
         case "scene1":
             console.log("Escena 1",CLICKED.name);
             if (CLICKED.parent.name == "slipper") {
                 enterAnimationYRotation(0, 0.25, 0.5, -8, -8, -8, 0, 0.2, 0, Math.PI, 2*Math.PI, CLICKED.parent);
             }
-            // Para mariposa
             if (CLICKED.name == "butterfly") {
                 zigzagAnimation(0.05,0.3,13,15,11,13,-20,CLICKED);
-                //zigzagAnimation(0.05,0.3,11.5,13.5,9.5,-20,8,CLICKED);
             }
             break;
         case "scene2":
@@ -806,6 +865,8 @@ function playClickAnimations()
                 case "stepsisters_normal":
                     outZigzagAnimation(0.05,0.3,-10,-9,6,-25, -1, 1,scene.getObjectByName("gusgus"));
                     break;
+                default:
+                    break;
             }
             break;
         case "scene3":
@@ -814,7 +875,7 @@ function playClickAnimations()
             switch(CLICKED.name)
             {
                 case "fountain":
-                    // For water splash
+                    // Animation for the water splash, position and scale
                     element = scene.getObjectByName("water_splash");        
                     element.scale.y = 0.5;
                     element.scale.x = 0.15;
@@ -824,7 +885,6 @@ function playClickAnimations()
                     animator.init({ 
                         interps:
                             [
-                                // Keys for the entry animation
                                 { 
                                     keys:[0, 0.05, 0.1], 
                                     values:[
@@ -888,7 +948,6 @@ function playClickAnimations()
             if (CLICKED.parent.name == "Cinderella_Carosse") {
                 console.log("Carrouse");
                 enterAnimationYRotation(0, 0.1, 0.2, -30, -10, -30, 0, 0.2, 0, Math.PI, (7*Math.PI) / 3, CLICKED.parent);
-                return;
             }
             if (CLICKED.name == "fairy_godmother") {
                 enterAnimationYRotation(0, 0.15, 0.3, -5, 7, -5, 0, 0.3, -Math.PI, Math.PI, -Math.PI, CLICKED);
@@ -913,7 +972,6 @@ function playClickAnimations()
                     scene.getObjectByName("light").intensity= 0.3;
                     spotlightOn = 1;
                 }
-                //outZigzagAnimation(0.05,0.3,-10,-9,12,-25,scene.getObjectByName("mice"));
             }   
             break;
         case "scene6":
@@ -928,89 +986,22 @@ function playClickAnimations()
                 }
             }
             if(CLICKED.parent.name=="column1"){
-                // 15, -13, -8
                 outZigzagAnimation(0.05,0.3,-14,-12,18,-30, -8, -8,scene.getObjectByName("mice"));
             }   
             break;    
     }
 }
 
-function zigzagAnimation(ti, tf, y_init, y_top, y_bottom, pos1_x, pos2_x, element){
-    animator = new KF.KeyFrameAnimator;
-    animator2 = new KF.KeyFrameAnimator;
-    timeJump = (tf-ti)/6;
-    xJump = (pos2_x - pos1_x)/3;
-    animator.init({ 
-        interps:
-            [
-                // Keys for the entry animation
-                { 
-                    keys:[0, ti, ti+timeJump, ti+timeJump*2, ti+timeJump*3, ti+timeJump*4, tf], 
-                    values:[
-                            { x : pos1_x, y : y_init },    
-                            { x : pos1_x + xJump, y : y_top },    
-                            { x : pos1_x + xJump*2, y : y_bottom },
-                            { x : pos2_x, y : y_top },
-                            { x : pos1_x + xJump*2, y : y_bottom },
-                            { x : pos1_x + xJump, y : y_top },
-                            { x : pos1_x, y : y_init },
-                            ],
-                    target: element.position
-                },
-            ],
-        loop: loopAnimation,
-        duration: duration * 1000,
-    });
-    animator.start();
-}
+/////////////////////////////////////////////////
+//    Enter Animations                         //
+/////////////////////////////////////////////////
 
-function outZigzagAnimation(ti, tf, y_init, y_bottom, pos1_x, pos2_x, z_init, z_end,element){
-    animator = new KF.KeyFrameAnimator;
-    animator2 = new KF.KeyFrameAnimator;
-    timeJump = (tf-ti)/6;
-    xJump = (pos2_x - pos1_x)/3;
-    animator.init({ 
-        interps:
-            [
-                // Keys for the entry animation
-                { 
-                    keys:[0, ti, ti+timeJump, ti+timeJump*2, ti+timeJump*3, ti+timeJump*4, ti+timeJump*5, tf], 
-                    values:[
-                            { y : y_init, z : z_init },    
-                            { y : y_init, z : z_init },    
-                            { y : y_bottom, z : z_init },
-                            { y : y_init, z : z_init },
-                            { y : y_bottom, z : z_init },
-                            { y : y_init, z : z_end },
-                            { y : y_bottom, z : z_end },
-                            { y : y_init, z : z_end },
-                            ],
-                    target: element.position
-                },
-                
-                // Keys for the entry animation
-                { 
-                    keys:[0, ti, tf],
-                    values:[
-                            { x : pos1_x },
-                            { x : pos1_x },
-                            { x : pos2_x },
-                            ],
-                    target: element.position
-                }
-            ],
-        loop: loopAnimation,
-        duration: duration * 1000,
-    });
-    animator.start();
-}
-
+// Function for entering to the scene in X axis
 function enterAnimationX(ti, tf, pos1_x, pos2_x, element){
     animator = new KF.KeyFrameAnimator;
     animator.init({ 
         interps:
             [
-                // Keys for the entry animation
                 { 
                     keys:[0, ti, tf], 
                     values:[
@@ -1027,12 +1018,12 @@ function enterAnimationX(ti, tf, pos1_x, pos2_x, element){
     animator.start();
 }
 
+// Function for entering to the scene in Y axis
 function enterAnimationY(ti, tf, pos1_y, pos2_y, element){
     animator = new KF.KeyFrameAnimator;
     animator.init({ 
         interps:
             [
-                // Keys for the entry animation
                 { 
                     keys:[0, ti, tf], 
                     values:[
@@ -1049,12 +1040,12 @@ function enterAnimationY(ti, tf, pos1_y, pos2_y, element){
     animator.start();
 }
 
+// Function for entering to the scene in Y axis with rotation
 function enterAnimationYRotation(t1, t2, t3, pos1_y, pos2_y, pos3_y, tiR, tfR, rot1, rot2, rot3, element){
     animator = new KF.KeyFrameAnimator;
     animator.init({ 
         interps:
             [
-                // Keys for the entry animation
                 { 
                     keys:[t1, t2, t3], 
                     values:[
@@ -1080,12 +1071,85 @@ function enterAnimationYRotation(t1, t2, t3, pos1_y, pos2_y, pos3_y, tiR, tfR, r
     animator.start();
 }
 
+/////////////////////////////////////////////////
+//    On Click Animations                      //
+/////////////////////////////////////////////////
+
+// Function for creating a Zig Zag Animation 
+function zigzagAnimation(ti, tf, y_init, y_top, y_bottom, pos1_x, pos2_x, element){
+    animator = new KF.KeyFrameAnimator;
+    animator2 = new KF.KeyFrameAnimator;
+    timeJump = (tf-ti)/6;
+    xJump = (pos2_x - pos1_x)/3;
+    animator.init({ 
+        interps:
+            [
+                { 
+                    keys:[0, ti, ti+timeJump, ti+timeJump*2, ti+timeJump*3, ti+timeJump*4, tf], 
+                    values:[
+                            { x : pos1_x, y : y_init },    
+                            { x : pos1_x + xJump, y : y_top },    
+                            { x : pos1_x + xJump*2, y : y_bottom },
+                            { x : pos2_x, y : y_top },
+                            { x : pos1_x + xJump*2, y : y_bottom },
+                            { x : pos1_x + xJump, y : y_top },
+                            { x : pos1_x, y : y_init },
+                            ],
+                    target: element.position
+                },
+            ],
+        loop: loopAnimation,
+        duration: duration * 1000,
+    });
+    animator.start();
+}
+
+// Function for creating an out Zig Zag Animation
+function outZigzagAnimation(ti, tf, y_init, y_bottom, pos1_x, pos2_x, z_init, z_end,element){
+    animator = new KF.KeyFrameAnimator;
+    animator2 = new KF.KeyFrameAnimator;
+    timeJump = (tf-ti)/6;
+    xJump = (pos2_x - pos1_x)/3;
+    animator.init({ 
+        interps:
+            [
+                { 
+                    keys:[0, ti, ti+timeJump, ti+timeJump*2, ti+timeJump*3, ti+timeJump*4, ti+timeJump*5, tf], 
+                    values:[
+                            { y : y_init, z : z_init },    
+                            { y : y_init, z : z_init },    
+                            { y : y_bottom, z : z_init },
+                            { y : y_init, z : z_init },
+                            { y : y_bottom, z : z_init },
+                            { y : y_init, z : z_end },
+                            { y : y_bottom, z : z_end },
+                            { y : y_init, z : z_end },
+                            ],
+                    target: element.position
+                },
+                { 
+                    keys:[0, ti, tf],
+                    values:[
+                            { x : pos1_x },
+                            { x : pos1_x },
+                            { x : pos2_x },
+                            ],
+                    target: element.position
+                }
+            ],
+        loop: loopAnimation,
+        duration: duration * 1000,
+    });
+    animator.start();
+}
+
+
+// Function for the mouse animation with rotation
 function AnimationRotationMouse(t1, t2, t3, pos1_x, pos2_x, pos3_x, pos4_x, pos1_z, pos2_z, pos3_z, pos4_z, rot1, rot2, rot3, element){
     animator = new KF.KeyFrameAnimator;
     animator.init({ 
         interps:
             [
-                // Keys for the entry animation
                 { 
                     keys:[0, t1, t2, t3], 
                     values:[
@@ -1112,6 +1176,42 @@ function AnimationRotationMouse(t1, t2, t3, pos1_x, pos2_x, pos3_x, pos4_x, pos1
     animator.start();
 }
 
+// Function for the dance animation
+function danceAnimations(element) 
+{
+    animator = new KF.KeyFrameAnimator;
+    animator.init({ 
+        interps:
+            [
+                // Keys for the movement in ∞ by the group
+                { 
+                    keys:[0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1], 
+                    values:[
+                            { x : 0, z : 0 },
+                            { x : 4, z : -4 },
+                            { x : 8, z : 0 },
+                            { x : 4, z : 4 },
+                            { x : 0, z : 0 },
+                            { x : -4, z : -4 },
+                            { x : -8, z : 0 },
+                            { x : -4, z : 4 },
+                            { x : 0, z : 0 },
+                            ],
+                    target:element.position,
+                    easing:TWEEN.Easing.Exponential.Out
+                }
+            ],
+        loop: loopAnimation,
+        duration: duration * 1000,
+    });
+    animator.start();
+}
+
+/////////////////////////////////////////////////
+//          Text Functions                     //
+/////////////////////////////////////////////////
+
+// Function for the text creation (textGeometry)
 function textCreation(text, size, x, y, z, color, scene, textGroup, shown){
     const loaderText = new THREE.FontLoader(manager);
 
@@ -1147,6 +1247,7 @@ function textCreation(text, size, x, y, z, color, scene, textGroup, shown){
     } );
 }
 
+// Function for spliting the text into lines in an array of texts
 function splitText(text, limit) 
 {
     let arr = [];
@@ -1170,6 +1271,7 @@ function splitText(text, limit)
     return arr;
 }
 
+// Function for the text animation
 function textAnimation(ti, tf, pos1_y, pos2_y, speed, textArray)
 {
     len = textArray.length;
@@ -1182,84 +1284,4 @@ function textAnimation(ti, tf, pos1_y, pos2_y, speed, textArray)
             }, speed * 1000)
         ));
     }    
-}
-
-// Dance animation
-function danceAnimations(element) 
-{
-    animator = new KF.KeyFrameAnimator;
-    animator.init({ 
-        interps:
-            [
-                // Keys for the movement in ∞ by the group
-                { 
-                    keys:[0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1], 
-                    values:[
-                            { x : 0, z : 0 },
-                            { x : 4, z : -4 },
-                            { x : 8, z : 0 },
-                            { x : 4, z : 4 },
-                            { x : 0, z : 0 },
-                            { x : -4, z : -4 },
-                            { x : -8, z : 0 },
-                            { x : -4, z : 4 },
-                            { x : 0, z : 0 },
-                            ],
-                    target:element.position,
-                    easing:TWEEN.Easing.Exponential.Out
-                }
-            ],
-        loop: loopAnimation,
-        duration: duration * 1000,
-    });
-    animator.start();
-}
-
-// /Computer-Graphics/13_threejsInteraction/threejsInteraction.html
-function initAnimator()
-{
-    animator = new KF.KeyFrameAnimator;
-    animator.init({ 
-        interps:
-            [
-                { 
-                    keys:[0, .5, 1], 
-                    values:[
-                            { y : 0 },
-                            { y : Math.PI  },
-                            { y : Math.PI * 2 },
-                            ],
-                },
-            ],
-        loop: loopAnimation,
-        duration:duration * 1000,
-    });
-}
-
-// /Computer-Graphics/13_threejsInteraction/threejsInteraction.html
-//https://threejs.org/docs/#api/en/core/Raycaster.intersectObjects
-//https://riptutorial.com/three-js/example/17088/object-picking---raycasting
-function raycast ( e )
-{
-    e.preventDefault();
-    mouseVector.x = 2 * (e.clientX / width) - 1;
-	mouseVector.y = 1 - 2 * ( e.clientY / height );
-
-    raycaster.setFromCamera(mouseVector, camera);
-    
-    let intersects = raycaster.intersectObjects(scene.children, true);
-
-    if(intersects.length > 0)
-    {
-        CLICKED = intersects[ intersects.length - 1 ].object;
-        //CLICKED.material.emissive.setHex( 0x00ff00 );
-        playClickAnimations();
-    }
-    else 
-    {
-        if ( CLICKED ) 
-            CLICKED.material.emissive.setHex( CLICKED.currentHex );
-        CLICKED = null;
-    }
-
 }
