@@ -312,15 +312,15 @@ function createScene(canvas)
     loadOnly3dObjModel("../models/slipper/3d-model.obj", 'slipper', 0.3, 0,-8,0);
 
     // Loading butterfly https://www.pngegg.com/es/png-dktlp
-    butterfly = createCharacterMesh("../models/butterfly.png", 'butterfly' ,8,6,13,13,-12);
+    butterfly = createCharacterMesh("../models/2d_images/butterfly.png", 'butterfly' ,8,6,13,13,-12);
     //butterfly.color.setHex(0xff00ff);
     butterfly.material.emissive.setHex(0x000000);
     sceneTemp.add(butterfly);
 
     // Loading floor
-    const geometry = new THREE.PlaneGeometry( 120, 100, 1 );
-    const material = new THREE.MeshPhongMaterial( {color: 0x45b5e9, side: THREE.DoubleSide, reflectivity: 1} );
-    const plane = new THREE.Mesh( geometry, material );
+    let geometry = new THREE.PlaneGeometry( 120, 100, 1 );
+    let material = new THREE.MeshPhongMaterial( {color: 0x45b5e9, side: THREE.DoubleSide, reflectivity: 1} );
+    let plane = new THREE.Mesh( geometry, material );
     plane.rotation.x = -Math.PI/2;
     plane.position.y = -12;
     scenes[0].add( plane );
@@ -350,29 +350,29 @@ function createScene(canvas)
     // Put in a ground plane to show off the lighting
     // 727 x 902 px
     // Loading Cinderella's 2D object
-    sceneTemp.add(createCharacterMesh("../models/cinderella_cleaningOutline.png", 'cinderella_cleaning' ,12,15,-30,-5,-2));
+    sceneTemp.add(createCharacterMesh("../models/2d_images/cinderella_cleaningOutline.png", 'cinderella_cleaning' ,12,15,-30,-5,-2));
     
     // 470x496px
     // Loading Stepsisters' 2D objects
-    sceneTemp.add(createCharacterMesh("../models/stepsisters_normalOutline.png", 'stepsisters_normal' ,14,14,30,-5,0));
+    sceneTemp.add(createCharacterMesh("../models/2d_images/stepsisters_normalOutline.png", 'stepsisters_normal' ,14,14,30,-5,0));
     
     // 277x655 px
     // Loading Stepmother's 2D object
-    sceneTemp.add(createCharacterMesh("../models/stepmother.png", 'stepmother', 7,15,30,-5,0.5));
+    sceneTemp.add(createCharacterMesh("../models/2d_images/stepmother.png", 'stepmother', 7,15,30,-5,0.5));
 
     // Loading Bubbles
     bubblesGroup = new THREE.Object3D;
     bubblesGroup.name = "bubbles";
-    bubblesGroup.add(createCharacterMesh("../models/bubble.png", 'bubble', 1.0,1.0,0,0,0));
-    bubblesGroup.add(createCharacterMesh("../models/bubble.png", 'bubble', 0.8,0.8,0.4,-1.1,0));
-    bubblesGroup.add(createCharacterMesh("../models/bubble.png", 'bubble', 0.8,0.8,-0.7,0.8,0));
-    bubblesGroup.add(createCharacterMesh("../models/bubble.png", 'bubble', 0.3,0.3,0.4,0.7,0));
-    bubblesGroup.add(createCharacterMesh("../models/bubble.png", 'bubble', 0.3,0.3,-0.6,-1.2,0));
+    bubblesGroup.add(createCharacterMesh("../models/2d_images/bubble.png", 'bubble', 1.0,1.0,0,0,0));
+    bubblesGroup.add(createCharacterMesh("../models/2d_images/bubble.png", 'bubble', 0.8,0.8,0.4,-1.1,0));
+    bubblesGroup.add(createCharacterMesh("../models/2d_images/bubble.png", 'bubble', 0.8,0.8,-0.7,0.8,0));
+    bubblesGroup.add(createCharacterMesh("../models/2d_images/bubble.png", 'bubble', 0.3,0.3,0.4,0.7,0));
+    bubblesGroup.add(createCharacterMesh("../models/2d_images/bubble.png", 'bubble', 0.3,0.3,-0.6,-1.2,0));
     sceneTemp.add(bubblesGroup);
     bubblesGroup.position.set(-10,-9.85,2);
 
     // Loading Mouse's 2D object
-    gusGus = createCharacterMesh("../models/gusgus.png", 'gusgus', 3,4,6,-10,-1);
+    gusGus = createCharacterMesh("../models/2d_images/gusgus.png", 'gusgus', 3,4,6,-10,-1);
     gusGus.rotation.y = Math.PI;
     sceneTemp.add(gusGus);
     
@@ -409,15 +409,15 @@ function createScene(canvas)
     sceneTemp.background = new THREE.TextureLoader(manager).load("../images/Backgrounds/scene3-4_background.jpg");
 
     // Loading Cinderella Crying's 2D object
-    sceneTemp.add(createCharacterMesh("../models/cinderella_cryingOutline.png", 'cinderella_crying', 8,10,-30,-8,-2));
+    sceneTemp.add(createCharacterMesh("../models/2d_images/cinderella_cryingOutline.png", 'cinderella_crying', 8,10,-30,-8,-2));
 
     // Creating group for Stepsisters and Mother
     objectGroup = new THREE.Object3D;
     objectGroup.name = "groupStepSistersMother"
     // Loading Stepsisters' 2D objects
-    stepSisters = createCharacterMesh("../models/stepsisters_party.png", 'stepsisters_party', 13,14,16,-8,-5);
+    stepSisters = createCharacterMesh("../models/2d_images/stepsisters_party.png", 'stepsisters_party', 13,14,16,-8,-5);
     // Loading Stepmother's 2D object
-    stepMother = createCharacterMesh("../models/stepmother_party.png", 'stepmother_party', 8,15,9,-8,-5);
+    stepMother = createCharacterMesh("../models/2d_images/stepmother_party.png", 'stepmother_party', 8,15,9,-8,-5);
     stepSisters.rotation.y = Math.PI;
     objectGroup.add(stepSisters);
     objectGroup.add(stepMother);
@@ -425,15 +425,15 @@ function createScene(canvas)
     sceneTemp.add(objectGroup)
 
     // Loading fountain's water splash
-    waterSplash = createCharacterMesh("../models/water_splash.png", 'water_splash', 8, 10, 6.3,-3.7,-13);
+    waterSplash = createCharacterMesh("../models/2d_images/water_splash.png", 'water_splash', 8, 10, 6.3,-3.7,-13);
     waterSplash.visible = false;
     sceneTemp.add(waterSplash);
 
     // Loading mice
-    gusGus = createCharacterMesh("../models/gusgus.png", 'gusgus', 4,5,-16,-10,-5);
+    gusGus = createCharacterMesh("../models/2d_images/gusgus.png", 'gusgus', 4,5,-16,-10,-5);
     gusGus.visible = false;
     sceneTemp.add(gusGus);
-    jackJack = createCharacterMesh("../models/jackjack.png", 'jackjack', 5,5,-16,-10,-5);
+    jackJack = createCharacterMesh("../models/2d_images/jackjack.png", 'jackjack', 5,5,-16,-10,-5);
     jackJack.visible = false;
     sceneTemp.add(jackJack);
 
@@ -462,8 +462,8 @@ function createScene(canvas)
     // Set the background image 
     sceneTemp.background = new THREE.TextureLoader(manager).load("../images/Backgrounds/scene3-4_background.jpg");
 
-    sceneTemp.add(createCharacterMesh("../models/cinderella_crying.png", 'cinderella_crying', 8,10,-15,-8,-2));
-    godmother = createCharacterMesh("../models/fairy_godmotherOutline2.png", 'fairy_godmother', 16,18,-2,30,-7);
+    sceneTemp.add(createCharacterMesh("../models/2d_images/cinderella_crying.png", 'cinderella_crying', 8,10,-15,-8,-2));
+    godmother = createCharacterMesh("../models/2d_images/fairy_godmotherOutline.png", 'fairy_godmother', 16,18,-2,30,-7);
     godmother.rotation.y = Math.PI;
     sceneTemp.add(godmother);
 
@@ -500,10 +500,12 @@ function createScene(canvas)
     grupoBaile.name = "grupoBaile";
 
     // Loading the prince
-    sceneTemp.add(grupoBaile.add(createCharacterMesh("../models/prince_charming_scene_5_Outline.png", 'prince_dancing', 10,10,0,-7,0)));
+    sceneTemp.add(grupoBaile.add(createCharacterMesh("../models/2d_images/prince_charming_scene_5_Outline.png", 'prince_dancing', 10,10,0,-7,0)));
 
     // Loading Cinderella
-    sceneTemp.add(grupoBaile.add(createCharacterMesh("../models/cinderellaOutline.png", 'cinderella_dancing', 9,12,4,-9,-5)));
+    sceneTemp.add(grupoBaile.add(createCharacterMesh("../models/2d_images/cinderellaOutline.png", 'cinderella_dancing', 9,12,4,-9,-5)));
+
+    grupoBaile.position.x = -30;
 
     // Adding scene to Array of Scenes
     scenes.push(sceneTemp);
@@ -515,6 +517,15 @@ function createScene(canvas)
     
     // Loading the column
     load3dModel('../models/Column/Column_Made_By_Tyro_Smith.obj', '../models/Column/Column_Made_By_Tyro_Smith.mtl', 'column', scenes[4], 1.8, 16, -1, 0, 0, 0, true);
+
+    // Loading invisible plane for text
+    geometry = new THREE.PlaneGeometry( 95, 70, 1 );
+    material = new THREE.MeshBasicMaterial( {color: 0xffffff, opacity: 0.25, transparent: true, side: THREE.DoubleSide} );
+    plane = new THREE.Mesh( geometry, material );
+    plane.position.x = -46;
+    plane.position.y = 30;
+    plane.position.z = -120;
+    scenes[4].add( plane );
 
     // Creating text
     textScene5Array =  splitText(textScenes[3], 37);
@@ -551,16 +562,16 @@ function createScene(canvas)
     sceneTemp.background = new THREE.TextureLoader(manager).load("../images/Backgrounds/scene5-6_background.jpg");
 
     // Loading the prince
-    sceneTemp.add(createCharacterMesh("../models/prince_scene6.png", 'prince', 5,12,-4,-9,-5));
+    sceneTemp.add(createCharacterMesh("../models/2d_images/prince_scene6.png", 'prince', 5,12,-4,-9,-5));
 
     // Loading Cinderella
-    sceneTemp.add(createCharacterMesh("../models/cinderella_bride.png", 'cinderella', 8,12,4,-9,-5));
+    sceneTemp.add(createCharacterMesh("../models/2d_images/cinderella_bride.png", 'cinderella', 8,12,4,-9,-5));
 
     // Loading Mice
-    sceneTemp.add(createCharacterMesh("../models/ratones_scene6.png", 'mice', 5,3,18,-14,-8));
+    sceneTemp.add(createCharacterMesh("../models/2d_images/ratones_scene6.png", 'mice', 5,3,18,-14,-8));
 
     // Loading Birds
-    sceneTemp.add(createCharacterMesh("../models/birds_scene6Outline.png", 'birds', 5,3,12,12.5,-5));
+    sceneTemp.add(createCharacterMesh("../models/2d_images/birds_scene6Outline.png", 'birds', 5,3,12,12.5,-5));
 
     // For the petals rain
     // Rose Petals group
@@ -574,7 +585,7 @@ function createScene(canvas)
         let height = width * 1.1;
         let x = Math.random() * 10 -2; // Adds petals randomly over Cinderella and the prince
         // https://www.pngkey.com/maxpic/u2q8a9i1y3e6q8y3/
-        petalsGroup.add(createCharacterMesh("../models/rose_petal.png", 'petal', width,height,x,13,1))
+        petalsGroup.add(createCharacterMesh("../models/2d_images/rose_petal.png", 'petal', width,height,x,13,1))
     }
     // Adding petals group to the scene
     sceneTemp.add(petalsGroup);
@@ -589,6 +600,15 @@ function createScene(canvas)
 
     // Loading the columns
     load3dModel('../models/Column/Column_Made_By_Tyro_Smith.obj', '../models/Column/Column_Made_By_Tyro_Smith.mtl', 'column1', scenes[5], 1.8, 16, -1, 0, 0, 0, true);
+    
+    // Loading invisible plane for text
+    geometry = new THREE.PlaneGeometry( 95, 70, 1 );
+    material = new THREE.MeshBasicMaterial( {color: 0xffffff, opacity: 0.25, transparent: true, side: THREE.DoubleSide} );
+    plane = new THREE.Mesh( geometry, material );
+    plane.position.x = -46;
+    plane.position.y = 30;
+    plane.position.z = -120;
+    scenes[5].add( plane );
 
     // Creating text
     textScene6Array =  splitText(textScenes[4], 37);
@@ -750,13 +770,13 @@ function playAnimations()
                 switch (element.name) {
                     case "cinderella_crying":
                         // Reset texture and scale
-                        element.material.map = new THREE.TextureLoader().load( "../models/cinderella_crying.png" ); 
+                        element.material.map = new THREE.TextureLoader().load( "../models/2d_images/cinderella_crying.png" ); 
                         element.scale.set(1, 1, 1);
                         enterAnimationYRotation(0, 0.8, 0.95, -8, -8, -2, 0.8, 0.95, (8*Math.PI)/3, (16*Math.PI)/3, Math.PI*8, element);
                         
                         // Set timeout for changing texture and scale for cinderella's in dress                 
                         setTimeout( () => {
-                            element.material.map = new THREE.TextureLoader().load( "../models/cinderella.png" ); 
+                            element.material.map = new THREE.TextureLoader().load( "../models/2d_images/cinderella.png" ); 
                             element.scale.set(1.5, 1.5, 1.5);
                         }, (duration - 1) * 1000 );
                         break;
@@ -820,7 +840,7 @@ function playAnimations()
                         enterAnimationX(0, 0.125, -4, -0.5, element);
                         break;
                     case "textGroup":
-                        textAnimation(0, 0.7, 0.5, 55, 0.5, element.children);
+                        textAnimation(0, 1, 0.5, 55, 0.5, element.children);
                         break;
                     default:
                         break;

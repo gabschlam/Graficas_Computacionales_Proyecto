@@ -32,7 +32,7 @@
     Cuando le prohíben a Cenicienta a acudir al baile que tanto deseaba ir. Entrará Cenicienta, luego su familia y finalmente saldrá su familia y se quedará sola en la escena.
 
         **Objetos interactuables:**
-        - Fuente: la fuente sacará gotas de agua, o quizá se elevará y bajará (indicando que pronto llegará el hada madrina). 
+        - Fuente: la fuente sacará gotas de agua. 
         - Ratones: al presionar a Cenicienta aparecerán sus ratones a acompañarla. 
 
     * **Escena 4:**
@@ -40,8 +40,8 @@
     El hada madrina aparece para ayudar a Cenicienta a acudir al baile. Cenicienta ya estará en la escena, dado que ya estaba en ese lugar en la escena anterior. Luego, aparecerá el hada madrina y el carruaje. 
         
         **Objetos interactuables:**
-        - Carruaje: al presionarlo se elevará del piso (flotará) y volverá a bajar. 
-        - Hada madrina: Moverse de arriba hacia abajo.
+        - Carruaje: al presionarlo se elevará del piso (flotará), girará y volverá a bajar. 
+        - Hada madrina: Moverse de arriba hacia abajo, girando.
 
     * **Escena 5:**
     ![Escena 5](images/ScenesReadme/Scene5.png)
