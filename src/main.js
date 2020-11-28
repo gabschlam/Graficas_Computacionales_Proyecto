@@ -11,7 +11,10 @@ let animationMice = false;
 
 let index = 0;
 
+// Array for the scenes
 let scenes = [];
+
+// Array for the texts for each scene
 let textScenes = [
     'Once upon a time there was a very beautiful and kind young woman who had lost both her parents, and was left with her stepmother. This woman had two very ugly daughters, but their mother spoiled them and always made Cinderella do all the difficult housework. Because of this, Cinderella found herself often kneeling on the floor, covered in dirt and ashes, exhausted and with her clothes torn to rags. What’s more, she was left no time for any other activities. Since she was always dirty from ash and cinders, the townspeople called her Cinderella.',
     'One day, the prince announced a grand ball, and invited all young women who would like to marry him so that he could choose the most beautiful and make her his princess. The stepmother prepared her two daughters with the best ball gowns and made them up so that they would be pretty, but she prohibited Cinderella from attending the ball. She ordered her to stay at home mopping the floor and preparing dinner so that it would be ready when the three of them returned home. Cinderella obeyed, but as she watched her stepsisters leave for the ball at the royal palace, she couldn’t help but feel miserable and began to cry.',
@@ -36,22 +39,31 @@ let animator = null;
 //Scene 5 light
 let spotlightOn = 0;
 
-// Function for loading OBJ 3d model with MTL file
+// Function for loading OBJ 3d model with MTL file, with material file
+// receives urls, name, scene, scale, position, rotation 
+// and true or false if it needs an outline (meaning that it will have animation on click)
 function load3dModel(objModelUrl, mtlModelUrl, name, sceneObj, scale, x, y, z, rotationX, rotationY, outline)
 {
+    // Loading the material file
     mtlLoader = new THREE.MTLLoader(manager);
 
     mtlLoader.load(mtlModelUrl, materials =>{
         
+        // Load the corresponding materials
         materials.preload();
-        // console.log(materials);
 
         objLoader = new THREE.OBJLoader(manager);
+        // Assign materials to object
         objLoader.setMaterials(materials);
 
+        // Start loading object from url
         objLoader.load(objModelUrl, object=>{
+            // Set scale
             object.scale.set(scale,scale,scale);
+            // Set position
             object.position.set(x, y, z);
+
+            // If there is rotation in X or Y
             if (rotationX) {
                 object.rotation.x = rotationX ;
             }
@@ -61,11 +73,14 @@ function load3dModel(objModelUrl, mtlModelUrl, name, sceneObj, scale, x, y, z, r
             object.name = name;
 
             object.traverse( function( child ) {
+                // Assign geometry to mesh
                 if ( child.isMesh ) 
                 {
                     child.geometry.computeVertexNormals();
 
+                    // If outline is needed
                     if (outline) {
+                        // If object is fountain, assign more edges, with more angle (35)
                         if (name == "fountain") {
                             // only show edges with 35 degrees or more angle between faces
                             var thresholdAngle = 35;
@@ -76,6 +91,8 @@ function load3dModel(objModelUrl, mtlModelUrl, name, sceneObj, scale, x, y, z, r
                             var thresholdAngle = 50;
                             var color = 0xff0000;
                         }
+
+                        // Create outline effect with EdgesGeometry
                         var lineGeometry = new THREE.EdgesGeometry(child.geometry, thresholdAngle);
                         var material = new THREE.LineBasicMaterial({color: color});
                         var mesh = new THREE.LineSegments(lineGeometry, material);
@@ -316,12 +333,12 @@ function createScene(canvas)
     // Loading slippers
     loadOnly3dObjModel("../models/slipper/3d-model.obj", 'slipper', 0.3, 0,-8,0);
 
-    // Loading butterfly https://www.pngegg.com/es/png-dktlp
+    // Loading butterfly
     butterfly = createCharacterMesh("../models/2d_images/butterfly.png", 'butterfly' ,8,6,13,13,-12);
     butterfly.material.emissive.setHex(0x000000);
     sceneTemp.add(butterfly);
 
-    // FFloor
+    // Floor
     let geometry = new THREE.PlaneGeometry( 120, 100, 1 );
     let material = new THREE.MeshPhongMaterial( {color: 0x45b5e9, side: THREE.DoubleSide, reflectivity: 1} );
     let plane = new THREE.Mesh( geometry, material );
@@ -406,7 +423,9 @@ function createScene(canvas)
 
     /////////////////////////////////////////////////
     //       Scene 3                               //
-    /////////////////////////////////////////////////  
+    // Cinderella and her step-family are outside  //
+    // getting ready for the ball.                 //
+    /////////////////////////////////////////////////
 
     sceneTemp = new THREE.Scene();
     sceneTemp.name = "scene3";
@@ -460,6 +479,8 @@ function createScene(canvas)
 
     /////////////////////////////////////////////////
     //       Scene 4                               //
+    // Cinderella is outside crying and suddenly   //
+    // the Fairy Godmother shows up.               //
     /////////////////////////////////////////////////
 
     sceneTemp = new THREE.Scene();
@@ -467,7 +488,10 @@ function createScene(canvas)
     // Set the background image 
     sceneTemp.background = new THREE.TextureLoader(manager).load("../images/Backgrounds/scene3-4_background.jpg");
 
+    // Loading Cinderella's 2D object
     sceneTemp.add(createCharacterMesh("../models/2d_images/cinderella_crying.png", 'cinderella_crying', 8,10,-15,-8,-2));
+    
+    // Loading Fairy Godmother's 2D object
     godmother = createCharacterMesh("../models/2d_images/fairy_godmotherOutline.png", 'fairy_godmother', 16,18,-2,30,-7);
     godmother.rotation.y = Math.PI;
     sceneTemp.add(godmother);
@@ -705,12 +729,13 @@ function playAnimations()
             break;
         case "scene3":
             console.log("Escena 3");
-            // Animations
+            // Animations for the characters to enter the scene
             scene.children.forEach(element => {
                 switch (element.name) {
                     case "cinderella_crying":
                         enterAnimationX(0, 0.125, -30, -15, element);
                         break;
+                    // For making visible either gusgus, jackjack and water_splash object
                     case "gusgus":
                     case "jackjack":
                     case "water_splash":
@@ -732,6 +757,7 @@ function playAnimations()
                                                 ],
                                         target:element.position
                                     },
+                                    // Rotation for stepsisters
                                     { 
                                         keys:[0, 0.8, 0.9, 1], 
                                         values:[
@@ -742,6 +768,7 @@ function playAnimations()
                                                 ],
                                         target:element.children[0].rotation
                                     },
+                                    // Rotation for stepmother                                  
                                     { 
                                         keys:[0, 0.8, 0.9, 1], 
                                         values:[
@@ -758,6 +785,7 @@ function playAnimations()
                         });
                         animator.start();
                         break;
+                    // Animation for the text to iterate
                     case "textGroup":
                         textAnimation(0, 1, 0.5, 55, 0.8, element.children);
                         break;
@@ -768,7 +796,7 @@ function playAnimations()
             break;
         case "scene4":
             console.log("Escena 4");
-            // Animations
+            // Animations for the characters to enter the scene
             scene.children.forEach(element => {
                 switch (element.name) {
                     case "cinderella_crying":
@@ -807,6 +835,7 @@ function playAnimations()
                         });
                         animator.start();
                         break;
+                    // Animation for the text to iterate
                     case "textGroup":
                         textAnimation(0, 1, 0.5, 55, 0.8, element.children);
                         break;
@@ -817,12 +846,13 @@ function playAnimations()
             break;
         case "scene5":
             console.log("Escena 5");
-            // Animations
+            // Animations for the characters to enter the scene
             scene.children.forEach(element => {
                 switch (element.name) {
                     case "grupoBaile":
                         enterAnimationX(0, 0.125, -30, 0, element);
                         break;
+                    // Animation for the text to iterate
                     case "textGroup":
                         textAnimation(0, 1, 0.5, 55, 0.8, element.children);
                         break;
@@ -833,7 +863,7 @@ function playAnimations()
             break;
         case "scene6":
             console.log("Escena 6");
-            // Animations
+            // Animations for the characters to enter the scene
             scene.children.forEach(element => {
                 switch (element.name) {
                     case "cinderella":
@@ -842,6 +872,7 @@ function playAnimations()
                     case "prince":
                         enterAnimationX(0, 0.125, -4, -0.5, element);
                         break;
+                    // Animation for the text to iterate
                     case "textGroup":
                         textAnimation(0, 1, 0.5, 55, 0.5, element.children);
                         break;
@@ -868,9 +899,9 @@ function playClickAnimations()
             if (CLICKED.parent.name == "slipper") {
                 enterAnimationYRotation(0, 0.25, 0.5, -8, -8, -8, 0, 0.2, 0, Math.PI, 2*Math.PI, CLICKED.parent);
             }
-            // If user clicks on the butterfly, it goes to the beginning of the page and returns to its initial position
+            // If user clicks on the butterfly, it goes to the beginning of the page and returns to its initial position, rotating on y axis
             if (CLICKED.name == "butterfly") {
-                zigzagAnimation(0.05,0.3,13,15,11,13,-20,CLICKED);
+                zigzagAnimation(0.05,0.3,13,15,11,13,-20, -Math.PI / 2, Math.PI / 2, CLICKED);
             }
             break;
         case "scene2":
@@ -905,12 +936,14 @@ function playClickAnimations()
             // Animations
             switch(CLICKED.name)
             {
+                // If user clicks on the fountain, the water splash is shown with its proper animation
                 case "fountain":
                     // Animation for the water splash, position and scale
                     element = scene.getObjectByName("water_splash");        
                     element.scale.y = 0.5;
                     element.scale.x = 0.15;
                     element.position.y = -3.7;
+                    // Hide or unhide depending on current state
                     element.visible = !element.visible;
                     animator = new KF.KeyFrameAnimator;
                     animator.init({ 
@@ -940,12 +973,15 @@ function playClickAnimations()
                     });
                     animator.start();
                     break;
+                // If user clicks on cinderella, or failing that, on gusgus or jackjack, both gusgus and jackjack (mice) go to keep cinderella company
                 case "cinderella_crying":
                 case "gusgus":
                 case "jackjack":
                     scene.children.forEach(element => {
+                        // If element is gusgus, makes proper animation with different values for position and rotation
                         if(element.name=="gusgus"){
                             element.visible = true;
+                            // If animation already happened, make the inverse animation for the mice to hide
                             if (animationMice == true) {
                                 AnimationRotationMouse(0.1, 0.2, 0.3, -10, -10, -10, -16, 0, -2.5, -5, -5, -Math.PI, 0, -Math.PI, element);
                                 setTimeout( () => {
@@ -956,8 +992,10 @@ function playClickAnimations()
                                 AnimationRotationMouse(0.1, 0.2, 0.3, -16, -10, -10, -10, -5, -5, -2.5, 0, 0, 0, -Math.PI, element);   
                             }
                         }
+                        // If element is gusgus, makes proper animation with different values for position and rotation
                         if(element.name=="jackjack"){
                             element.visible = true;
+                            // If animation already happened, make the inverse animation for the mice to hide
                             if (animationMice == true) {
                                 AnimationRotationMouse(0.1, 0.2, 0.3, -16, -20, -20, -16, 0, -2.5, -5, -5, -Math.PI, 0, -Math.PI, element);
                                 setTimeout( () => {
@@ -969,6 +1007,7 @@ function playClickAnimations()
                             }
                         }
                     });
+                    // Make variable true or false depending on current state
                     animationMice = !animationMice;
                     break;
             }
@@ -976,10 +1015,11 @@ function playClickAnimations()
         case "scene4":
             console.log("Escena 4", CLICKED.name);
             // Animations
+            // If user clicks on the carruaje, it will go up and down, while rotating on y axis
             if (CLICKED.parent.name == "Cinderella_Carosse") {
-                console.log("Carrouse");
                 enterAnimationYRotation(0, 0.1, 0.2, -30, -10, -30, 0, 0.2, 0, Math.PI, (7*Math.PI) / 3, CLICKED.parent);
             }
+            // If user clicks on the fairy godmother, it will go up and down, while rotating on y axis
             if (CLICKED.name == "fairy_godmother") {
                 enterAnimationYRotation(0, 0.15, 0.3, -5, 7, -5, 0, 0.3, -Math.PI, Math.PI, -Math.PI, CLICKED);
             }
@@ -1010,7 +1050,7 @@ function playClickAnimations()
             console.log("Escena 6", CLICKED.name);
             if(CLICKED.name=="birds")
             {
-                zigzagAnimation(0.05,0.3,12,10,6,12.5,-12,CLICKED);
+                zigzagAnimation(0.05,0.3,12,10,6,12.5,-12,0,0,CLICKED);
                 for(i = 0; i< scene.getObjectByName("petals").children.length;i++)
                 {
                     enterAnimationY(0, Math.random() + 0.5, 13, -30, scene.getObjectByName("petals").children[i]);
@@ -1109,15 +1149,14 @@ function enterAnimationYRotation(t1, t2, t3, pos1_y, pos2_y, pos3_y, tiR, tfR, r
 /////////////////////////////////////////////////
 //    On Click Animations                      //
 // To reuse code, we created multiple anima-   //
-// tions with generi movements like zigzag,    //
+// tions with generic movements like zigzag,   //
 // rotations, and an infinity sign.            //
 /////////////////////////////////////////////////
 
 // Function for creating a Zig Zag Animation 
-// As parameters, it receives times, y-llimits, x start and end positions, and element to move 
-function zigzagAnimation(ti, tf, y_init, y_top, y_bottom, pos1_x, pos2_x, element){
+// As parameters, it receives times, y-limits, x start and end positions, rotations, and element to move 
+function zigzagAnimation(ti, tf, y_init, y_top, y_bottom, pos1_x, pos2_x, rot1, rot2, element){
     animator = new KF.KeyFrameAnimator;
-    animator2 = new KF.KeyFrameAnimator;
     // For the element to go up and down we divide the x range into three segments and time into six, one pint in time is one position in x
     // As the element returns to its initial position, x is divided into 3 and not six
     timeJump = (tf-ti)/6;
@@ -1140,6 +1179,22 @@ function zigzagAnimation(ti, tf, y_init, y_top, y_bottom, pos1_x, pos2_x, elemen
                             { x : pos1_x, y : y_init },
                             ],
                     target: element.position
+                },
+                { 
+                    keys:[0, ti, ti+timeJump, ti+timeJump*2, ti+timeJump*3, ti+timeJump*4, tf], 
+                    values:[
+                            // Starting position
+                            { y : 0 },    
+                            { y : rot1 },    
+                            { y : rot1 },
+                            // Reach the x's limit and goes back to initiial position, alternates between y top andd bottom to create the zigzag
+                            { y : rot2 }, 
+                            { y : rot2 },
+                            { y : rot2 },
+                            // Starting position again
+                            { y : 0 },
+                            ],
+                    target: element.rotation
                 }
             ],
         loop: loopAnimation,
@@ -1152,7 +1207,6 @@ function zigzagAnimation(ti, tf, y_init, y_top, y_bottom, pos1_x, pos2_x, elemen
 // It works to create a zigzag animation ffor characters to leave the scene
 function outZigzagAnimation(ti, tf, y_init, y_bottom, pos1_x, pos2_x, z_init, z_end,element){
     animator = new KF.KeyFrameAnimator;
-    animator2 = new KF.KeyFrameAnimator;
     // For the element to go up and down we divide the x range into three segments and time into six, one pint in time is one position in x
     // As the element returns to its initial position, x is divided into 3 and not six
     timeJump = (tf-ti)/6;
@@ -1193,6 +1247,7 @@ function outZigzagAnimation(ti, tf, y_init, y_bottom, pos1_x, pos2_x, z_init, z_
 }
 
 // Function for the mouse animation with rotation
+// It works to create a movement for the mouse for going from the back of cinderella and go to in front of her, and vice versa
 function AnimationRotationMouse(t1, t2, t3, pos1_x, pos2_x, pos3_x, pos4_x, pos1_z, pos2_z, pos3_z, pos4_z, rot1, rot2, rot3, element){
     animator = new KF.KeyFrameAnimator;
     animator.init({ 
@@ -1225,6 +1280,7 @@ function AnimationRotationMouse(t1, t2, t3, pos1_x, pos2_x, pos3_x, pos4_x, pos1
 }
 
 // Function for the dance animation
+// It works to create a dance movement for cinderella and the prince
 function danceAnimations(element) 
 {
     animator = new KF.KeyFrameAnimator;

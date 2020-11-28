@@ -83,7 +83,6 @@ Nuestro plan de trabajo se dividirá en diferentes sprints, con diferentes entre
 
 ## Referencias Modelos 3D
 **Escena 1:**
-* Mariposa: https://www.pngegg.com/es/png-dktlp
 * Zapatillas: https://www.cgtrader.com/items/177103/download-page
 
 **Escena 2:**
@@ -110,6 +109,7 @@ Nuestro plan de trabajo se dividirá en diferentes sprints, con diferentes entre
 
 ## Referencias Modelos 2D
 **Por orden de aparición**
+* Mariposa: https://www.pngegg.com/es/png-dktlp
 * Cenicienta limpiando: https://www.pinterest.es/pin/35465915803790189/
 * Madrastra feliz: https://webstockreview.net/image/cinderella-clipart-cinderella-stepmother/2361020.html
 * Hermanastras felices: https://www.disneyclips.com/images3/images/anastasia-drizella3.png
