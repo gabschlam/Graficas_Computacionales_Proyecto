@@ -13,7 +13,7 @@
 6. Habrá un total de seis escenas de la historia. A continuación se explicará cada una de ellas:
     * **Escena 1:**
     ![Escena 1](images/ScenesReadme/Scene1.png)
-    Esta escena será la portada, en ella lucirá la icónica zapatilla de cenicienta con y además una mariposa que estará postrada en la escena (quizá en el título). Para esta primera escena no queremos que la zapatilla y la mariposa entren, sino que siempre estará dentro para hacer lucir la portada. Además, estará el título y nuestros nombres.
+    Esta escena será la portada, en ella lucirá la icónica zapatilla de cenicienta con y además una mariposa que estará postrada cerca del título. Para esta primera escena no queremos que la zapatilla y la mariposa entren, sino que siempre estará dentro para hacer lucir la portada. Además, estará el título y nuestros nombres.
         
         **Objetos interactuables:**
         - Zapatilla: al presionarla esta rotará en y para lucir su increíble diseño. 
@@ -21,11 +21,11 @@
 
     * **Escena 2:**
     ![Escena 2](images/ScenesReadme/Scene2.png)
-    Esta escena ilustra lo infeliz que era Cenicienta, la escena comenzará vacía, posteriormente entrará Cenicienta con su cubeta de agua y luego las hermanastras y su madrastra. 
+    Esta escena ilustra lo infeliz que era Cenicienta, la escena comenzará con un sillón, mesa y cubeta, posteriormente entrará Cenicienta, luego madrastra y finalmente hermanastras. 
         
         **Objetos interactuables:**
-        - Cubeta con agua: cuando se presione esta sacará burbujas.
-        - Sillón: saldrá un ratón caminando. 
+        - Sillón y Cenicienta: cuando se presionen, la cubeta sacará burbujas.
+        - Hermanastras: Saldrá un ratón caminando detrás de su madre. 
 
     * **Escena 3:**
     ![Escena 3](images/ScenesReadme/Scene3.png)
@@ -84,6 +84,7 @@ Nuestro plan de trabajo se dividirá en diferentes sprints, con diferentes entre
 ## Referencias Modelos 3D
 **Escena 1:**
 * Mariposa: https://www.pngegg.com/es/png-dktlp
+* Zapatillas: https://www.cgtrader.com/items/177103/download-page
 
 **Escena 2:**
 * Mesa: https://sketchfab.com/3d-models/classic-coffee-table-0b151b371da847d3a2dd960f9339eef1
@@ -106,3 +107,21 @@ Nuestro plan de trabajo se dividirá en diferentes sprints, con diferentes entre
 * Columna: https://free3d.com/3d-model/white-column-44873.html
 * Textura columna: https://www.pinterest.es/pin/825495806689115334/
 * Príncipe y cenicienta: https://www.jing.fm/iclipt/Thmwx/
+
+## Referencias Modelos 2D
+**Por orden de parición**
+* Cenicienta limpiando: https://www.pinterest.es/pin/35465915803790189/
+* Madrastra feliz: https://webstockreview.net/image/cinderella-clipart-cinderella-stepmother/2361020.html
+* Hermanastras felices: https://www.disneyclips.com/images3/images/anastasia-drizella3.png
+* Gus Gus:
+* Cenicienta triste:
+* Madrastra baile: https://www.disneyclips.com/images3/images/anastasia-drizella.png
+* Hermanastras baile: https://www.disneyclips.com/images3/images/lady-tremaine.png
+* Jack Jack:
+* Hada Madrina: https://www.kindpng.com/imgv/xoiwTi_cinderella-fairy-godmother-the-walt-disney-company-cinderella/
+* Cenicienta baile: http://pngimg.com/download/83469
+* Principe baile: https://pnghut.com/png/9qk3rDJVwb/prince-charming-cinderella-grand-duke-clip-art-transparent-png
+* Cenicienta y Principe boda: https://www.nicepng.com/ourpic/u2q8e6i1u2y3w7u2_cinderella-clock-silhouette-midnight-google-search-cinderella-and/
+* Pájaros: https://www.pinterest.com.mx/pin/673640056751289629/
+* Ratones:
+* Otras referencias: https://www.disneyclips.com/images3/cinderella-ladytremaine.html

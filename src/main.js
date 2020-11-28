@@ -95,9 +95,14 @@ function load3dModel(objModelUrl, mtlModelUrl, name, sceneObj, scale, x, y, z, r
 }
 
 // Function for loading OBJ 3d model without MTL file
+// Function to load obj models with no material
+// Crystal effect references: https://threejs.org/examples/?q=refra#webgl_materials_cubemap_refraction
+// https://threejs.org/examples/#webgl_materials_variations_standard
+// https://threejs.org/examples/?q=trans#webgl_materials_physical_transmission
 function loadOnly3dObjModel(objModelUrl, name, scale, x, y, z) 
 {
     var loader = new THREE.OBJLoader(manager);
+    // Parameters for the material to look like crystal
     const params = {
         color: 0xffffff,
         transmission: 0.60,
@@ -109,6 +114,8 @@ function loadOnly3dObjModel(objModelUrl, name, scale, x, y, z)
     loader.load(objModelUrl, function (object) {
         object.traverse( function (child){
             if(child.isMesh){
+                // These parameters allow th slippers to look transparent and like crystal
+                // https://threejs.org/docs/#api/en/materials/MeshPhysicalMaterial
                 child.material = new THREE.MeshPhysicalMaterial({
                     color: params.color,
 					metalness: 0,
@@ -131,16 +138,16 @@ function loadOnly3dObjModel(objModelUrl, name, scale, x, y, z)
         object.position.set(x,y,z);
         object.name = name;
         scenes[0].add(object);
-        // console.log("FBX");
-        // console.log(object);
     });
 }
 
 // Function for loading FBX 3d model
+// receives urls, name, scene, scale, position and rotation
 function load3dFbxModel(modelUrl, textureUrl, normalUrl, aoUrl, metalUrl, roughnessUrl, name, sceneObj, scale, x, y, z, rotationX, rotationY)
 {
     var loader = new THREE.FBXLoader(manager);
     loader.load(modelUrl, function (object) {
+        // Loads sent urls and material
         object.traverse( function (child){
             if(child.isMesh){
                 let texture = new THREE.TextureLoader(manager).load(textureUrl);
@@ -150,24 +157,21 @@ function load3dFbxModel(modelUrl, textureUrl, normalUrl, aoUrl, metalUrl, roughn
                 let roughness = null;
                 if(normalUrl != null){
                     normal = new THREE.TextureLoader(manager).load(normalUrl);
-                    // console.log("loaded normal", normalUrl)
                 }
                 if(aoUrl != null){
                     ao = new THREE.TextureLoader(manager).load(aoUrl);
-                    // console.log("loaded ao",aoUrl)
                 }
                 if(metalUrl != null){
                     metallic = new THREE.TextureLoader(manager).load(metalUrl);
-                    // console.log("loaded metal",metalUrl)
                 }
                 if(roughnessUrl != null){
                     roughness = new THREE.TextureLoader(manager).load(roughnessUrl);
-                    // console.log("loaded rough",roughnessUrl)
                 }
                 child.material = new THREE.MeshStandardMaterial( { map: texture, normalMap: normal, aoMap:ao, aoMapIntensity: 1, metalnessMap: metallic, metalness: 0,  roughnessMap: roughness, roughness: 0 } );
             }
         });
 
+        // scales, rotates, and sets the object
         object.scale.x = object.scale.y = object.scale.z = scale;
         object.position.set(x,y,z);
         if (rotationX) {
@@ -178,12 +182,11 @@ function load3dFbxModel(modelUrl, textureUrl, normalUrl, aoUrl, metalUrl, roughn
         }
         object.name = name;
         sceneObj.add(object);
-        // console.log("FBX");
-        // console.log(object);
     });
 }
 
 // Function for creating mesh for 2d characters
+// It receives an image address, measures, and position
 function createCharacterMesh( address, name, width, height, X, Y, Z ) 
 {
     let map = new THREE.TextureLoader(manager).load(address);
@@ -292,6 +295,8 @@ function createScene(canvas)
 
     /////////////////////////////////////////////////
     //       Scene 1                               //
+    // Story cover, cinderella slippers, name, and //
+    // butterfly.                                  //
     /////////////////////////////////////////////////
 
     sceneTemp = new THREE.Scene();
@@ -313,11 +318,10 @@ function createScene(canvas)
 
     // Loading butterfly https://www.pngegg.com/es/png-dktlp
     butterfly = createCharacterMesh("../models/2d_images/butterfly.png", 'butterfly' ,8,6,13,13,-12);
-    //butterfly.color.setHex(0xff00ff);
     butterfly.material.emissive.setHex(0x000000);
     sceneTemp.add(butterfly);
 
-    // Loading floor
+    // FFloor
     let geometry = new THREE.PlaneGeometry( 120, 100, 1 );
     let material = new THREE.MeshPhongMaterial( {color: 0x45b5e9, side: THREE.DoubleSide, reflectivity: 1} );
     let plane = new THREE.Mesh( geometry, material );
@@ -340,6 +344,8 @@ function createScene(canvas)
 
     /////////////////////////////////////////////////
     //       Scene 2                               //
+    // Cinderella and her step-family are in the   //
+    // living room for the introduction.           //
     /////////////////////////////////////////////////
 
     sceneTemp = new THREE.Scene();
@@ -347,32 +353,31 @@ function createScene(canvas)
     // Set the background image 
     sceneTemp.background = new THREE.TextureLoader(manager).load("../images/Backgrounds/scene2_background.jpg");
     
-    // Put in a ground plane to show off the lighting
-    // 727 x 902 px
     // Loading Cinderella's 2D object
     sceneTemp.add(createCharacterMesh("../models/2d_images/cinderella_cleaningOutline.png", 'cinderella_cleaning' ,12,15,-30,-5,-2));
     
-    // 470x496px
     // Loading Stepsisters' 2D objects
     sceneTemp.add(createCharacterMesh("../models/2d_images/stepsisters_normalOutline.png", 'stepsisters_normal' ,14,14,30,-5,0));
     
-    // 277x655 px
     // Loading Stepmother's 2D object
-    sceneTemp.add(createCharacterMesh("../models/2d_images/stepmother.png", 'stepmother', 7,15,30,-5,0.5));
+    sceneTemp.add(createCharacterMesh("../models/2d_images/stepmother.png", 'stepmother', 7,15,30,-5,1.5));
 
     // Loading Bubbles
+    //Creates a groups for the bubbles
     bubblesGroup = new THREE.Object3D;
     bubblesGroup.name = "bubbles";
+    // Sets different sizes and positions for the bubbles, and adds them to the group
     bubblesGroup.add(createCharacterMesh("../models/2d_images/bubble.png", 'bubble', 1.0,1.0,0,0,0));
     bubblesGroup.add(createCharacterMesh("../models/2d_images/bubble.png", 'bubble', 0.8,0.8,0.4,-1.1,0));
     bubblesGroup.add(createCharacterMesh("../models/2d_images/bubble.png", 'bubble', 0.8,0.8,-0.7,0.8,0));
     bubblesGroup.add(createCharacterMesh("../models/2d_images/bubble.png", 'bubble', 0.3,0.3,0.4,0.7,0));
     bubblesGroup.add(createCharacterMesh("../models/2d_images/bubble.png", 'bubble', 0.3,0.3,-0.6,-1.2,0));
+    // Adds the bubbles to the scenes
     sceneTemp.add(bubblesGroup);
     bubblesGroup.position.set(-10,-9.85,2);
 
     // Loading Mouse's 2D object
-    gusGus = createCharacterMesh("../models/2d_images/gusgus.png", 'gusgus', 3,4,6,-10,-1);
+    gusGus = createCharacterMesh("../models/2d_images/gusgus.png", 'gusgus', 3,4,6,-10,-2);
     gusGus.rotation.y = Math.PI;
     sceneTemp.add(gusGus);
     
@@ -644,7 +649,7 @@ function initAnimator()
     });
 }
 
-// Function for using raycasting for managing the user click on object
+// Function to use raycasting and managing the user click on object
 // Computer-Graphics/13_threejsInteraction/threejsInteraction.html
 // https://threejs.org/docs/#api/en/core/Raycaster.intersectObjects
 // https://riptutorial.com/three-js/example/17088/object-picking---raycasting
@@ -661,13 +666,10 @@ function raycast ( e )
     if(intersects.length > 0)
     {
         CLICKED = intersects[ intersects.length - 1 ].object;
-        //CLICKED.material.emissive.setHex( 0x00ff00 );
         playClickAnimations();
     }
     else 
     {
-        if ( CLICKED ) 
-            CLICKED.material.emissive.setHex( CLICKED.currentHex );
         CLICKED = null;
     }
 }
@@ -679,7 +681,7 @@ function playAnimations()
     switch (scene.name) {
         case "scene2":
             console.log("Escena 2");
-            // Animations
+            // Animations for the characters to enter the scene
             scene.children.forEach(element => {
                 switch (element.name) {
                     case "cinderella_cleaning":
@@ -694,6 +696,7 @@ function playAnimations()
                     case "gusgus":
                         enterAnimationX(0.125, 0.250, 30, 6, element);
                         break;
+                    // Animation for the text to iterate
                     case "textGroup":
                         textAnimation(0, 1, 10, 64, 0.8, element.children);
                         break;
@@ -853,14 +856,19 @@ function playAnimations()
 }
 
 // Function for playing animations on click
+// This function is called each time user clicks over an object.
 function playClickAnimations() 
 {
+    // There is a switch for scenes because each one has different animations
     switch (scene.name) {
+        //Each case determines which animation to play with an if, it depends on character name or parent name
         case "scene1":
             console.log("Escena 1",CLICKED.name);
+            // For this scene, if user clicks on the slippers they turn
             if (CLICKED.parent.name == "slipper") {
                 enterAnimationYRotation(0, 0.25, 0.5, -8, -8, -8, 0, 0.2, 0, Math.PI, 2*Math.PI, CLICKED.parent);
             }
+            // If user clicks on the butterfly, it goes to the beginning of the page and returns to its initial position
             if (CLICKED.name == "butterfly") {
                 zigzagAnimation(0.05,0.3,13,15,11,13,-20,CLICKED);
             }
@@ -868,6 +876,7 @@ function playClickAnimations()
         case "scene2":
             console.log("Escena 2", CLICKED.name);
             // Animations
+            // If user clicks the sofa, bubbles arise from the bucket
             if (CLICKED.parent.name == "sofa") {
                 for(i = 0; i< scene.getObjectByName("bubbles").children.length;i++)
                 {
@@ -876,12 +885,14 @@ function playClickAnimations()
             }
             switch(CLICKED.name)
             {
+                // If user clicks on Cinderella, bubbles arise from the bucket
                 case "cinderella_cleaning":
                     for(i = 0; i< scene.getObjectByName("bubbles").children.length;i++)
                     {
                         enterAnimationY(0, Math.random() + 0.1, 0, 30, scene.getObjectByName("bubbles").children[i]);
                     }
                     break;
+                // If user clicks on the stepsisters, Gus gus leaves the scene
                 case "stepsisters_normal":
                     outZigzagAnimation(0.05,0.3,-10,-9,6,-25, -1, 1,scene.getObjectByName("gusgus"));
                     break;
@@ -1014,6 +1025,10 @@ function playClickAnimations()
 
 /////////////////////////////////////////////////
 //    Enter Animations                         //
+// To reuse code, we created a group of        //
+// animations for all of our characters to     //
+// enter scenes. These ones also worked for on //
+// click animations.                           //
 /////////////////////////////////////////////////
 
 // Function for entering to the scene in X axis
@@ -1093,12 +1108,18 @@ function enterAnimationYRotation(t1, t2, t3, pos1_y, pos2_y, pos3_y, tiR, tfR, r
 
 /////////////////////////////////////////////////
 //    On Click Animations                      //
+// To reuse code, we created multiple anima-   //
+// tions with generi movements like zigzag,    //
+// rotations, and an infinity sign.            //
 /////////////////////////////////////////////////
 
 // Function for creating a Zig Zag Animation 
+// As parameters, it receives times, y-llimits, x start and end positions, and element to move 
 function zigzagAnimation(ti, tf, y_init, y_top, y_bottom, pos1_x, pos2_x, element){
     animator = new KF.KeyFrameAnimator;
     animator2 = new KF.KeyFrameAnimator;
+    // For the element to go up and down we divide the x range into three segments and time into six, one pint in time is one position in x
+    // As the element returns to its initial position, x is divided into 3 and not six
     timeJump = (tf-ti)/6;
     xJump = (pos2_x - pos1_x)/3;
     animator.init({ 
@@ -1107,16 +1128,19 @@ function zigzagAnimation(ti, tf, y_init, y_top, y_bottom, pos1_x, pos2_x, elemen
                 { 
                     keys:[0, ti, ti+timeJump, ti+timeJump*2, ti+timeJump*3, ti+timeJump*4, tf], 
                     values:[
+                            // Starting position
                             { x : pos1_x, y : y_init },    
                             { x : pos1_x + xJump, y : y_top },    
                             { x : pos1_x + xJump*2, y : y_bottom },
-                            { x : pos2_x, y : y_top },
+                            // Reach the x's limit and goes back to initiial position, alternates between y top andd bottom to create the zigzag
+                            { x : pos2_x, y : y_top }, 
                             { x : pos1_x + xJump*2, y : y_bottom },
                             { x : pos1_x + xJump, y : y_top },
+                            // Starting position again
                             { x : pos1_x, y : y_init },
                             ],
                     target: element.position
-                },
+                }
             ],
         loop: loopAnimation,
         duration: duration * 1000,
@@ -1125,15 +1149,19 @@ function zigzagAnimation(ti, tf, y_init, y_top, y_bottom, pos1_x, pos2_x, elemen
 }
 
 // Function for creating an out Zig Zag Animation
+// It works to create a zigzag animation ffor characters to leave the scene
 function outZigzagAnimation(ti, tf, y_init, y_bottom, pos1_x, pos2_x, z_init, z_end,element){
     animator = new KF.KeyFrameAnimator;
     animator2 = new KF.KeyFrameAnimator;
+    // For the element to go up and down we divide the x range into three segments and time into six, one pint in time is one position in x
+    // As the element returns to its initial position, x is divided into 3 and not six
     timeJump = (tf-ti)/6;
     xJump = (pos2_x - pos1_x)/3;
     animator.init({ 
         interps:
             [
                 { 
+                    // Generates the zigzag effect by alternating between y-top and y-bottom, and uses z to create a movement in depth
                     keys:[0, ti, ti+timeJump, ti+timeJump*2, ti+timeJump*3, ti+timeJump*4, ti+timeJump*5, tf], 
                     values:[
                             { y : y_init, z : z_init },    
@@ -1147,6 +1175,7 @@ function outZigzagAnimation(ti, tf, y_init, y_bottom, pos1_x, pos2_x, z_init, z_
                             ],
                     target: element.position
                 },
+                // As for x we use only 3 points in time
                 { 
                     keys:[0, ti, tf],
                     values:[
@@ -1162,7 +1191,6 @@ function outZigzagAnimation(ti, tf, y_init, y_bottom, pos1_x, pos2_x, z_init, z_
     });
     animator.start();
 }
-
 
 // Function for the mouse animation with rotation
 function AnimationRotationMouse(t1, t2, t3, pos1_x, pos2_x, pos3_x, pos4_x, pos1_z, pos2_z, pos3_z, pos4_z, rot1, rot2, rot3, element){
@@ -1229,6 +1257,9 @@ function danceAnimations(element)
 
 /////////////////////////////////////////////////
 //          Text Functions                     //
+// This section includes animations that allow //
+// us to manage texts. Including creation and  //
+// the animation.                              //
 /////////////////////////////////////////////////
 
 // Function for the text creation (textGeometry)
