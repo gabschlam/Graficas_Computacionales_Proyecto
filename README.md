@@ -109,19 +109,19 @@ Nuestro plan de trabajo se dividirá en diferentes sprints, con diferentes entre
 * Príncipe y cenicienta: https://www.jing.fm/iclipt/Thmwx/
 
 ## Referencias Modelos 2D
-**Por orden de parición**
+**Por orden de aparición**
 * Cenicienta limpiando: https://www.pinterest.es/pin/35465915803790189/
 * Madrastra feliz: https://webstockreview.net/image/cinderella-clipart-cinderella-stepmother/2361020.html
 * Hermanastras felices: https://www.disneyclips.com/images3/images/anastasia-drizella3.png
-* Gus Gus:
-* Cenicienta triste:
+* Gus Gus: https://www.disneyclips.com/images3/images/gus5.png
+* Cenicienta triste: https://fairytalesforfeminists.files.wordpress.com/2017/11/cinderella-cleaning-clipart-1.gif
 * Madrastra baile: https://www.disneyclips.com/images3/images/anastasia-drizella.png
 * Hermanastras baile: https://www.disneyclips.com/images3/images/lady-tremaine.png
-* Jack Jack:
+* Jack Jack: https://www.disneyclips.com/images3/images/jaq2.png
 * Hada Madrina: https://www.kindpng.com/imgv/xoiwTi_cinderella-fairy-godmother-the-walt-disney-company-cinderella/
 * Cenicienta baile: http://pngimg.com/download/83469
 * Principe baile: https://pnghut.com/png/9qk3rDJVwb/prince-charming-cinderella-grand-duke-clip-art-transparent-png
 * Cenicienta y Principe boda: https://www.nicepng.com/ourpic/u2q8e6i1u2y3w7u2_cinderella-clock-silhouette-midnight-google-search-cinderella-and/
 * Pájaros: https://www.pinterest.com.mx/pin/673640056751289629/
-* Ratones:
+* Ratones: https://cdn140.picsart.com/322596818424211.png?type=webp&to=min&r=480
 * Otras referencias: https://www.disneyclips.com/images3/cinderella-ladytremaine.html
