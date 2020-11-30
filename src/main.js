@@ -9,7 +9,6 @@ let renderer = null,
 scene = null, 
 sceneTemp = null,
 camera = null,
-cube = null,
 objLoader = null,
 ambientLight = null;
 
