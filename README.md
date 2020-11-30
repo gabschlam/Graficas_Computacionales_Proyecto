@@ -45,19 +45,19 @@
 
     * **Escena 5:**
     ![Escena 5](images/ScenesReadme/Scene5.png)
-    Cenicienta conoce al Príncipe y bailan juntos. Entra primero el Príncipe y luego Cenicienta a la escena. 
+    Cenicienta conoce al Príncipe y bailan juntos. Entran juntos a la escena. 
         
         **Objetos interactuables:**
         - Cenicienta y el Príncipe: comienzan a bailar en forma de infinito. 
-        - Luz: cuando se presiona cierto lugar por definir, aparece una luz que alumbra directamente al Príncipe y a Cenicienta. 
+        - Luz: cuando se presiona la columna, se prende y se apaga una luz que alumbra directamente al Príncipe y a Cenicienta.
 
     * **Escena 6:**
     ![Escena 6](images/ScenesReadme/Scene6.png)
-    Encuentran que a Cenicienta le queda perfectamente la zapatilla y se casa con el Príncipe. Primero entra el Príncipe y luego Cenicienta. 
+    Encuentran que a Cenicienta le queda perfectamente la zapatilla y se casa con el Príncipe. Entra el Príncipe del lado izquierdo y Cenicienta del derecho. 
         
         **Objetos interactuables:**
-        - Ratones: al presionar algún mueble saldrán caminando. 
-        - Pájaros: al presionarlos darán un recorrido de vuelo y volverán a postrarse en el mismo sitio. 
+        - Ratones: al presionar la columna saldrán caminando. 
+        - Pájaros: al presionarlos darán un recorrido de vuelo soltando pétalos de rosa y volverán a postrarse en el mismo sitio.
 
 7. Implementar conocimiento de gráficos 3D y animaciones adquiridos en clase.
 
@@ -98,7 +98,6 @@ Nuestro plan de trabajo se dividirá en diferentes sprints, con diferentes entre
 * Carruaje: https://www.blendswap.com/blend/9819
 
 **Escena 5:**
-* Príncipe: https://www.pngwing.com/es/free-png-zdlha
 * Columna: https://free3d.com/3d-model/white-column-44873.html
 * Textura columna: https://www.pinterest.es/pin/825495806689115334/
 
@@ -125,3 +124,4 @@ Nuestro plan de trabajo se dividirá en diferentes sprints, con diferentes entre
 * Pájaros: https://www.pinterest.com.mx/pin/673640056751289629/
 * Ratones: https://cdn140.picsart.com/322596818424211.png?type=webp&to=min&r=480
 * Otras referencias: https://www.disneyclips.com/images3/cinderella-ladytremaine.html
+

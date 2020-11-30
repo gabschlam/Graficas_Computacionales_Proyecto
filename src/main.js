@@ -1,11 +1,17 @@
+/*
+Final Project
+Gabriel Schlam Huber - A01024122
+Alejandra Nissan Leizorek - A01024682
+Samantha Barco Mejia - A01196844
+*/ 
+
 let renderer = null, 
 scene = null, 
 sceneTemp = null,
 camera = null,
 cube = null,
 objLoader = null,
-ambientLight = null,
-sphere = null;
+ambientLight = null;
 
 let animationMice = false;
 
@@ -206,15 +212,15 @@ function load3dFbxModel(modelUrl, textureUrl, normalUrl, aoUrl, metalUrl, roughn
 // It receives an image address, measures, and position
 function createCharacterMesh( address, name, width, height, X, Y, Z ) 
 {
-    let map = new THREE.TextureLoader(manager).load(address);
-
-    let geometry = new THREE.PlaneGeometry(width, height, 5, 5);
-    let mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({map:map, side:THREE.DoubleSide, transparent:true}));
+    let map = new THREE.TextureLoader(manager).load(address); //Loads texture
+    let geometry = new THREE.PlaneGeometry(width, height, 5, 5); //Creates geometry
+    let mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({map:map, side:THREE.DoubleSide, transparent:true})); //Finally creates the mesh
+    //Set position
     mesh.position.setX(X);
     mesh.position.setY(Y);
-    mesh.position.setZ(Z);
-    mesh.name = name;
-    mesh.side = THREE.DoubleSide;
+    mesh.position.setZ(Z); 
+    mesh.name = name; //The name is important for the animations and raycasting 
+    mesh.side = THREE.DoubleSide; 
     return mesh;
 }
 
@@ -517,6 +523,7 @@ function createScene(canvas)
 
     /////////////////////////////////////////////////
     //       Scene 5                               //
+    // Cinderella meets Prince charming in the ball//
     /////////////////////////////////////////////////  
 
     sceneTemp = new THREE.Scene();  
@@ -528,13 +535,13 @@ function createScene(canvas)
     grupoBaile = new THREE.Object3D;
     grupoBaile.name = "grupoBaile";
 
-    // Loading the prince
+    // Loading the prince 2D object
     sceneTemp.add(grupoBaile.add(createCharacterMesh("../models/2d_images/prince_charming_scene_5_Outline.png", 'prince_dancing', 10,10,0,-7,0)));
 
-    // Loading Cinderella
+    // Loading Cinderella 2D object
     sceneTemp.add(grupoBaile.add(createCharacterMesh("../models/2d_images/cinderellaOutline.png", 'cinderella_dancing', 9,12,4,-9,-5)));
 
-    grupoBaile.position.x = -30;
+    grupoBaile.position.x = -30; //Setting the x position of the group
 
     // Adding scene to Array of Scenes
     scenes.push(sceneTemp);
@@ -544,10 +551,10 @@ function createScene(canvas)
     sceneTemp.add( directionalLight );
     directionalLight.position.set(-15, 0, -10);
     
-    // Loading the column
+    // Loading the column 3D object
     load3dModel('../models/Column/Column_Made_By_Tyro_Smith.obj', '../models/Column/Column_Made_By_Tyro_Smith.mtl', 'column', scenes[4], 1.8, 16, -1, 0, 0, 0, true);
 
-    // Loading invisible plane for text
+    // Loading invisible plane for text 
     geometry = new THREE.PlaneGeometry( 95, 70, 1 );
     material = new THREE.MeshBasicMaterial( {color: 0xffffff, opacity: 0.25, transparent: true, side: THREE.DoubleSide} );
     plane = new THREE.Mesh( geometry, material );
@@ -583,6 +590,8 @@ function createScene(canvas)
    
     /////////////////////////////////////////////////
     //       Scene 6                               //
+    // Prince charming finds Cinderella and they   //
+    // get married                                 //
     /////////////////////////////////////////////////
 
     sceneTemp = new THREE.Scene();
@@ -590,16 +599,16 @@ function createScene(canvas)
     // Set the background image 
     sceneTemp.background = new THREE.TextureLoader(manager).load("../images/Backgrounds/scene5-6_background.jpg");
 
-    // Loading the prince
+    // Loading the prince 2D object
     sceneTemp.add(createCharacterMesh("../models/2d_images/prince_scene6.png", 'prince', 5,12,-4,-9,-5));
 
-    // Loading Cinderella
+    // Loading Cinderella 2D object
     sceneTemp.add(createCharacterMesh("../models/2d_images/cinderella_bride.png", 'cinderella', 8,12,4,-9,-5));
 
-    // Loading Mice
+    // Loading Mice 2D object
     sceneTemp.add(createCharacterMesh("../models/2d_images/ratones_scene6.png", 'mice', 5,3,18,-14,-8));
 
-    // Loading Birds
+    // Loading Birds 2D object
     sceneTemp.add(createCharacterMesh("../models/2d_images/birds_scene6Outline.png", 'birds', 5,3,12,12.5,-5));
 
     // For the petals rain
@@ -627,7 +636,7 @@ function createScene(canvas)
     // Adding scene to Array of Scenes
     scenes.push(sceneTemp);
 
-    // Loading the columns
+    // Loading the columns 3D object
     load3dModel('../models/Column/Column_Made_By_Tyro_Smith.obj', '../models/Column/Column_Made_By_Tyro_Smith.mtl', 'column1', scenes[5], 1.8, 16, -1, 0, 0, 0, true);
     
     // Loading invisible plane for text
@@ -849,6 +858,7 @@ function playAnimations()
             // Animations for the characters to enter the scene
             scene.children.forEach(element => {
                 switch (element.name) {
+                    // Animation for Cinderella and Prince Charming to enter the scene
                     case "grupoBaile":
                         enterAnimationX(0, 0.125, -30, 0, element);
                         break;
@@ -866,9 +876,11 @@ function playAnimations()
             // Animations for the characters to enter the scene
             scene.children.forEach(element => {
                 switch (element.name) {
+                    // Animation for Cinderella to enter the scene
                     case "cinderella":
                         enterAnimationX(0, 0.125, 12, 5.3, element);
                         break;
+                    // Animation for Prince Charming to enter the scene
                     case "prince":
                         enterAnimationX(0, 0.125, -4, -0.5, element);
                         break;
@@ -1027,11 +1039,13 @@ function playClickAnimations()
         case "scene5":
             // Animations
             console.log("Escena 5", CLICKED.name);
+            // When clicked, Cinderella and Prince Charming dance in an eight 
             if(CLICKED.name=="cinderella_dancing")
             {
                 element = scene.getObjectByName("grupoBaile");    
                 danceAnimations(element);
             }
+            // When clicked, the light intensity increases or decreases by using a boolean
             if(CLICKED.parent.name=="column"){
                 if (spotlightOn == 1) 
                 {
@@ -1048,6 +1062,7 @@ function playClickAnimations()
         case "scene6":
             // Animaciones
             console.log("Escena 6", CLICKED.name);
+            // When clicked, the birds start flying and the rose petals start falling in the scene 
             if(CLICKED.name=="birds")
             {
                 zigzagAnimation(0.05,0.3,12,10,6,12.5,-12,0,0,CLICKED);
@@ -1056,6 +1071,7 @@ function playClickAnimations()
                     enterAnimationY(0, Math.random() + 0.5, 13, -30, scene.getObjectByName("petals").children[i]);
                 }
             }
+            // When clicked, the mice start running
             if(CLICKED.parent.name=="column1"){
                 outZigzagAnimation(0.05,0.3,-14,-12,18,-30, -8, -8,scene.getObjectByName("mice"));
             }   
@@ -1072,6 +1088,7 @@ function playClickAnimations()
 /////////////////////////////////////////////////
 
 // Function for entering to the scene in X axis
+//It just asks for two positions, two times and of course the element it will be assigned to
 function enterAnimationX(ti, tf, pos1_x, pos2_x, element){
     animator = new KF.KeyFrameAnimator;
     animator.init({ 
@@ -1094,6 +1111,7 @@ function enterAnimationX(ti, tf, pos1_x, pos2_x, element){
 }
 
 // Function for entering to the scene in Y axis
+//It just asks for two positions, two times and of course the element it will be assigned to
 function enterAnimationY(ti, tf, pos1_y, pos2_y, element){
     animator = new KF.KeyFrameAnimator;
     animator.init({ 
@@ -1289,6 +1307,7 @@ function danceAnimations(element)
             [
                 // Keys for the movement in ∞ by the group
                 { 
+                    // It was done by dividing the ∞ in the most significant vertices
                     keys:[0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1], 
                     values:[
                             { x : 0, z : 0 },
@@ -1302,7 +1321,7 @@ function danceAnimations(element)
                             { x : 0, z : 0 },
                             ],
                     target:element.position,
-                    easing:TWEEN.Easing.Exponential.Out
+                    easing:TWEEN.Easing.Exponential.Out // Helps the animation look more smooth
                 }
             ],
         loop: loopAnimation,
