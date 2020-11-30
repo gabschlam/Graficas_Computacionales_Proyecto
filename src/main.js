@@ -885,7 +885,7 @@ function playAnimations()
                         break;
                     // Animation for the text to iterate
                     case "textGroup":
-                        textAnimation(0, 1, 0.5, 55, 0.5, element.children);
+                        textAnimation(0, 1, 0.5, 55, 0.8, element.children);
                         break;
                     default:
                         break;
